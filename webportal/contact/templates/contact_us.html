@@ -1,0 +1,51 @@
+{% extends  'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<link rel="stylesheet" href="/static/css/contact.css?v=1.0.0">
+<!--header - Project Name + Icons-->
+<main class="center">
+
+    <div class="contact-form" style="padding-left: 100px; padding-right: 100px; padding-top: 30px; width:80%;height:75%;">
+        <h1>Contact us</h1>
+        <p>
+             We have answered many frequently asked questions in our <a href="/faq/" class="cta-btn"> <b>FAQs</b></a>
+            area - so look there first! Maybe you will find an answer directly there.</p>
+
+        <form method="post">
+        {% csrf_token %}
+
+            <div class="row">
+
+                <div class="col-12 col-md-6">
+                    {{ form.name|as_crispy_field}}
+                </div>
+
+                <div class="col-12 col-md-6">
+                    {{ form.email|as_crispy_field}}
+                </div>
+
+            </div>
+
+            {{ form.subject|as_crispy_field}}
+            {{ form.message|as_crispy_field}}
+            {{ form.captcha|as_crispy_field}}
+
+            <div class="submit-btn-wrapper">
+            <button class="submit-btn" type="submit">Submit</button>
+            </div>
+
+        </form>
+
+        {% if messages %}
+        <div class="messages" id="hideme">
+            {% for message in messages %}
+            <p  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </p>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
+</main>
+{% endblock %}

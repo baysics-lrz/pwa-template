@@ -1,0 +1,414 @@
+{% extends  'create_observation.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block lexicon %}
+    <div class="col-12 col-sm-12 col-md-9" style="position: absolute; z-index: 2000000; height: inherit; width: 100%; display: none;" id="Lexicon">
+                <div class="row" style="height:inherit;">
+                    <div style="height: inherit;width:100%;" class="col-12 col-sm-12 col-md-7" id="Placeholder"></div>
+                    <div style="height: inherit;background-color: rgba(255,255,255,0.8);width:100%;overflow: auto;" class="col-12 col-sm-12 col-md-5">
+                        <div class="row" style="margin-right: 0px;margin-left:0px;">
+                            <div class="col-12" style="margin-top: -10px;margin-bottom: -5px;">
+                                <span id="nav-close" style="font-size:50px;cursor:pointer;float:right;height: 60px;" onclick="closeLexicon();">×</span>
+                            </div>
+
+                            <div class="col-12 linkslexicon pl-4 pr-4 mb-4">
+                                <b>Tips for observations:</b>
+                                <br/>
+                                <div id="observationtipps"></div>
+                                <b>Time for observations:</b>
+                                <br/>
+                                <div id="observationtime"></div>
+                                <br/>
+                                <hr>
+                            </div>
+
+                            <div class="col-3" style="padding-right:0px">
+                                <img src="/static/image/category2.svg" style="width:100%;">
+                            </div>
+                            <div class="col-9" id="LexiTitel"><p><b id="subject-name">Please select first.</b><br><i id="subject-latin-name"></i></p></div>
+                            <div id="photo-carousell" class="col-12" style="padding:0;margin-top: 8px;">
+                            </div>
+                            <div class="col-12" style="margin-top: 15px;margin-bottom: -5px;">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                  <li class="nav-item">
+                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"></a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"></a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"></a>
+                                  </li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent" style="font-size:15px;padding-left:15px;">
+                                  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                  </div>
+                                  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                  </div>
+                                  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+{% endblock %}
+
+{% block creation_form %}
+
+    <form method="post" enctype="multipart/form-data" class="mt-3">
+        {% csrf_token %}
+
+        {{ form.Category2Subject|as_crispy_field }}
+
+        {{ form.Certainty|as_crispy_field }}
+
+        <div class="col-12 col-form-label">
+            <b>Please answer with Yes or No:</b>&nbsp
+            <img class="menu-button" src="/static/image/info_icon_orange.svg" onclick="document.getElementById('ObservationsInfo').style.display = 'block'">
+        </div>
+
+        <div style="display:none">
+        {{ form.Category2Feature1|as_crispy_field }}
+
+        {{ form.Category2Feature2|as_crispy_field }}
+
+        {{ form.Category2Feature3|as_crispy_field }}
+
+        {{ form.Category2Feature4|as_crispy_field }}
+
+        {{ form.Category2Feature5|as_crispy_field }}
+
+        {{ form.Category2Feature6|as_crispy_field }}
+        </div>
+        <div id="div_id_Category2Feature1" class="form-group" style="margin-bottom:0">
+            <div class="row">
+                <div class="col-8">
+                    <label class="col-form-label ">
+                        Category2Feature1
+                    </label>
+                </div>
+                <div class="col-4">
+                    <label class="toggle-switchy" for="Category2Feature1Switch" data-size="sm" data-color="blue" data-style="rounded">
+                      <input type="checkbox" id="Category2Feature1Switch" onchange='toogleswitch();'>
+                      <span class="toggle">
+                        <span class="switch"></span>
+                      </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="div_id_Category2Feature2" class="form-group" style="margin-bottom:0">
+            <div class="row">
+                <div class="col-8">
+                    <label class="col-form-label ">
+                        Category2Feature2
+                    </label>
+                </div>
+                <div class="col-4">
+                    <label class="toggle-switchy" for="Category2Feature2Switch" data-size="sm" data-color="blue" data-style="rounded">
+                      <input type="checkbox" id="Category2Feature2Switch" onchange='toogleswitch();'>
+                      <span class="toggle">
+                        <span class="switch"></span>
+                      </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="div_id_Category2Feature3" class="form-group" style="margin-bottom:0">
+            <div class="row">
+                <div class="col-8">
+                    <label class="col-form-label ">
+                        Category2Feature3
+                    </label>
+                </div>
+                <div class="col-4">
+                    <label class="toggle-switchy" for="Category2Feature3Switch" data-size="sm" data-color="blue" data-style="rounded">
+                      <input type="checkbox" id="Category2Feature3Switch" onchange='toogleswitch();'>
+                      <span class="toggle">
+                        <span class="switch"></span>
+                      </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="div_id_Category2Feature4" class="form-group" style="margin-bottom:0">
+            <div class="row">
+                <div class="col-8">
+                    <label class="col-form-label ">
+                        Category2Feature4
+                    </label>
+                </div>
+                <div class="col-4">
+                    <label class="toggle-switchy" for="Category2Feature4Switch" data-size="sm" data-color="blue" data-style="rounded">
+                      <input type="checkbox" id="Category2Feature4Switch" onchange='toogleswitch();'>
+                      <span class="toggle">
+                        <span class="switch"></span>
+                      </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="div_id_Category2Feature5" class="form-group" style="margin-bottom:0">
+            <div class="row">
+                <div class="col-8">
+                    <label class="col-form-label ">
+                        Category2Feature5
+                    </label>
+                </div>
+                <div class="col-4">
+                    <label class="toggle-switchy" for="Category2Feature5Switch" data-size="sm" data-color="blue" data-style="rounded">
+                      <input type="checkbox" id="Category2Feature5Switch" onchange='toogleswitch();'>
+                      <span class="toggle">
+                        <span class="switch"></span>
+                      </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="div_id_Category2Feature6" class="form-group" style="margin-bottom:0">
+            <div class="row">
+                <div class="col-8">
+                    <label class="col-form-label ">
+                        Category2Feature6
+                    </label>
+                </div>
+                <div class="col-4">
+                    <label class="toggle-switchy" for="Category2Feature6Switch" data-size="sm" data-color="blue" data-style="rounded">
+                      <input type="checkbox" id="Category2Feature6Switch" onchange='toogleswitch();'>
+                      <span class="toggle">
+                        <span class="switch"></span>
+                      </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            function check(name,state){
+                if (state) {
+                    document.getElementsByName(name)[0].checked = true;
+                    document.getElementsByName(name)[1].checked = false;
+                }
+                else {
+                    document.getElementsByName(name)[1].checked = true;
+                    document.getElementsByName(name)[0].checked = false;
+                }
+            }
+            window.toogleswitch=function(){
+                check("Category2Feature1",document.getElementById('Category2Feature1Switch').checked);
+                check("Category2Feature2",document.getElementById('Category2Feature2Switch').checked);
+                check("Category2Feature4",document.getElementById('Category2Feature4Switch').checked);
+                check("Category2Feature3",document.getElementById('Category2Feature3Switch').checked);
+                check("Category2Feature5",document.getElementById('Category2Feature5Switch').checked);
+                check("Category2Feature6",document.getElementById('Category2Feature6Switch').checked);
+            }
+
+            window.toogleswitch();
+        </script>
+        <div id="div_id_Category2Feature7" class="form-group">
+            <label for="id_Category2Feature7" class="col-form-label ">
+                Percentage1 (%)
+            </label>
+            <div>
+                <span class="inputfield_slider" id="rangeValueLeafFall">0</span>
+
+                <input type="range" max="100" min="0" value="0" name="Category2Feature7" class="diagram-bar" id="id_Category2Feature7" style="width:100%" onChange="rangeSlideLeafFall(this.value)" onmousemove="rangeSlideLeafFall(this.value)" ontouchmove="rangeSlideLeafFall(this.value)"/>
+
+            </div>
+        </div>
+        <div id="div_id_Category2Feature8" class="form-group">
+            <label for="id_Category2Feature7" class="col-form-label ">
+                Percentage2 (%)
+            </label>
+
+            <div class="">
+                <span class="inputfield_slider" id="rangeValue">0</span>
+                <input type="range" max="100" min="0" value="0" name="Category2Feature8" class="diagram-bar" id="id_Category2Feature8" style="width:100%"  onChange="rangeSlide(this.value)" onmousemove="rangeSlide(this.value)" ontouchmove="rangeSlide(this.value)" />
+            </div>
+        </div>
+
+        <script>
+
+            var diagramSlider = document.querySelector(".diagram-bar");
+
+            function iosPolyfill(e) {
+              var val = (e.pageX - diagramSlider.getBoundingClientRect().left) /
+               (diagramSlider.getBoundingClientRect().right - diagramSlider.getBoundingClientRect().left),
+              max = diagramSlider.getAttribute("max"),
+              segment = 1 / (max - 1),
+              segmentArr = [];
+
+              max++;
+
+              for (var i = 0; i < max; i++) {
+                segmentArr.push(segment * i);
+              }
+
+              var segCopy = segmentArr.slice(),
+              ind = segmentArr.sort((a, b) => Math.abs(val - a) - Math.abs(val - b) )[0];
+
+              diagramSlider.value = segCopy.indexOf(ind) + 1;
+            }
+
+            if (!!navigator.platform.match(/iPhone|iPod|iPad/)) {
+              diagramSlider.addEventListener("touchend", iosPolyfill, {passive: true});
+            }
+            function rangeSlide(value) {
+                document.getElementById('rangeValue').innerHTML = value;
+            }
+            function rangeSlideLeafFall(value) {
+                document.getElementById('rangeValueLeafFall').innerHTML = value;
+            }
+
+        </script>
+
+        <div class="row">
+            <div class="col-6">
+                {{ form.Lat|as_crispy_field }}
+            </div>
+
+            <div class="col-6">
+                {{ form.Lon|as_crispy_field }}
+            </div>
+            <div class="col-12">
+            </div>
+        </div>
+
+        {{ form.ObservationDate|as_crispy_field }}
+
+        <div class="col-12 col-md-12">
+            <img id="Image" alt="Image upload" src="/static/image/photo_upload.png"
+                 style="width:inherit;margin-top:16px;margin-bottom:16px;color: red;"/>
+        </div>
+
+        {{ form.Photo|as_crispy_field }}
+                                        <div id="Errortext_create" class="col-12" style="color:red"></div>
+
+
+        <!-- Information if coordinates are outside bavaria or if GPS is too unprecise-->
+          <div id="coord-warning" style="color: red;"></div>
+          <button type="button" class="button" style="width:100%;" onclick="checkformdata()">
+              <span class="spinner-border spinner-border-sm" id="sendspinner" role="status" aria-hidden="true" style="display:none;">
+                <span class="sr-only"></span>
+                  </span>
+              <span id="sendword">
+                  Send
+              </span></button>
+        <div style="display: none">
+            {{ form.Position }}
+        </div>
+        <div id="gpsaccuracy-form" style="display: none">
+          {{ form.AccuracyGPS|as_crispy_field  }}
+        </div>
+        <button id="submit_location" type="submit" class="button" style="width:100%; display:none;">Send</button>
+
+
+    </form>
+
+
+ <script src="/static/js/observations/category2_create_form.js"></script>
+
+
+{% endblock %}
+
+
+{% block info_box %}
+    <div id="ObservationsInfo" style="overflow: auto; display: none;">
+    <span style="font-size:40px;text-align: right;width: 100%;display: inline-block;font-size: 55px;align:right; cursor: pointer;"
+          onclick="document.getElementById('ObservationsInfo').style.display = 'none'"><b>×</b></span>
+        <b>Information:</b>
+        <p style="padding-right:10%">
+            An example section with information about the subject.
+        </p>
+        <ol>
+            <li>Category2Feature1</li>
+            <li>Category2Feature2</li>
+            <li>Category2Feature3</li>
+        </ol>
+        <p style="padding-right:10%">
+            Further information
+        </p>
+        <div id="accordion">
+
+            <div class="card">
+                <div class="card-header" id="headingCategory3">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseCategory3"
+                                aria-expanded="false" aria-controls="collapseCategory3" style="text-decoration:none;">
+                      <span class="ObservationsInfoHeadline">
+
+                        <b>
+                            Category2Feature1:
+                        </b>
+                      </span>
+                        </button>
+                    </h5>
+                </div>
+
+                <div id="collapseCategory3" class="collapse" aria-labelledby="headingCategory3"
+                     data-parent="#accordion">
+                    <div class="card-body">
+                        <p>
+                            Dummy text 1.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingCategory2Feature2">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseCategory2Feature2"
+                                aria-expanded="false" aria-controls="collapseCategory2Feature2" style="text-decoration:none;">
+                      <span class="ObservationsInfoHeadline">
+
+                        <b>
+                            Category2Feature2:
+                        </b>
+                      </span>
+                        </button>
+                    </h5>
+                </div>
+
+                <div id="collapseCategory2Feature2" class="collapse" aria-labelledby="headingCategory2Feature2"
+                     data-parent="#accordion">
+                    <div class="card-body">
+                        <p>
+                            Dummy text 2.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingCategory2Feature3">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseCategory2Feature3"
+                                aria-expanded="false" aria-controls="collapseCategory2Feature3" style="text-decoration:none;">
+                      <span class="ObservationsInfoHeadline">
+
+                        <b>
+                            Category2Feature3:
+                        </b>
+                      </span>
+                        </button>
+                    </h5>
+                </div>
+
+                <div id="collapseCategory2Feature3" class="collapse" aria-labelledby="headingCategory2Feature3"
+                     data-parent="#accordion">
+                    <div class="card-body">
+                        <p>
+                           Dummy text 3.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+    </div>
+{% endblock %}

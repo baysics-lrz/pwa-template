@@ -1,0 +1,72 @@
+[
+  {
+    "SubjectName": "Category4Subject1",
+    "LatinName": "Latin Name 1",
+    "Photos": [
+      {
+        "Url": "image/ImageNotAvailable.png",
+        "Cite": "dummy text, CC-BY"
+      }
+    ],
+    "Observationtipps": "dummy text",
+    "Observationtime": "dummy text",
+    "Tabs": [
+      {
+        "TabName": "Tab1",
+        "Content": [
+          "dummy text"
+        ]
+      },
+      {
+        "TabName": "Tab2",
+        "Content": [
+          "dummy text 1",
+          "dummy text 2"
+        ]
+      },
+      {
+        "TabName": "Tab3",
+        "Content": [
+          "dummy text 1",
+          "dummy text 2",
+          "dummy text 3"
+        ]
+      }
+    ]
+  },
+  {
+    "SubjectName": "Category4Subject2",
+    "LatinName": "Latin Name 2",
+    "Photos": [
+      {
+        "Url": "image/ImageNotAvailable.png",
+        "Cite": "dummy text, CC-BY"
+      }
+    ],
+    "Observationtipps": "dummy text",
+    "Observationtime": "dummy text",
+    "Tabs": [
+      {
+        "TabName": "Tab1",
+        "Content": [
+          "dummy text"
+        ]
+      },
+      {
+        "TabName": "Tab2",
+        "Content": [
+          "dummy text 1",
+          "dummy text 2"
+        ]
+      },
+      {
+        "TabName": "Tab3",
+        "Content": [
+          "dummy text 1",
+          "dummy text 2",
+          "dummy text 2"
+        ]
+      }
+    ]
+  }
+]

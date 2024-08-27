@@ -1,0 +1,136 @@
+{% extends  'base.html' %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+<link rel="stylesheet" href="/static/css/profile.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/entries.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/create_observation.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/toggle-switchy.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/range.css?v=1.0.0">
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+      rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+<script src="/static/js/lexicon.js"></script>
+
+<div class="row" id="Topruler">
+    <div class="col-2 rectangle desktop-only"
+         style="background:var(--darkblue);">
+    </div>
+    <div class="col-12 col-sm-12 rectangle col-md-10">
+        <div class="mainheadline">
+            <b>Observations</b>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="height: 83vh">
+
+{% include "includes/left-menu.html" %}
+    <div class="col-12 col-sm-12 col-md-10" style="height:inherit; padding-right: 0; padding-left: 0;">
+
+        {% block info_box %}
+        {% endblock %}
+
+        <div class="row" style="height:inherit">
+            <div class="col-12 col-sm-12 col-md-9" id="mapdiv">
+                {% include "entry_map.html" %}
+            </div>
+
+            {% block lexicon %}
+            {% endblock %}
+
+            <div class="col-12 col-sm-12 col-md-9"
+                 style="position: absolute;z-index: 2000000;height: inherit;width: 100%;display:none;" id="Lexicon">
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-3" id="Inputdivdiv">
+                <div class="row" style="margin-top:15px">
+                    <div class="col-3">
+                        <a href="/observations/createcategory1">
+                        <span style="width:100%;display:inline-block;">
+                            <img id="image_to_category1" src="/static/image/category1.svg"
+                                 style="width:35px;opacity: 0.33;">
+                        </span>
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <a href="/observations/createcategory2">
+                        <span style="width:100%;display:inline-block;">
+                            <img id="image_to_category2" src="/static/image/category2.svg"
+                                 style="width:35px;opacity: 0.33;">
+                        </span>
+                        </a>
+                    </div>
+                     <div class="col-3">
+                        <a href="/observations/createcategory3">
+                        <span style="width:100%;display:inline-block;">
+                            <img id="image_to_category3" src="/static/image/category3.svg"
+                                 style="width:35px;opacity: 0.33;">
+                        </span>
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <a href="/observations/createcategory4">
+                        <span style="width:100%;display:inline-block;">
+                            <img id="image_to_category4" src="/static/image/category4.svg"
+                                 style="width:35px;opacity: 0.33;">
+                        </span>
+                        </a>
+                    </div>
+                </div>
+                {% block creation_form %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    let currentURL = window.location.href;
+
+    // Sets the opacity of the current navigation buttons
+    function makeNavButtons() {
+        if (currentURL.includes("category1")) {
+            document.getElementById("image_to_category1").style.opacity = "1";
+        } else if (currentURL.includes("category2")) {
+            document.getElementById("image_to_category2").style.opacity = "1";
+        } else if (currentURL.includes("category3")) {
+            document.getElementById("image_to_category3").style.opacity = "1";
+        } else if (currentURL.includes("category4")) {
+            document.getElementById("image_to_category4").style.opacity = "1";
+        }
+    }
+
+    makeNavButtons();
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#Image')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    document.addEventListener('automatic-location', function (e) {
+        document.getElementById('id_Position').value = 'automatic'
+    }, false)
+
+    document.getElementById("id_Lat").onchange = () => {
+        document.getElementById("id_Position").value = "map/manual"
+    }
+    document.getElementById("id_Lon").onchange = () => {
+        document.getElementById("id_Position").value = "map/manual"
+    }
+    document.getElementById('map').onclick = () => {
+        document.getElementById("id_Position").value = "map/manual"
+    }
+</script>
+
+{% endblock %}

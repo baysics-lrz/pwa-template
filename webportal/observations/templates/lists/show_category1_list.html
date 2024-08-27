@@ -1,0 +1,173 @@
+{% extends  'base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<link rel="stylesheet" href="/static/css/profile.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/entries.css?v=1.0.0">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/date-eu.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/datetime-moment.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/title-numeric.js"></script>
+
+<style>
+    tr.selected{background-color:#b0bed9}
+</style>
+
+<div class="row">
+	<div class="col-2 rectangle desktop-only"
+		 style="background: linear-gradient(110deg, #ffffff,  var(--darkblue) 50%);">
+	</div>
+	<div class="col-12 col-sm-12 rectangle col-md-10">
+		<div class="mainheadline">
+			<b>My entries</b>
+		</div>
+
+	</div>
+</div>
+
+<div class="row" id="Loggedincontent">
+    {% include "includes/left-menu.html" %}
+	<div class="col-12 col-sm-12 col-md-10" id="entriesContent">
+        <div class="row" style="height:inherit">
+            <div class="col-12 col-sm-12 col-md-9" style="padding:0;height:inherit;overflow:auto;">
+                <div class="mobile-only" id="showIntroMobil">
+                    <p>Hello {{user.username}}, this is a dummy text.</p>
+                </div>
+
+                <p style="margin:15px">
+                    Choose an icon:
+                    <a href="/observations/show-my-list">
+                        <span style="width:50px;display:inline-block;">
+                            <img src="/static/image/category1.svg" style="width:35px">
+                        </span>
+                    </a>
+                    <a href="/observations/category2/show-category2-list/">
+                        <span style="width:50px;display:inline-block;">
+                            <img src="/static/image/category2.svg" style="width:35px;opacity: 0.33;">
+                        </span>
+                    </a>
+                    <a href="/observations/category3/show-category3-list">
+                        <span style="width:50px;display:inline-block;">
+                            <img src="/static/image/category3.svg" style="width:35px;opacity: 0.33;">
+                        </span>
+                    </a>
+                    <a href="/observations/category4/show-category4-list">
+                        <span style="width:50px;display:inline-block;">
+                            <img src="/static/image/category4.svg" style="width:35px;opacity: 0.33;">
+                        </span>
+                    </a>
+                </p>
+                <table id="Entries">
+                    <thead>
+                        <tr>
+                            <th><span class="desktop-only">ID</span></th>
+                            <th>Date</th>
+                            <th>Subject</th>
+                            <th>Place</th>
+                            <th class="desktop-only">Feature1</th>
+                            <th class="desktop-only">Feature2</th>
+                            <th class="desktop-only">Feature3</th>
+                            <th class="mobile-only"></th>
+                            <th class="mobile-only"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category1 in category1s %}
+                        <tr style="cursor:pointer;">
+                            <td><span class="desktop-only" title="{{category1.pk}}">{{category1.pk}}</span></td>
+                            <td data-sort='{{ category1.ObservationDate|date:"Y-m-d" }}'> {{ category1.ObservationDate }} </td>
+                            <td> {{ category1.Category1Subject }} </td>
+                            <td> {{category1.Municipal}} </td>
+                            <td class="desktop-only"> {{category1.Category1Feature1}} </td>
+                            <td class="desktop-only"> {{category1.Category1Feature2}} </td>
+                            <td class="desktop-only"> {{category1.Category1Feature3}} </td>
+                            <td class="mobile-only">
+                                <span class="Settinglinks mobile-only" style="width: 17px;">
+                                    <a href="/observations/updatecategory1/{{category1.pk}}/">
+                                        <img src="/static/image/edit_icon.svg" alt="password icon" class="icon_login icon_password"
+                                             style="height: 25px;"/>
+                                    </a>
+                                </span>
+                            </td>
+                            <td class="mobile-only">
+                                <span class="Settinglinks mobile-only" style="width: 17px;">
+                                    <a href="/observations/deletecategory1/{{category1.pk}}/">
+                                        <img src="/static/image/icon_delete.svg" alt="password icon" class="icon_login icon_password"
+                                             style="height: 25px;"/>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-3 desktop-only" style="padding:0;height:inherit;overflow:auto;">
+                <div id="showintro">
+                    <p>Hello {{user.username}}, this is a dummy text.</p>
+                </div>
+
+                <div id="emptyphoto" class="showentry">
+                     <p>Select an entry.</p>
+                </div>
+
+                {% for category1 in category1s %}
+                <div class="showentry" id="Detail{{category1.pk}}" style="display:none;">
+
+                    {% if category1.Photo %}
+                    <img src=  "{{ MEDIA_URL }}{{ category1.Photo }}" width="100%" style="margin-bottom:15px;"><br/>
+                    {% endif %}
+                    <p>
+                        <span class="Settinglinks" style="width: 30px;">
+                            <img src="/static/image/edit_icon.svg" alt="password icon" class="icon_login icon_password"
+                                 style="height: 25px;"/>
+                        </span>
+                        <a href="/observations/updatecategory1/{{category1.pk}}/">Edit</a>
+                    </p>
+                    <p>
+                        <span class="Settinglinks" style="width: 30px;">
+                            <img src="/static/image/icon_delete.svg" alt="password icon" class="icon_login icon_password"
+                                 style="height: 25px;"/>
+                        </span>
+                        <a style="cursor:pointer;" data-toggle="modal" data-target="#exampleModalCenter{{category1.pk}}">Delete</a>
+                    </p>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter{{category1.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle{{category1.pk}}" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle{{category1.pk}}">Delete entry</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Do you want to delete this {{category1.ObservationDate}}, {{category1.Category1Subject}} entry?
+                      </div>
+                      <div class="modal-footer">
+                      <form action="{% url 'deletecategory1' pk=category1.pk %}" method="post">
+                      {% csrf_token %}
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                      <input type="submit" class="btn btn-danger" style="background: var(--red);" value="Ja">
+                      </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/observations/show_category_list.js"></script>
+
+{% else %}
+<p><a href="/accounts/login/">Please log in to continue.</a></p>
+{% endif %}
+
+{% endblock %}

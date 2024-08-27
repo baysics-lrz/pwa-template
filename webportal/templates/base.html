@@ -1,0 +1,225 @@
+{% load pwa %}
+{% load cms_tags sekizai_tags menu_tags %}
+
+<!DOCTYPE html>
+<html>
+<!-- Head -->
+<head>
+    <title>your Project</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="/manifest.json" crossorigin="use-credentials" type="application/json">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/base.css?v=1.0.0">
+    <link rel="stylesheet" href="/static/css/downloads.css?v=1.0.0">
+    <link rel="stylesheet" href="/static/css/topicselection.css?v=1.0.0">
+    <link rel="stylesheet" href="/static/css/forms.css?v=1.0.0">
+    <link rel="stylesheet" href="/static/css/profile_settings.css?v=1.0.0">
+    <link rel="stylesheet" href="/static/css/static.css?v=1.0.0">
+    <link rel="stylesheet" href="/static/css/FAQs.css?v=1.0.0">
+    <link rel="stylesheet" href="/static/css/news.css?v=1.0.0">
+
+    <script src="/static/js/a2hs.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="/static/js/pwa_function.js"></script>
+
+    {% render_block "css" %}
+    {% progressive_web_app_meta %}
+
+</head>
+
+<!-- Mobile navigation bar -->
+<div id="myNav" class="overlay">
+    {% include "includes/navigation.html" %}
+</div>
+
+<body>
+
+{% cms_toolbar %}
+<!-- Footer -->
+{% include "includes/menu_legal.html" %}
+<!-- Navigation bar -->
+{% include "includes/navigation.html" %}
+
+<div class="main-container">
+    <div class="wrapper">
+        <div class="content">
+            <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+            {% for message in messages %}
+                <div class="container-fluid p-0">
+                    <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message }}
+                    </div>
+                </div>
+            {% endfor %}
+            <!-- Main content -->
+            {% block content %} {% endblock %}
+            {% block myprofile %} {% endblock %}
+        </div>
+    </div>
+</div>
+
+{% render_block "js" %}
+<div id="divWidth" style="display: none;">
+
+</div>
+
+<div class="pwa-banner" id="pwa-banner">
+    <div class="notice d-flex justify-content-between align-items-center">
+        <div class="pwa-text">You can easily save our portal as an APP. In Chrome on the desktop or on
+            Android this is easily possible via the download button.<br> The installation instructions can be found under "more".
+        </div>
+        <div class="buttons d-flex flex-column flex-lg-row">
+            <button class="btn a2hs-button"><i class="fa fa-arrow-circle-down "></i></button>
+            <button type="button" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-success btn-sm"
+                    data-dismiss="modal">More
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="pwafunction()"><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Install the APP</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="accordion">
+
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h5 class="mb-0">
+                                <button class="btn pwa-install " data-toggle="collapse" data-target="#collapseThree"
+                                        aria-expanded="false" aria-controls="collapseThree">
+                                    Android - Chrome (recommended)
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                            <div class="card-body">
+                                <p>You can easily install the APP via the download button.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <h5 class="mb-0">
+                                <button class="btn pwa-install " data-toggle="collapse" data-target="#collapseTwo"
+                                        aria-expanded="false" aria-controls="collapseTwo">
+                                    Android - Firefox
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                            <div class="card-body">
+                                <ul class="pwa-ul mb-5">
+                                    <li>This is dummy text.</li>
+                                    <li>This is dummy text.</li>
+                                    <li>This is dummy text.</li>
+                                    <li>This is dummy text.</li>
+                                    <li>This is dummy text.</li>
+                                    <li>This is dummy text.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="card-header" id="headingFour">
+                            <h5 class="mb-0">
+                                <button class="btn pwa-install " data-toggle="collapse" data-target="#collapseFour"
+                                        aria-expanded="false" aria-controls="collapseThree">
+                                    IOS iPhone - Chrome
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                            <div class="card-body">
+                                <p>Please use Safari to install the APP. You can find the installation instructions
+                                    under IOS iPhone - Safari.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn  pwa-install" data-toggle="collapse" data-target="#collapseOne"
+                                        aria-expanded="false" aria-controls="collapseOne">
+                                    IOS iPhone - Safari <b>(recommended)</b>
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+                                <ul class="pwa-ul mb-5">
+                                    <li>This is dummy text.</li>
+                                    <li>This is dummy text.</li>
+                                    <li>This is dummy text.</li>
+                                    <li>This is dummy text.</li>
+                                    <li>This is dummy text.</li>
+                                    <li>This is dummy text.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="/static/js/menu_legal.js"></script>
+
+<script>
+    var sessionstyle = localStorage.getItem("savedstyle");
+    document.getElementById("pwa-banner").style.display = sessionstyle;
+
+    var timestamp = new Date().getTime() + (14 * 24 * 60 * 60 * 1000);
+    var selectedTimestamp = localStorage.getItem("savedtime");
+    console.log("Timestamp + 30 days= " + timestamp);
+    console.log("selectedTimestamp = " + selectedTimestamp);
+    if (timestamp > selectedTimestamp) {
+        console.log("The selected time is less than 14 days from now");
+    } else if (timestamp < selectedTimestamp) {
+        console.log("The selected time is more than 14 days from now");
+        localStorage.removeItem("savedstyle");
+        localStorage.removeItem("savedtime");
+    } else {
+        // -Exact- same timestamps.
+    }
+
+
+    window.addEventListener("offline", function (event) {
+        alert("Internet connection lost. You will be directed to the offline-pages!");
+        window.location.href = "/offline/overview";
+    })
+</script>
+
+<script type = "module">
+	import {
+		uploadAllLocalEntries, downloadAllRemoteEntries
+	}
+    from "/static/js/offline/background_upload_download.js";
+
+    if (true) {
+	    uploadAllLocalEntries().catch(err => console.log(err));
+    }
+</script>
+
+</html>

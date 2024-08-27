@@ -1,0 +1,133 @@
+{% extends  'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<link rel="stylesheet" href="/static/css/login.css?v=1.0.0">
+<script src="/static/js/check_username_agreement.js"></script>
+
+<div class="createprofile_container">
+    <div class="registerdiv">
+
+        <div class="login">
+            <h1>Register here!</h1>
+            <form class="register_form needs-validation" method="post" novalidate>
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+               <div class="login_list" data-toggle="tooltip" data-placement="right" title="Required. No spaces. Only letters, numbers and @/./+/-/_.">
+                    <span>
+                        <img src="/static/image/icon_username.svg" alt="mail icon" class="icon_login icon_mail"/>
+                    </span>
+                     Username
+               </div>
+                {{form.username}}
+                <br class="smaller_line_break"/>
+                {{ form.username.errors }}
+                <div class="login_list">
+                    <span>
+                        <img src="/static/image/icon_mail.svg" alt="mail icon" class="icon_login icon_mail"/>
+                    </span>
+                     E-Mail
+                </div>
+                {{form.email}}
+                <br class="smaller_line_break"/>
+                {{ form.email.errors }}
+
+                <div class="login_list" data-toggle="tooltip" data-placement="right" title="The password must not be too similar to your other personal information. The password must contain at least 8 characters. The password must not be common. The password must not consist only of digits.">
+                    <span>
+                        <img src="/static/image/icon_password.svg" alt="password icon" class="icon_login icon_password"/>
+                    </span>
+                    Password
+                </div>
+                {{ form.password1 }}
+                <br class="smaller_line_break"/>
+                {{form.password1.errors}}
+
+                <div class="login_list" data-toggle="tooltip" data-placement="right" title="The password must not be too similar to your other personal information. The password must contain at least 8 characters. The password must not be common. The password must not consist only of digits.">
+                    <span>
+                        <img src="/static/image/icon_password.svg" alt="password icon" class="icon_login icon_password"/>
+                    </span>
+                    Repeat password
+                </div>
+                {{form.password2}}
+                <br class="smaller_line_break"/>
+                {{ form.password2.errors }}
+
+                <label for="consent">
+                    <input type="checkbox" class="regular-checkbox" id="consent" name="loggedin" onchange="onTermsOfUseChange()" required>
+                    <div class="smallletters">
+                            I read and accept <a class="register-link" href="/terms-of-use">term of use </a> and <a class="register-link" href="/data-policy">data policy</a>. I meet the minimum age requirement (above 16).
+                    </div>
+                    <div class="invalid-feedback">
+                        Term of use must be accepted.
+                    </div>
+                </label>
+
+                <label for="name_checkbox">
+                    <input type="checkbox" class="regular-checkbox" id="name_checkbox" onchange="changeUserAgreement()">
+                    <div class="smallletters">
+                            Make your username visible to public. It can be changed any time under "Settings".
+                    </div>
+                    <div style="display: none">
+                        {{ form.name_agreement }}
+                    </div>
+                </label>
+
+                <div style="text-align:center"><button type="submit" id="register_button" value="Registrieren" class="button-login" style="margin-left: auto;
+    margin-right: auto;" disabled>Register</button></div>
+            </form>
+        </div>
+
+        <div class="register">
+            <h1>Welcome back!</h1>
+            <p style="color:white">Log into your profile.</p>
+
+            <form action="/accounts/login/" method="get">
+                <div style="text-align:center">
+                    <input type="submit" value="Login" class="button-register">
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function onTermsOfUseChange() {
+        if (document.getElementById("consent").checked) {
+            document.getElementById("register_button").disabled = false;
+            return;
+        }
+        document.getElementById("register_button").disabled = true;
+    }
+</script>
+
+<script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+    $(function() {
+      $('.errorlist').prev('input').css('border', '1px solid var(--red)f');
+    });
+</script>
+
+<script>
+var element = document.getElementById("name_checkbox");
+element.classList.add("form-control");
+
+let isChecked = document.getElementById("id_user-name_agreement").value === "Yes"
+
+document.getElementById("name_checkbox").checked = isChecked;
+
+function changeUserAgreement() {
+  if (isChecked) {
+      document.getElementById("id_user-name_agreement").value = "No";
+      isChecked = false;
+      return;
+  }
+  document.getElementById("id_user-name_agreement").value = "Yes";
+  isChecked = true;
+}
+</script>
+
+{% endblock %}

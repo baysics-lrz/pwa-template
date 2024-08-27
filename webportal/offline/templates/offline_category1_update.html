@@ -1,0 +1,645 @@
+{% extends  'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="/static/css/offline_category_update.css?v=1.0.0">
+<div class="container">
+    <div id="rectangle"><h4 id="form-headline" style="color:white; padding-left:15px; margin-bottom: 0px;">Observe Category 1</h4></div>
+
+    <a class="btn mt-3 offlineback" href="/offline/overview" type="button"><i class="fa fa-arrow-left mr-3"></i>Back to offline overview</a>
+    <div class="row"  class="row" style="margin-left: 0px; margin-right: 0px; margin-top: 15px; margin-bottom: 15px">
+        <div class="col-sm">
+            <div class="row text-center" style="margin-top:5px; margin-bottom: 10px;">
+                <div class="col-3">
+                    <a href="/offline/category1interface">
+                        <span style="width:100%;display:inline-block;">
+                            <img src="/static/image/category1.svg" style="width:35px;">
+                        </span>
+                    </a>
+                </div>
+                <div class="col-3">
+                    <a href="/offline/category2interface">
+                        <span style="width:100%;display:inline-block;">
+                            <img src="/static/image/category2.svg" style="width:35px;opacity: 0.33;">
+                        </span>
+                    </a>
+                </div>
+                <div class="col-3">
+                    <a href="/offline/category3interface">
+                        <span style="width:100%;display:inline-block;">
+                            <img src="/static/image/category3.svg" style="width:35px;opacity: 0.33;">
+                        </span>
+                    </a>
+                </div>
+                <div class="col-3">
+                    <a href="/offline/category4interface">
+                        <span style="width:100%;display:inline-block;">
+                            <img src="/static/image/category4.svg" style="width:35px;opacity: 0.33;">
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <form id="hauptform">
+                <div id="div_id_0-Category1Subject" class="form-group">
+                    <label for="subject_input" class="col-form-label  requiredField">
+                        <b>What is the observation about? <span class="asteriskField">*</span></b>
+                    </label>
+                    <div class="">
+                        <select name="0-Category1Subject" class="select form-control" required id="subject_input">
+                          <option value="" selected>---------</option>
+                          <option value="Category1Subject1">Category1Subject1</option>
+                          <option value="Category1Subject2">Category1Subject2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div id="div_id_0-Certainty" class="col-7">
+                        <label for="id_0-Certainty_0" class="col-form-label  requiredField">
+                            <b>Certainty:<span class="asteriskField">*</span></b>
+                        </label>
+                    </div>
+                    <div class="col-5" style="padding-top: calc(.375rem + 1px);">
+                          <div class="form-check">
+                            <label for="certainty_input_1" class="form-check-label">
+                                <input type="radio" class="form-check-input" name="certainty" id="certainty_input_1" value="Uncertain" required >
+                                Uncertain
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label for="certainty_input_2" class="form-check-label">
+                                <input type="radio" class="form-check-input" name="certainty" id="certainty_input_2" value="Certain"  checked="checked" required >
+                                Certain
+                            </label>
+                          </div>
+                    </div>
+                    <div class="col-12">
+                        <div id="div_id_0-Number" class="form-group">
+                        <label for="id_0-Number" class="col-form-label "><b>Number</b></label>
+                            <div class="">
+                                <input type="number" name="0-Number" value="1" class="numberinput form-control" id="id_0-Number">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div id="div_category1feature1_input" class="form-group">
+                            <label for="category1feature1_input" class="col-form-label  requiredField"><b>Category1Feature1</b></label>
+                            <div class="">
+                                <select id="category1feature1_input" class="select form-control" required>
+                                    <option value="" selected>---------</option>
+                                    <option value="Category1Feature1-1">Category1Feature1-1</option>
+                                    <option value="Category1Feature1-2">Category1Feature1-2</option>
+                                    <option value="Category1Feature1-3">Category1Feature1-3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div id="div_category1feature2_input" class="form-group">
+                            <label for="category1feature2_input" class="col-form-label  requiredField"><b>Category1Feature2</b></label>
+                            <div class="">
+                                <input type="text" class="input form-control"id="category1feature2_input" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div id="div_category1feature3_input" class="form-group">
+                            <label for="category1feature3_input" class="col-form-label  requiredField"><b>Category1Feature3</b></label>
+                            <div class="">
+                                <select id="category1feature3_input" required>
+                                    <option value="" selected>---------</option>
+                                    <option value="Category1Feature3-1">Category1Feature3-1</option>
+                                    <option value="Category1Feature3-2">Category1Feature3-2</option>
+                                    <option value="Category1Feature3-3">Category1Feature3-3</option>
+                                    <option value="Category1Feature3-4">Category1Feature3-4</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div id="div_id_1-Lat" class="form-group">
+                            <label for="latitude_input" class="col-form-label  requiredField">
+                               <b>Latitude<span class="asteriskField">*</span></b>
+                            </label>
+                            <div class="">
+                                <input type="number" name="0-Lat" step="0.000001" placeholder="00.000000" class="numberinput form-control" required="" id="latitude_input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div id="div_id_1-Lon" class="form-group">
+                            <label for="longitude_input" class="col-form-label  requiredField">
+                               <b>Longitude<span class="asteriskField">*</span></b>
+                            </label>
+                            <div class="">
+                                <input type="number" name="0-Lon" step="0.000001" placeholder="00.000000" class="numberinput form-control" required="" id="longitude_input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div id="div_gps_button" class="form-group">
+                            <label for="gps_button" class="col-form-label  requiredField">
+                                <b><div id="accuracy">Accuracy: NaN</div></b>
+                            </label>
+                            <div class="">
+                                <button type="button" class="btn1" id="gps_button">get location automatically</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div id="div_position_input" class="form-group" style="display:none;">
+                            <label for="position_input" class="col-form-label  requiredField">
+                                <b>Position</b>
+                            </label>
+                            <div class="">
+                                <select name="position" id="position_input" required>
+                                    <option value="automatic">automatic</option>
+                                    <option value="map/manual">map/manual</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="div_id_AccuracyGPS" class="form-group"  style="display:none;">
+                        <div class="">
+                            <input id="id_AccuracyGPS" type="number" name="AccuracyGPS" step="any" class="numberinput form-control" value="0">
+                        </div>
+                        <script>
+                            // Select your input element.
+                            var number = document.getElementById('id_AccuracyGPS');
+
+                            // Listen for input event on numInput.
+                            number.onkeydown = function(e) {
+                                if(!((e.keyCode > 95 && e.keyCode < 106)
+                                  || (e.keyCode > 47 && e.keyCode < 58)
+                                  || e.keyCode == 8)) {
+                                    return false;
+                                }
+                            }
+                        </script>
+                      </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <div id="div_date_input" class="form-group">
+                            <label for="date_input" class="col-form-label  requiredField">
+                                <b>Observation date<span class="asteriskField">*</span></b>
+                            </label>
+                            <div class="">
+                                <input type="date" id="date_input" name="0-ObservationDate" class="dateinput form-control" required="" >
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        document.getElementById('date_input').value = new Date().toISOString().substring(0, 10);
+                    </script>
+                    <div class="col-6">
+                        <div id="div_time_input" class="form-group">
+                            <label for="time_input" class="col-form-label  requiredField">
+                                <b>Observation time<span class="asteriskField">*</span></b>
+                            </label>
+                            <div class="">
+                                <input type="time" id="time_input" name="0-ObservationDate" class="dateinput form-control" required="" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div id="div_image_input" class="form-group">
+                            <label for="image_input" class="col-form-label  requiredField">
+                                <b>Image</b>
+                            </label>
+                            <br>
+                            <img  id="image_preview"  class="col-4" src="/static/image/image-upload.png"/>
+
+                            <label class="image-upload-button col-6">
+                                <input id="image_input" type="file" name="image" accept="image/*" alt="Image upload" required/>
+                                Image upload (optional)
+                            </label>
+                        </div>
+
+                        <br>
+                        <br>
+                    </div>
+
+                    <div id="Errortext_create" class="col-12" style="color:red"></div>
+                    <div class="col-6 pb-md-4">
+                        <button style="width:100%;"  class="button" type="button" id="submitbutton">Send
+                </button>
+                    </div>
+                    <div class="col-6 pb-md-4">
+                        <button id="cancelbuttonedit" onclick="location.reload();" class="button" style="width:100%;">Cancel</button>
+                    </div>
+                </div>
+
+            </form>
+            <div class="row">
+                <div id="Errortext" class="col-12" style="color:red"></div>
+                <div class="col-6">
+                    <button id="editbutton" disabled class="button" style="width:100%;">Save</button>
+                </div>
+                <div class="col-6">
+                    <button id="cancelbutton" onclick="location.reload()" class="button" style="width:100%;" disabled>Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="col mt-5 mb-5">
+            <h3>Data uploaded to browser</h3>
+            <button  class="button" type="button" id="server_uploadbutton">Upload to server</button>
+            <br/><br/>
+            <br/><br/>
+            <div id="localdata"></div>
+            <br/>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+     function Redirect()
+     {
+         alert("Entry successfully uploaded to the browser!");
+         window.location="overview";
+     }
+
+      function UpdateRedirect()
+     {
+         alert("Entry successfully changed in the browser!");
+         location.reload();
+     }
+
+</script>
+
+<script type="module">
+
+    // variables for the input form
+    import {
+        deleteLocalCategory1,
+        getLocalCategory1AsList,
+        getLocalCategory1ByID,
+        getRemoteCategory1AsList,
+        storeAllCategory1FromServerInIDB,
+        storeNewCategory1InIDB,
+        updateLocalCategory1
+    } from "/static/js/offline/observations/category1.js";
+
+    showLocalData();
+    showRemoteData();
+    assignFunctionsToButtons();
+
+    function assignFunctionsToButtons() {
+        document.getElementById('gps_button').onclick = () => {
+            getCurrentLocationViaGPS();
+        }
+        document.getElementById('image_input').onchange = () => {
+            readURL(document.getElementById('image_input'));
+        }
+        document.getElementById('submitbutton').onclick = () => {
+            storeInputDataInIDB();
+        }
+    }
+
+
+    let subject = null;
+    let certainty = null;
+    let lat = null;
+    let lon = null;
+    let observationTime = null;
+    let observationDate = null;
+    let category1feature1 = null;
+    let category1feature2 = null;
+    let category1feature3 = null;
+    let image = null;
+    let AccuracyGPS = null;
+
+    // update the input-variables
+    function updateInputData() {
+        subject = document.getElementById("subject_input").value
+        if (document.getElementsByName("certainty")[0].checked==true){
+        certainty="Uncertain";}
+        else {certainty="Certain";}
+        lon = document.getElementById("longitude_input").value
+        lat = document.getElementById("latitude_input").value
+        AccuracyGPS = document.getElementById("id_AccuracyGPS").value;
+        observationDate = document.getElementById("date_input").value;
+        observationTime = document.getElementById("time_input").value;
+        category1feature1 = document.getElementById("category1feature1_input").value;
+        category1feature3 = document.getElementById("category1feature3_input").value;
+
+        image = document.getElementById("image_input").files[0];
+        if (image === undefined) {
+            image = null;
+        }
+    }
+
+    // show the local data in a table
+    function showLocalData() {
+        getLocalCategory1AsList().then(function (category1list) {
+            generateDataTable("localdata", category1list)
+        })
+    }
+
+    // show the remote data in a table
+    function showRemoteData() {
+        if (navigator.onLine) {
+            storeAllCategory1FromServerInIDB().then(function () {
+                getRemoteCategory1AsList().then(function (category1list) {
+                    generateDataTable("remotedata", category1list);
+                })
+            })
+        } else {
+            getRemoteCategory1AsList().then(function (category1list) {
+                generateDataTable("remotedata", category1list);
+            })
+
+        }
+    }
+
+    // generate a HTML table for the category1-data
+    function generateDataTable(html_element_id, category1data) {
+        // get the reference for the body
+        let body = document.getElementById(html_element_id)
+
+        body.innerText = "";
+        // creates a <table> element and a <tbody> element
+        let tbl = document.createElement("table");
+        let tblBody = document.createElement("tbody");
+
+        // creating all cells
+        for (let category1 of category1data.reverse()) {
+            // creates a table row
+            let row = document.createElement("tr");
+
+
+            let category1_id_text = document.createTextNode(category1.id);
+            let category1_subject_text = document.createTextNode(category1.Category1Subject);
+            let category1_observation_data_text = document.createTextNode(category1.ObservationDate);
+
+
+            let cell = document.createElement("td");
+            cell.appendChild(category1_id_text);
+            row.appendChild(cell);
+
+            cell = document.createElement("td");
+            cell.appendChild(category1_subject_text);
+            row.appendChild(cell);
+
+            cell = document.createElement("td");
+            cell.appendChild(category1_observation_data_text);
+            row.appendChild(cell);
+
+            if (html_element_id === "localdata") {
+                cell = document.createElement("td");
+                let button = document.createElement("button");
+                button.innerHTML = "Delete";
+                button.onclick = function () {
+                    deleteCategory1(category1.id);
+                }
+                cell.appendChild(button);
+                row.appendChild(cell);
+
+                cell = document.createElement("td");
+                button = document.createElement("button");
+                button.innerHTML = "Edit";
+                button.onclick = function () {
+                    setupEdit(category1.id);
+                }
+                cell.appendChild(button);
+                row.appendChild(cell);
+            }
+            // add the row to the end of the table body
+            tblBody.appendChild(row);
+            // put the <tbody> in the <table>
+            tbl.appendChild(tblBody);
+            // appends <table> into <body>
+            body.appendChild(tbl);
+            // sets the border attribute of tbl to 2;
+            tbl.setAttribute("border", "1");
+        }
+    }
+
+    // sets the sites HTML for editing state
+    // takes an object of the category1 which needs to be edited
+    function setHTMLForEditing(input_obj) {
+        document.getElementById("subject_input").value = input_obj.Category1Subject;
+        if (input_obj.Certainty == "Uncertain"){
+            document.getElementsByName("certainty")[0].checked=true;
+        }
+        else {
+            document.getElementsByName("certainty")[1].checked=true;
+        }
+        document.getElementById("longitude_input").value = input_obj.Lon;
+        document.getElementById("latitude_input").value = input_obj.Lat;
+        document.getElementById("id_AccuracyGPS").value = input_obj.AccuracyGPS;
+        document.getElementById("category1feature1_input").value = input_obj.Category1Feature1;
+        document.getElementById("category1feature2_input").value = input_obj.Category1Feature2;
+        document.getElementById("category1feature3_input").value = input_obj.Category1Feature3;
+        document.getElementById("time_input").value = input_obj.ObservationTime;
+
+        document.getElementById("date_input").value = input_obj.ObservationDate;
+        console.log(input_obj.Photo)
+        displayImageWhileEdit(input_obj.Photo)
+
+        document.getElementById("form-headline").innerText = `Edit: ID ${input_obj.id}. ${input_obj.Category1Subject}`
+        document.getElementById("submitbutton").disabled = true;
+        document.getElementById("cancelbuttonedit").disabled = true;
+        document.getElementById("editbutton").disabled = false;
+        document.getElementById("editbutton").onclick = function () {
+            makeEdit(input_obj.id)
+        }
+        document.getElementById("cancelbutton").disabled = false;
+
+    }
+
+    function validitychecker(idname, searchword){
+    var errortextfkt ="";
+    if (document.getElementById(idname).value == "") {
+            errortextfkt = errortextfkt +("Missing " + searchword +" <br>");
+            document.getElementById(idname).setCustomValidity('Missing " + searchword +" ');
+            document.getElementById(idname).classList.add('is-invalid');
+        }else{
+            document.getElementById(idname).classList.add('is-valid');
+            document.getElementById(idname).setCustomValidity('');
+        }
+        return errortextfkt
+    }
+
+    // Store the Input data of the Form in IDB
+    function storeInputDataInIDB() {
+    // First check whether all data are filled in
+        var errortext = "";
+        var elems = document.querySelectorAll(".is-invalid");
+        [].forEach.call(elems, function(el) {el.classList.remove("is-invalid");});
+        var elems = document.querySelectorAll(".is-valid");
+        [].forEach.call(elems, function(el) {el.classList.remove("is-valid");});
+
+        errortext = errortext + validitychecker("subject_input", "what is the observation about")
+        errortext = errortext + validitychecker("longitude_input", "longitude")
+        errortext = errortext + validitychecker("latitude_input", "latitude")
+        errortext = errortext + validitychecker("date_input", "observation date")
+        errortext = errortext + validitychecker("time_input", "observation time")
+
+        if (errortext != ""){
+            document.getElementById("Errortext_create").innerHTML = errortext;
+            return;
+        }
+        // update the input variables
+        updateInputData();
+        // create an object with all the data
+        let newCategory1Data = {
+            Category1Subject: subject,
+            Certainty: certainty,
+            Lon: lon,
+            Lat: lat,
+            Category1Feature1: category1feature1,
+            Category1Feature2: category1feature2,
+            Category1Feature3: category1feature3,
+            ObservationTime: observationTime,
+            ObservationDate: observationDate,
+            AccuracyGPS: AccuracyGPS,
+            Photo: image,
+            user: -1,
+        };
+        console.log("Storing data in IDB:", newCategory1Data);
+        // call function which will store the data in the IDB
+        storeNewCategory1InIDB(newCategory1Data).then(function (ID) {
+            console.log("Stored Category1-instance with ID:", ID);
+        }).then(function () {
+            Redirect();
+        }).catch(function (error) { // catch, when error occurs
+            alert("Error while storing Category1-Instance");
+            console.log(error);
+        });
+        document.getElementById("hauptform").reset();
+    }
+
+    // setup the HTML for editing
+    function setupEdit(category1_id) {
+        getLocalCategory1ByID(category1_id).then(function (category1) {
+            setHTMLForEditing(category1);
+        }).catch(function (error) {
+            console.log(error);
+        })
+    }
+
+    // make the edit (after pressing the edit button)
+    function makeEdit(category1_id) {
+        // First check whether all data are filled in
+        var errortext = "";
+        if (document.getElementById("subject_input").value == "") errortext = errortext +("Missing what is the observation about<br>");
+        if (document.getElementById("longitude_input").value == "") errortext = errortext +("Missing longitude<br>");
+        if (document.getElementById("latitude_input").value == "") errortext = errortext +("Missing latitude<br>");
+        if (document.getElementById("date_input").value == "") errortext = errortext +("Missing observation date <br>");
+        if (document.getElementById("time_input").value == "") errortext = errortext +("Missing observation time <br>");
+        if (errortext != ""){
+            document.getElementById("Errortext").innerHTML = errortext;
+            return;
+        }
+        // If everything is fine go on, otherwise show error message
+        updateInputData();
+        updateLocalCategory1(category1_id, {
+            Category1Subject: subject,
+            Certainty: certainty,
+            Lon: lon,
+            Lat: lat,
+            Category1Feature1: Category1Feature1,
+            Category1Feature2: Category1Feature2,
+            Category1Feature3: category1feature3,
+            ObservationTime: observationTime,
+            ObservationDate: observationDate,
+            Photo: image,
+        }).then(function () {
+                location.reload();
+            }
+        )
+    }
+
+
+    // delete an observation by ID
+    function deleteCategory1(category1_id) {
+        deleteLocalCategory1(category1_id).then(function () {
+            location.reload();
+        })
+    }
+
+    // display the image while creating an observation
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#image_preview')
+                    .attr('src', e.target.result)
+                    .width(250);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // display the image while editing
+    function displayImageWhileEdit(file) {
+        if (file) {
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#image_preview')
+                    .attr('src', e.target.result)
+                    .width(200)
+                    .height(200);
+            };
+            reader.readAsDataURL(file);
+        }
+
+    }
+
+    function checkForGPS() {
+        if ("geolocation" in navigator) {
+            document.getElementById("gps_button").disabled = false;
+        }
+    }
+
+    // set input to manual if people add their own longitude and latitude
+    document.getElementById("latitude_input").onchange = () => {
+        document.getElementById("position_input").value = "map/manual"
+    }
+    document.getElementById("longitude_input").onchange = () => {
+        document.getElementById("position_input").value = "map/manual"
+    }
+    function getCurrentLocationViaGPS() {
+      // remove previous input for accuracy and coordinates in case the old one is kept
+      document.getElementById("id_AccuracyGPS").value = ""
+      document.getElementById("accuracy").innerText = ""
+      document.getElementById("longitude_input").value = ""
+      document.getElementById("latitude_input").value = ""
+        const options = {enableHighAccuracy: true}
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                /* Round the GPS value to the 6th decimal */
+                document.getElementById("latitude_input").value = String(Math.round(position.coords.latitude * 1000000) / 1000000)
+                document.getElementById("longitude_input").value = String(Math.round(position.coords.longitude * 1000000) / 1000000)
+                document.getElementById("accuracy").innerText = "Accuracy: " + Math.round(position.coords.accuracy) + " m"
+                document.getElementById("id_AccuracyGPS").value = Math.round(position.coords.accuracy)
+                /* set position to automatic if using the device's own gps. Can still be changed by the user. */
+                document.getElementById('position_input').value = 'automatic'
+            }, function(error){
+              // return error message if there is a problem with Geolocation
+              console.log(error)
+              if (error.code == 1){
+                document.getElementById("accuracy").innerText = "No permission has been granted to detect the location."
+              }
+              if (error.code == 2){
+                document.getElementById("accuracy").innerText = "Internal error during position detection."
+              }
+              if (error.code == 3){
+                document.getElementById("accuracy").innerText = "The location detection takes too long for a response."
+              }
+            }, options);
+        }
+    }
+document.getElementById('date_input').value = new Date().toISOString().substring(0, 10);
+</script>
+
+{% endblock %}

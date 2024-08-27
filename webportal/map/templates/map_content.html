@@ -1,0 +1,908 @@
+
+<!--
+  The js being inside a html file is necessary for django template tags.
+-->
+
+<!-- Leaflet 1.5.1 -->
+<link rel="stylesheet" href="/static/leaflet/leaflet-1.5.1/leaflet.css" />
+<script src="/static/leaflet/leaflet-1.5.1/leaflet.js"></script>
+
+<!-- Leaflet Plugin: Markerclusters -->
+<link rel="stylesheet" href="/static/leaflet/plugins/markercluster/MarkerCluster.css" />
+<link rel="stylesheet" href="/static/leaflet/plugins/markercluster/MarkerCluster.Default.css" />
+<script src="/static/leaflet/plugins/markercluster/leaflet.markercluster.js"></script>
+
+<!-- custom styles -->
+<link rel="stylesheet" href="/static/css/map.css">
+<!-- GeoJson files -->
+<script src="/static/leaflet/spatial_files/landesgrenze.js" type="text/javascript"></script>
+
+<!-- scripts with spatial functions--->
+<script src="/static/js/spatial.js"></script>
+<script src="/static/js/map_functions.js"></script>
+
+<div id="map">
+</div>
+
+<!-- submit a flag/report on image -->
+<form method='POST' style='display:none'>
+{% csrf_token %}
+<button id="submit_flag" type="submit" name="flag_entry" value=0> submitbutton </button>
+</form>
+
+
+<script>
+// Django template tags need to stay in this html file
+
+
+// ======================= initial variables ===============================
+
+// check if you are alogged in
+var logged_in = false
+var active_user = null
+{% if active_user %} logged_in = true
+    active_user = "{{active_user}}"
+{% endif %}
+var userdict = {}
+//write username in a dictionary corresponding to user id
+{% if userswal %}
+ {% for u in userswal %} userdict[{{u.id}}] = "{{u.username}}"; {% endfor %}
+{% endif %}
+
+// convert the django template static to a js variable
+var static_path = "/static/"
+
+// CSS variables
+var icon_scale = getComputedStyle(document.documentElement).getPropertyValue('--animation-icon-scale')
+var wave_scale = getComputedStyle(document.documentElement).getPropertyValue('--animation-wave-scale')
+var wave_opacity = getComputedStyle(document.documentElement).getPropertyValue('--wave-opacity')
+var category1_color = getComputedStyle(document.documentElement).getPropertyValue('--category1-color')
+var category2_color = getComputedStyle(document.documentElement).getPropertyValue('--category2-color')
+var category3_color = getComputedStyle(document.documentElement).getPropertyValue('--category3-color')
+var category4_color = getComputedStyle(document.documentElement).getPropertyValue('--category4-color')
+
+var allObsMonths = [] // a sorted unique list of all Observations
+
+// recent Entries
+var recentEntryList = []
+var recentEntryDict = {}
+var fullinfodict = {}   // attributes for the info tag on map
+var colorClasses = [] // value borders for choropleth colorization
+// map view for portal
+var portalNormal = true
+var portalActivity = false
+/* Only allow a single Marker to be set for a new observation. */
+var activeMarker = false
+var infoOpen = false /* if the info panel is open. */
+var clicked = false   /* check if clicked or hover for map elements*/
+var clickedElement = null
+var own_observation = false /* if active user created observation */
+var clusteredicons = true // status if marker clusters are active or not
+var clustercontainer = null // leaflet control button container
+var clusterbuttonimg = 'split_cluster' // icon for clustering declustering button
+
+/* Create a Leaflet map at a certrain view and zoom level. */
+var map = L.map('map',{
+// Remove automatic zoom control so we can reposition it freely
+zoomControl:false
+}).setView([49, 11], 7)
+
+/* custom marker icon for position. */
+var pinIcon = L.divIcon({html: "<img class = 'pinIcon' src='"+static_path+"image/marker_pos.svg'/>",
+                      className: 'circleBox',
+                      iconSize: (24,40),
+                      iconAnchor: [19,38],
+                      popupAnchor: [0,-32]
+})
+
+/* Defining the base map layers. "maxZoom" set to the provided Zoom level of the map provider. */
+
+// Bright map with few labels (Carto Voyage style).
+var CartoDB_VoyagerLabelsUnder = L.tileLayer(
+'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png',
+    {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+    }
+).addTo(map)
+
+
+// OSM (German layout, distracting labels, but more accurate descriptions)
+var OpenStreetMap_DE = L.tileLayer(
+'https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png',
+    {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19 //manually set it more clickable than it actually has 17.5
+    }
+)
+
+/* Add the borders of the interaction area (i.e. Bavarian state border).*/
+var bayerischeGrenze = L.geoJSON(
+bygrenze,
+    {
+        fill: null,
+        color: "#134a74"
+    }
+).addTo(map)
+
+// map scale
+L.control.scale({position: 'bottomleft', imperial: false}).addTo(map)
+
+/* info panel which shows a quick overview of observations. */
+var info = L.control({position: 'bottomleft'})
+/* button to start with Observation. */
+var observe = L.control({position: 'bottomright'})
+
+/* Icons of the various types. The second parameter control if the
+icon will have the concentrical rings.*/
+var category1Icon = returnIcon("category1",0, false)
+var category1IconOwn = returnIcon("category1",0, true)
+var category2Icon = returnIcon("category2",0, false)
+var category2IconOwn = returnIcon("category2",0, true)
+var category3Icon = returnIcon("category3",0, false)
+var category3IconOwn = returnIcon("category3",0, true)
+var category4Icon = returnIcon("category4",0, false)
+var category4IconOwn = returnIcon("category4",0, true)
+var simplecategory1Icon = returnIcon("simplecategory1",0, false)
+var simplecategory2Icon = returnIcon("simplecategory2",0, false)
+var simplecategory3Icon = returnIcon("simplecategory3",0, false)
+var simplecategory4Icon = returnIcon("simplecategory4",0, false)
+
+// var simplehistIcon = returnIcon("simplehist",0, false)
+// var simplehistIcon2 = returnIcon("simple2hist",0, false)
+
+/* MarkerCluster groups  of the various types. The second parameter
+controls if the icon will have the concentrical rings.*/
+var category1Cluster = returnClusterIcon("category1", false)
+var category1ClusterOwn = returnClusterIcon("category1", true)
+var category2Cluster = returnClusterIcon("category2", false)
+var category2ClusterOwn = returnClusterIcon("category2", true)
+var category3Cluster = returnClusterIcon("category3", false)
+var category3ClusterOwn = returnClusterIcon("category3", true)
+var category4Cluster = returnClusterIcon("category4", false)
+var category4ClusterOwn = returnClusterIcon("category4", true)
+// var histCluster = returnClusterIcon("hist", false)
+
+var confirmbutton = document.getElementById('confirm_report')
+
+// create layer groups for split icons
+var category1points = L.layerGroup()
+var category2points = L.layerGroup()
+var category3points = L.layerGroup()
+var category4points = L.layerGroup()
+
+/* Allow to uncheck categories (to see overlapping points for example) */
+var category1LayerGroup = L.layerGroup([category1Cluster, category1ClusterOwn])
+var category2LayerGroup = L.layerGroup([category2Cluster, category2ClusterOwn])
+var category3LayerGroup = L.layerGroup([category3Cluster, category3ClusterOwn])
+var category4LayerGroup = L.layerGroup([category4Cluster, category4ClusterOwn])
+
+/* Create a layer groups for the layer control panel.*/
+var basemaps = {
+    "CARTO":CartoDB_VoyagerLabelsUnder,
+    "OSM":OpenStreetMap_DE,
+}
+
+var optionalLayerKeys = {
+    "Category 1": category1LayerGroup,
+    "Category 2": category2LayerGroup,
+    "Category 3": category3LayerGroup,
+    "Category 4": category4LayerGroup,
+}
+
+var layercontrol = L.control.layers(basemaps,optionalLayerKeys)
+
+portalNormal = false
+portalActivity = true
+var activityToggle = ""
+
+var allCategory3 = [
+    "Species1",
+    "Species2",
+]
+
+var allCategory4 = [
+    "Species1",
+    "Species2",
+]
+
+// filter for points displayed on map
+var filter = {}
+
+// creating the info panel
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info')
+    this.update("<b id=\"head\">Info.</b>","")
+    return this._div
+}
+
+observe.onAdd = function (map) {
+   this._div = L.DomUtil.create('div', 'observe')
+   if (logged_in == true){
+     this._div.innerHTML = "<a href=\"/observations/make-entry/\">" +
+                           "<img src='"+static_path+"image/observation_round.svg'" +
+                           "style=\"height:50px;\" \"/>"
+   } else {
+   this._div.innerHTML = "<a href=\"/accounts/login/\">" +
+                           "<img src='"+static_path+"image/observation_round.svg'" +
+                           "style=\"height:50px;\" \"/>"
+   }
+  this._div.style.position = "relative"
+  this._div.style.left = 7
+  L.DomEvent.disableClickPropagation(this._div)
+  L.DomEvent.on(this._div, "click", L.DomEvent.stopPropagation)
+  return this._div
+}
+
+/* Connect the highlighting function to each feature. */
+function onEachFeature(feature, layer) {
+/* if the info panel is closed allow it to open on click (for mobile). */
+if (infoOpen == false) {
+  layer.on({
+      mouseover: highlightFeature,
+      mouseout: resetHighlight,
+      click:  clickOpen,
+    })
+ }
+}
+
+/* Method that is used to update the info panel. */
+info.update = function (ih, e) {
+ if (ih == "undefined"){
+   this._div.innerHTML = "<b id=\"head\">Info.</b>"
+ } else {
+   this._div.innerHTML = ih
+   // try to grab the report button of the opened info panel
+   try {
+     var reportbutton = this._div.children[0].children[0].children[1]
+   } catch {
+   console.log("info panel is closed")
+   }
+
+   // Report/Flag a picture
+   if (reportbutton != undefined) {
+     // Don't show report feature to people who are not logged in
+     // or if it is already reported.
+     if (logged_in == false || e.target.options.report > 0) {
+       reportbutton.style.display = "none"
+     }
+
+     var entry_ident = ""
+     reportbutton.onclick = function(){
+       console.log(reportbutton.value)
+       entry_ident = reportbutton.value
+       //entry_ident = reportbutton.value.replace("pollen","veg")
+       //entry_ident = entry_ident.replace("phenologie","veg")
+       //entry_ident = entry_ident.replace("phenology","veg")
+       //entry_ident = entry_ident.replace("animal5","ani5")
+       confirmbutton.addEventListener('click', function() {submit_flag_func(entry_ident)})
+       var overlay = document.getElementById('overlay')
+       var centerbox = document.getElementById('centerbox')
+       overlay.style.display = "block"
+       centerbox.style.display = "block"
+     }
+
+     function submit_flag_func(ident) {
+         var linkflag = document.getElementById('submit_flag')
+         var radioval = 0
+         var photo = document.getElementById('photo')
+         var values = document.getElementById('values')
+         var other = document.getElementById('other')
+         var publicComment = document.getElementById('report_commentary')
+         var feedbacktext = document.getElementById('reportfeedback')
+         if(photo.checked) {
+           try {
+             linkflag.value = ident.concat(",1,",publicComment.value,",{{active_user}}")
+             console.log(document.getElementById('submit_flag'))
+             console.log("photos checked")
+             linkflag.click()
+             removefeedbacktext()
+             linkflag.remove()
+           } catch {
+             console.log("no submit flag button")
+           }
+         } else if(values.checked) {
+           try {
+             linkflag.value = ident.concat(",2,",publicComment.value,",{{active_user}}")
+             console.log(document.getElementById('submit_flag'))
+             linkflag.click()
+             removefeedbacktext()
+             linkflag.remove()
+           } catch {
+             console.log("no submit flag button")
+           }
+         } else if(other.checked) {
+           try {
+            linkflag.value = ident.concat(",3,",publicComment.value,",{{active_user}}")
+            console.log("others checked")
+             linkflag.click()
+             removefeedbacktext()
+             linkflag.remove()
+           } catch {
+             console.log("no submit flag button")
+           }
+         } else {
+           feedbacktext.innerHTML = "Please choose a category."
+         }
+     }
+   }
+ }
+}
+
+info.addTo(map)
+
+function display_the_entries(filter){
+var reportdate = ""
+var publiccomment = ""
+
+
+/* Fetch the entries from the DB. */
+{% if category1_list %}
+  var category1Entry = {}
+  {% for category1 in category1_list %}
+
+    {% if category1.PublicComment %}
+      try{
+        var reportdate = "{{category1.PublicComment.date_created}}"
+        var publiccomment = "{{category1.PublicComment.text}}"
+      } catch { console.log("no report flag")}
+    {% endif %}
+
+    /* Check if there is a photo or not. */
+    var photoUrl = "no photo"
+    var photoUrlLarge = photoUrl
+    {% if category1.Photo %}
+      // Photo exists
+      photoUrl = "{{category1.Photo.url}}"
+      photoUrlLarge = photoUrl
+
+      //* you could point to a smaller resized photo here */
+      // point to the smaller resized photo (thumbnail) for the map
+      //photoUrl = photoUrl.slice(0,-4).concat("_small.jpg")
+      //photoUrl = photoUrl.split("/")
+      //photoUrl.splice(2,0,"thumbnails")
+      //photoUrl = photoUrl.join("/")
+    {% endif %}
+    // If Flag was set to 1 (wrong photo), show an "under review" image
+    {% if category1.Flag %}
+      if({{category1.Flag}} == 1){
+        photoUrl = static_path + "image/review.png"
+        photoUrlLarge = photoUrl
+      }
+    {% endif %}
+
+    category1Entry[{{category1.id}}] = {
+      "oid":{{category1.id}},
+      "observation": "category1",
+      "label":"{{category1.Category1Subject}}",
+      "lat":"{{category1.Lat}}",
+      "lon":"{{category1.Lon}}",
+      "observationDate":"{{category1.ObservationDate}}",
+      "uid":"{{category1.user_id}}",
+      "report":parseInt("{{category1.Flag}}"),
+      "creationDate":parseInt("{{category1.DateFirstCreated|date:'U'}}"),
+      "primaryInfo":"{{category1.Category1Feature1}}",
+      "secondaryInfo": "{{category1.Category1Feature2}}",
+      "tertiaryInfo": "{{category1.Category1Feature3}}",
+      "photo":photoUrlLarge, //could ne a thumbnail
+    }
+    // create key for observation
+    var key = parseInt("{{category1.DateFirstCreated|date:'U'}}").toString().concat("category1", {{category1.id}})
+    fullinfodict[key] = {
+      //here the information for the "Information Table"/attribute table is added
+      "subject":"{{category1.Category1Subject}}",
+      "Lat (WGS84)":"{{category1.Lat}}",
+      "Lon (WGS84)":"{{category1.Lon}}",
+      "Date":"{{category1.ObservationDate}}",
+      "report":parseInt("{{category1.Flag}}"),
+      "Photo":photoUrlLarge
+    }
+    try{
+      draw_points(category1Entry[{{category1.id}}],filter)
+    } catch {
+      console.log("error while trying to draw category1")
+    }
+  {% endfor %}
+{% endif %}
+
+
+{% if category2_list %}
+  var category2Entry = {}
+  {% for category2 in category2_list %}
+
+    {% if category2.PublicComment %}
+      try{
+        var reportdate = "{{category2.PublicComment.date_created}}"
+        var publiccomment = "{{category2.PublicComment.text}}"
+      } catch { console.log("no report flag")}
+    {% endif %}
+
+    /* Check if there is a photo or not. */
+    var photoUrl = "no photo"
+    var photoUrlLarge = photoUrl
+    {% if category2.Photo %}
+      // Photo exists.
+      photoUrl = "{{category2.Photo.url}}"
+      photoUrlLarge = photoUrl // large Photo
+      // point to the smaller resized photo (thumbnail) for the map
+      /*
+      photoUrl = photoUrl.slice(0,-4).concat("_small.jpg")
+      photoUrl = photoUrl.split("/")
+      photoUrl.splice(2,0,"thumbnails")
+      photoUrl = photoUrl.join("/")
+      */
+    {% endif %}
+      // If Flag was set to 1 (wrong photo), show an "under review" image
+    {% if category2.Flag %}
+      if({{category2.Flag}} == 1){
+        photoUrl = static_path + "image/review.png"
+        photoUrlLarge = photoUrl
+      }
+    {% endif %}
+
+    category2Entry[{{category2.id}}] = {
+      "oid":{{category2.id}},
+      "observation": "category2",
+      "label":"{{category2.Category2Subject}}",
+      "lat":"{{category2.Lat}}",
+      "lon":"{{category2.Lon}}",
+      "observationDate":"{{category2.ObservationDate}}",
+      "creationDate":parseInt("{{category2.DateFirstCreated|date:'U'}}"),
+      "uid":"{{category2.user_id}}",
+      "report":parseInt("{{category2.Flag}}"),
+      "primaryInfo":"{{category2.Category2Feature1}}",
+      "secondaryInfo": "{{category2.Category2Feature2}}",
+      "tertiaryInfo": "{{category2.Category2Feature3}}",
+      "photo":photoUrlLarge,
+    }
+    // create key for observation
+    var key = parseInt("{{category2.DateFirstCreated|date:'U'}}").toString().concat("category2", {{category2.id}})
+     fullinfodict[key] = {
+       //here the information for the "Information Table"/attribute table is added
+      "subject":"{{category2.Category2Subject}}",
+      "Lat (WGS84)":"{{category2.Lat}}",
+      "Lon (WGS84)":"{{category2.Lon}}",
+      "Date":"{{category2.ObservationDate}}",
+      "report":parseInt("{{category2.Flag}}"),
+      "Photo":photoUrlLarge,
+    }
+    try{
+    draw_points(category2Entry[{{category2.id}}],filter)
+    } catch {
+      console.log("error while trying to draw category2")
+    }
+  {% endfor %}
+{% endif %}
+
+
+{% if category3_list %}
+  var category3Entry = {}
+  {% for category3 in category3_list %}
+
+    {% if category3.PublicComment %}
+      try{
+        var reportdate = "{{category3.PublicComment.date_created}}"
+        var publiccomment = "{{category3.PublicComment.text}}"
+      } catch { console.log("no report flag")}
+    {% endif %}
+
+  /* Check if there is a photo or not. */
+  var photoUrl = "no photo"
+  var photoUrlLarge = photoUrl
+  {% if category3.Photo %}
+    // Photo exists.
+    photoUrl = "{{category3.Photo.url}}"
+    photoUrlLarge = photoUrl
+    // point to the smaller resized photo (thumbnail) for the map
+    /*
+    photoUrl = photoUrl.slice(0,-4).concat("_small.jpg")
+    photoUrl = photoUrl.split("/")
+    photoUrl.splice(2,0,"thumbnails")
+    photoUrl = photoUrl.join("/")
+    */
+  {% endif %}
+    // If Flag was set to 1 (wrong photo), show an "under review" image
+  {% if category3.Flag %}
+    if({{category3.Flag}} == 1){
+      photoUrl = static_path + "image/review.png"
+      photoUrlLarge = photoUrl
+    }
+  {% endif %}
+
+    category3Entry[{{category3.id}}] = {
+      "oid":{{category3.id}},
+      "observation": "category3",
+      "label":"{{category3.Category3Subject}}",
+      "lat":"{{category3.Lat}}",
+      "lon":"{{category3.Lon}}",
+      "observationDate":"{{category3.ObservationDate}}",
+      "uid":"{{category3.user_id}}",
+      "report":parseInt("{{category3.Flag}}"),
+       "creationDate":parseInt("{{category3.DateFirstCreated|date:'U'}}"), // U for Unix time (seconds from 1970)
+       "primaryInfo":"{{category3.Category3Feature1}}",
+       "secondaryInfo": "{{category3.Category3Feature2}}",
+       "tertiaryInfo": "{{category3.Category3Feature3}}",
+       "photo":photoUrlLarge,
+    }
+    // create key for observation
+    var key = parseInt("{{category3.DateFirstCreated|date:'U'}}").toString().concat("category3", {{category3.id}})
+    fullinfodict[key] = {
+      //here the information for the "Information Table"/attribute table is added
+      "subject":"{{category3.Category3Subject}}",
+      "Lat (WGS84)":"{{category3.Lat}}",
+      "Lon (WGS84)":"{{category3.Lon}}",
+      "Date":"{{category3.ObservationDate}}",
+      "report":parseInt("{{category3.Flag}}"),
+      "Photo":photoUrlLarge,
+    }
+    try{
+      draw_points(category3Entry[{{category3.id}}],filter)
+    } catch {
+      console.log("error while trying to draw points of category3")
+    }
+
+  {% endfor %}
+{% endif %}
+
+
+{% if category4_list %}
+  var category4Entry = {}
+  {% for category4 in category4_list %}
+
+    {% if category4.PublicComment %}
+      try{
+        var reportdate = "{{category4.PublicComment.date_created}}"
+        var publiccomment = "{{category4.PublicComment.text}}"
+      } catch { console.log("no report flag")}
+    {% endif %}
+
+    /* Check if there is a photo or not. */
+    var photoUrl = "no photo"
+    var photoUrlLarge = photoUrl
+    {% if category4.Photo %}
+      // Photo exists.
+      photoUrl = "{{category4.Photo.url}}"
+      photoUrlLarge = photoUrl // large Photo
+      // point to the smaller resized photo (thumbnail) for the map
+      /*
+      photoUrl = photoUrl.slice(0,-4).concat("_small.jpg")
+      photoUrl = photoUrl.split("/")
+      photoUrl.splice(2,0,"thumbnails")
+      photoUrl = photoUrl.join("/")
+      */
+    {% endif %}
+      // If Flag was set to 1 (wrong photo), show an "under review" image
+    {% if category4.Flag %}
+      if({{category4.Flag}} == 1){
+        photoUrl = static_path + "image/review.png"
+        photoUrlLarge = photoUrl
+      }
+    {% endif %}
+
+    category4Entry[{{category4.id}}] = {
+      "oid":{{category4.id}},
+      "observation": "category4",
+      "label":"{{category4.Category4Subject}}",
+      "lat":"{{category4.Lat}}",
+      "lon":"{{category4.Lon}}",
+      "observationDate":"{{category4.ObservationDate}}",
+      "uid":"{{category4.user_id}}",
+      "report":parseInt("{{category4.Flag}}"),
+      "creationDate":parseInt("{{category4.DateFirstCreated|date:'U'}}"),
+      "primaryInfo":"{{category4.Category4Feature1}}",
+      "secondaryInfo": "{{category4.Category4Feature2}}",
+      "tertiaryInfo": "{{category4.Category4Feature3}}",
+      "photo":photoUrlLarge,
+    }
+    // create key for observation
+    var key = parseInt("{{category4.DateFirstCreated|date:'U'}}").toString().concat("category4", {{category4.id}})
+    fullinfodict[key] = {
+      //here the information for the "Information Table"/attribute table is added
+      "subject":"{{category4.Category4Subject}}",
+      "Lat (WGS84)":"{{category4.Lat}}",
+      "Lon (WGS84)":"{{category4.Lon}}",
+      "Date":"{{category4.ObservationDate}}",
+      "report":parseInt("{{category4.Flag}}"),
+      "Photo":photoUrlLarge,
+    }
+    try{
+    draw_points(category4Entry[{{category4.id}}],filter)
+    } catch {
+      console.log("error while trying to draw category4")
+    }
+  {% endfor %}
+{% endif %}
+}
+
+
+  /* Draws the db entries onto the map. */
+  function draw_points(dictEntry, filter){
+    // filtering by time
+    var lowerlimit = filter["time"][0]
+    var upperlimit = filter["time"][1]
+    /* Because the German decimal point notation (comma vs period)
+    we have to replace . and , manually. */
+    var lat = parseFloat(dictEntry.lat.replace(",","."))
+    var lon = parseFloat(dictEntry.lon.replace(",","."))
+    var shortDate = shorten_date(dictEntry.observationDate)
+    var sortableDate = sortable_date(shortDate)
+    var displayed_name = "anonym"
+    if (userdict[dictEntry.uid] != undefined){
+      displayed_name = userdict[dictEntry.uid]
+    }
+    var ymd = parseInt(sortableDate.toString())
+    //year and month in yyyymm
+    var ym = parseInt(sortableDate.toString().slice(0,-2))
+    //only collect unique values
+     if (allObsMonths.includes(ym) == false){
+       allObsMonths.push(ym)
+     }
+
+    //first part of the key is sorted date YYYYMMDD, followed by the time stamp of creating the entry in UTC
+    var keyEntries = sortableDate.toString().concat(Date.now().toString(),dictEntry.observation, dictEntry.oid)
+    recentEntryList.push(keyEntries)
+    recentEntryDict[keyEntries] = [dictEntry.label, shortDate, dictEntry.lat, dictEntry.lon, displayed_name]
+
+    var icon = null
+    var groupIcon = null
+
+    customMarker = L.Marker.extend(
+      {
+        options:{
+            oid: dictEntry.oid,
+            observation: dictEntry.observation,
+            label: dictEntry.label,
+            primaryInfo: dictEntry.primaryInfo,
+            secondaryInfo: dictEntry.secondaryInfo,
+            tertiaryInfo: dictEntry.tertiaryInfo,
+            quaternaryInfo:dictEntry.quaternaryInfo,
+            quinaryInfo:dictEntry.quinaryInfo,
+            observationDate: shortDate,
+            creationDate: dictEntry.creationDate,
+            photo: dictEntry.photo,
+            uid: dictEntry.uid,
+            report: dictEntry.report
+        }
+      }
+    )
+
+
+    /* Decide if markers should be shown as own or foreign observations. */
+    own_observation = false
+    {% if active_user %}
+      //logged_in = true
+      if ("{{active_user}}" == dictEntry.uid)
+      own_observation = true
+    {% endif %}
+
+    /* Choose as which observation type it will be visualized. */
+
+    if (dictEntry.observation == "category1"){
+      if (own_observation == true) {
+        markerIcon = category1IconOwn
+        groupIcon = category1ClusterOwn
+      } else {
+        markerIcon = category1Icon
+        groupIcon = category1Cluster
+      }
+      splitlayer = category1points
+      simpleIcon = simplecategory1Icon
+    } else if (dictEntry.observation == "category2"){
+      if (own_observation == true) {
+        markerIcon = category2IconOwn
+        groupIcon = category2ClusterOwn
+      } else {
+        markerIcon = category2Icon
+        groupIcon = category2Cluster
+      }
+      splitlayer = category2points
+      simpleIcon = simplecategory2Icon
+    } else if (dictEntry.observation == "category3"){
+      if (own_observation == true) {
+        markerIcon = category3IconOwn
+        groupIcon = category3ClusterOwn
+      } else {
+        markerIcon = category3Icon
+        groupIcon = category3Cluster
+      }
+      splitlayer = category3points
+      simpleIcon = simplecategory3Icon
+    }  else if (dictEntry.observation == "category4"){
+      if (own_observation == true) {
+        markerIcon = category4IconOwn
+        groupIcon = category4ClusterOwn
+      } else {
+        markerIcon = category4Icon
+        groupIcon = category4Cluster
+      }
+      splitlayer = category4points
+      simpleIcon = simplecategory4Icon
+    }
+
+      //for split icon
+    simplemarker = new customMarker([lat, lon], {icon:simpleIcon})
+
+    simplemarker.on(
+      {
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click:clickOpen
+      }
+    )
+
+    marker = new customMarker([lat, lon], {icon:markerIcon})
+    /* Bind the highlighting function for the info panel to marker. */
+    marker.on(
+      {
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click:clickOpen
+      }
+    )
+
+    if (filter["category"] == "category3"){
+      //return filter evaluation from category3s
+      var category3_result = category3_filter(filter, dictEntry)
+    }
+
+    // decide if date is within time slider for Art 1
+    if ((ym >= lowerlimit & ym <= upperlimit) ){
+      simplemarker.addTo(splitlayer) // split points
+      marker.addTo(groupIcon) // clusterable points
+    }
+    // decide if date is within time slider for Art 2
+    if ((ym >= lowerlimit & ym <= upperlimit)){
+    }
+  }
+
+
+  // draww all points between the dates yyyymm, yyyymm
+  filter["time"] = [179001,300012]
+  display_the_entries(filter)
+  allObsMonths = allObsMonths.sort()
+
+  /* Add all the cluster groups to the map. */
+  category1LayerGroup.addTo(map)
+  category2LayerGroup.addTo(map)
+  category3LayerGroup.addTo(map)
+  category4LayerGroup.addTo(map)
+
+  layercontrol.addTo(map)
+
+
+  /* Create or remove the Observationmarker and Information-window on click in map. */
+  map.on("click",toggleMarker)
+
+
+  //========================== switch to recent activity view ===============
+
+
+  /* Build a custom button that allows for location requests. */
+  var resetMapButton = L.Control.extend(
+    { options:{
+        position: 'topright'},
+        onAdd: function (map) {
+        /* Create a DOM-Util with the default style of a leaflet button
+        and customize it a little. */
+        var container = L.DomUtil.create(
+          'div',
+          'leaflet-bar leaflet-control reset')
+        container.style.backgroundColor = 'white'
+        container.style.width = '30px'
+        container.style.height = '30px'
+        container.style.display = 'none'
+        container.onclick = function(){
+          reset_portal()}
+        L.DomEvent.disableClickPropagation(container)
+        L.DomEvent.on(container, "click", L.DomEvent.stopPropagation)
+        // add the split cluster control again (it has to be removed when tihs mode is called)
+        return container}})
+  map.addControl(new resetMapButton())
+
+function change_background() {
+    var layersbutton = document.getElementsByClassName("leaflet-control-layers-toggle")[0]
+    layersbutton.style.display = "none"
+    var splitclusterbtn =  document.getElementsByClassName("leaflet-bar leaflet-control splitcluster")[0]
+    splitclusterbtn.style.display = "none"
+    var resetbutton = document.getElementsByClassName("reset")[0]
+    resetbutton.style.display = "block"
+    // remove category3s and observations
+    category1LayerGroup.remove()
+    category2LayerGroup.remove()
+    category3LayerGroup.remove()
+    category4LayerGroup.remove()
+    category1points.remove()
+    category2points.remove()
+    category3points.remove()
+    category4points.remove()
+
+    // change basemap to positron (zoom out if necessary - not necessry, has the highest max zoom )
+    CartoDB_VoyagerLabelsUnder.remove()
+    OpenStreetMap_DE.remove()
+    OpenTopo.remove()
+    dopLayer.remove()
+    CartoDB_Positron.addTo(map)
+}
+
+// Style the choropleth colors (5 classes +  no values)
+function getColor(d) {
+  return d >= colorClasses[4] ? '#b30000' :
+         d >= colorClasses[3]  ? '#e34a33' :
+         d >= colorClasses[2]  ? '#fc8d59' :
+         d >= colorClasses[1]  ? '#fdcc8a' :
+         d >= colorClasses[0]   ? '#fef0d9' :
+                    '#ffffff'}
+function getOpac(d) { return d > 0 ? 0.6 : 0.1}
+
+//========================== switch to normal portal view ===============
+function reset_portal() {
+
+    close_bottom()
+    filter["category"] = null
+
+    activityToggle = ""
+
+    var layersbutton = document.getElementsByClassName("leaflet-control-layers-toggle")[0]
+    layersbutton.style.display = "block"
+    var splitclusterbtn =  document.getElementsByClassName("leaflet-bar leaflet-control splitcluster")[0]
+    splitclusterbtn.style.display = "block"
+    // remove "switch back to portal view" button
+    var resetbutton = document.getElementsByClassName("reset")[0]
+    resetbutton.style.display = "none"
+
+    if (clusteredicons == true) {
+      category1LayerGroup.addTo(map)
+      category2LayerGroup.addTo(map)
+      category3LayerGroup.addTo(map)
+      category4LayerGroup.addTo(map)
+    } else {
+      category1points.addTo(map)
+      category2points.addTo(map)
+      category3points.addTo(map)
+      category4points.addTo(map)
+      split_hist_points.addTo(map)
+    }
+
+    filteredcategory3s.remove()
+
+    CartoDB_VoyagerLabelsUnder.addTo(map)
+    CartoDB_Positron.remove()
+
+    category1points.clearLayers()
+    category2points.clearLayers()
+    category3points.clearLayers()
+    category4points.clearLayers()
+    Category2Cluster.clearLayers()
+    category2ClusterOwn.clearLayers()
+    category3Cluster.clearLayers()
+    category3ClusterOwn.clearLayers()
+    category4Cluster.clearLayers()
+    category4ClusterOwn.clearLayers()
+
+    display_the_entries(filter)
+
+}
+
+observe.addTo(map)
+for (item in category2LayerGroup) {
+}
+
+/* Add the custom location request button. */
+map.addControl(new locationButton())
+map.addControl(new splitClusterButton())
+
+/* Place the leaflet zoom buttons above the location request button. */
+L.control.zoom({position:'bottomright'}).addTo(map)
+
+// remove spinner on full loading of map
+var mapsidetabs = document.getElementsByClassName("mapsidetabs")[0]
+mapsidetabs.style.visibility = "visible"
+document.getElementById('centerspinner').style.display = "none"
+
+// fit info panel nargin to side button size
+var infodelta = document.getElementsByClassName('mapsidetabs')[0].clientWidth
+document.getElementsByClassName('info leaflet-control')[0].style.marginLeft = infodelta
+
+
+</script>

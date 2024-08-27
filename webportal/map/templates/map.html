@@ -1,0 +1,417 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="/static/css/map_main.css?v=1.0.0">
+
+<!--- for mapsidebar Button --->
+<div class="mapsidetabs">
+  <div id="help" class="mapsidebarbutton" onclick="open_help()"> Help </div>
+  <div id="fullinfo" class="mapsidebarbutton" onclick="open_fullinfo()"> Info </div>
+</div>
+
+<!-- Content Side Tab -->
+<div id="mapbar1" class="mapsidebar">
+  <div id="mapsidebartext1" class="mapsidebartext"> </div>
+  <div id="mapaccordion">
+     <!-- Category 1 -->
+    <div class="mapcard">
+      <div class="mapcard-header" id="category1Heading">
+        <img class="mapaccordionIcon" src="/static/image/category1.svg"/>
+        <button id="category1Button" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Category1</button>
+      </div>
+      <div id="collapseTwo" class="collapse" aria-labelledby="category1Heading" data-parent="#mapaccordion">
+        <div id="category1Text" class="mapcard-body"></div>
+      </div>
+    </div>
+    <!-- Category 2 -->
+    <div class="mapcard">
+      <div class="mapcard-header" id="category2Heading">
+        <img class="mapaccordionIcon" src="/static/image/category2.svg"/>
+        <button id="category2Button" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Category2</button>
+      </div>
+      <div id="collapseOne" class="collapse show" aria-labelledby="category2Heading" data-parent="#mapaccordion">
+        <div id="category2Text" class="mapcard-body"></div>
+      </div>
+    </div>
+    <!-- Category 3 -->
+    <div class="mapcard">
+      <div class="mapcard-header" id="category3Heading">
+        <img class="mapaccordionIcon" src="/static/image/category3.svg"/>
+        <button id="category3Button" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Category3</button>
+      </div>
+      <div id="collapseFour" class="collapse" aria-labelledby="category3Heading" data-parent="#mapaccordion">
+        <div id="category3Text" class="mapcard-body"></div>
+      </div>
+    </div>
+    <!-- Category 4 -->
+    <div class="mapcard">
+      <div class="mapcard-header" id="category4Heading">
+        <img class="mapaccordionIcon" src="/static/image/category4.svg"/>
+        <button id="category4Button" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Category4</button>
+      </div>
+      <div id="collapseThree" class="collapse" aria-labelledby="category4Heading" data-parent="#mapaccordion">
+        <div id="category4Text" class="mapcard-body"></div>
+      </div>
+    </div>
+    <!-- Report -->
+    <div class="mapcard">
+      <div class="mapcard-header" id="reportHeading">
+        <img class="mapaccordionIcon" src="/static/image/warning.svg"/>
+        <button id="reportInfoButton" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Report</button>
+      </div>
+      <div id="collapseFive" class="collapse" aria-labelledby="reportHeading" data-parent="#mapaccordion">
+        <div id="reportText" class="mapcard-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="mapsidebartext2" class="maptilecontainer">
+  </div>
+
+</div>
+
+<!-- report center box -->
+<div id="centerbox">
+  <h4> What do you want to report?</h4>
+  <div>
+    <input type="radio" id="photo" name="report" value="1" onclick="removefeedbacktext()">
+    <label for="photo">Problem with a picture</label><br>
+    <input type="radio" id="values" name="report" value="2" onclick="removefeedbacktext()">
+    <label for="values">Wrong value</label><br>
+    <input type="radio" id="other" name="report" value="3" onclick="removefeedbacktext()">
+    <label for="other">Others</label><br>
+    <input type="text" id="report_commentary" placeholder="Leave comment (max. 200 letters)" maxlength="200">
+    <div id="reportfeedback" style="color: red;"></div>
+    <button id="confirm_report" class="button">Confirm</button>
+    <button class="button" onclick="cancelreport()" style="background-color: grey; margin: 10px;">Cancel</button>
+  </div>
+</div>
+
+<!-- overlay-->
+<div id="overlay"></div>
+
+<!-- spinner to show that things are loading -->
+<div id="centerspinner" class="spinner-border" role="status", style="position: absolute; left: 47vw; top: 40vh; z-index: 1002;">
+  <span class="sr-only">Loading...</span>
+</div>
+<!-- Include the whole html file instead of the javascript, django-template-tags
+  are not supported for js files. -->
+{% include "map_content.html" %}
+
+
+<script type="text/javascript">
+
+var sb = document.getElementById("mapbar1")
+
+var ac = document.getElementById("mapaccordion")
+var t1 = document.getElementById("mapsidebartext1")
+var t2 = document.getElementById("mapsidebartext2")
+var c1 =  document.getElementById("category1Text")
+var c2 =  document.getElementById("category2Text")
+var c3 =  document.getElementById("category3Text")
+var c4 =  document.getElementById("category4Text")
+var rpt =  document.getElementById("reportText")
+var content_elements = [t1,t2,c1,c2,c3,c4,rpt]
+
+// fix sizing
+try{
+  var wrapper = document.getElementsByClassName('wrapper')[0]
+  var content = document.getElementsByClassName('content')[0]
+  // change wrapper height for mobile view
+  mqList = window.matchMedia("(max-width:767px)")
+  if (mqList.matches == true) {
+    // check this if mobile height changes because of some frontend changes
+    // contingency offset
+    var offset = 80
+    var headerheight = document.getElementsByClassName("grid-nav")[2].clientHeight
+    if (headerheight < 250) {
+      offset = headerheight
+    }
+    var heightstr = "calc(100vh - ".concat(offset.toString(),"px)")
+    wrapper.style.height = heightstr
+    content.style.height = heightstr
+
+
+    // fix mobile display of category3charts
+    document.getElementById("category3plotcontainer").style.width = "70%"
+    document.getElementById("category3chart1").style.width = "60vw"
+    document.getElementById("category3chart1").style.height = "100%"
+    document.getElementById("category3chart2").style.width = "60vw"
+    document.getElementById("category3chart2").style.height = "100%"
+    document.getElementById("category3div1").style.float = "unset"
+    document.getElementById("category3div2").style.float = "unset"
+    document.getElementById("category3div1").style.width = "60vw"
+    document.getElementById("category3div2").style.width = "60vw"
+    document.getElementById("category3div1").style.height = "100%"
+    document.getElementById("category3div2").style.height = "100%"
+
+  } else {
+    wrapper.style.height = "100%"
+    var headerpadding = window.getComputedStyle(wrapper, null).getPropertyValue('padding-top')
+    var heightstr = "calc(".concat(wrapper.clientHeight,"px - ",headerpadding,")")
+    content.style.height = heightstr
+  }
+} catch {
+  console.log("could not change map offset")
+}
+
+
+function removefeedbacktext() {
+  var feedbacktext = document.getElementById('reportfeedback')
+  feedbacktext.innerHTML = ""
+}
+
+// Collapse first mapaccordion element by default because of space
+$('#collapseOne').collapse("hide");
+
+var mapsidebarOpen = false
+var mapsidebarContentText1 = "<h4>Help</h4>"+
+"This is dummpy text.<br>"
+
+var mapsidebarContentText2 =
+"To enter an observation<a href=\"/accounts/login/\" style=\"color: var(--orange)\"><b> Please login.</b></a>"
+
+// If user is already logged in
+{% if active_user %}
+  var mapsidebarContentText2 =
+  "<a href=\"/observations/make-entry/\" style=\"color: var(--orange)\"><b>Start here with entering your observations!</b></a>"+
+  " or click \"+\" symbol on the map." +
+  "<p style=\"text-align:center\"><img class=\"tutorialimage\" src=\"/static/image/obs_example.png\"/><br>" +
+  "</p>"
+{% endif %}
+
+var category1Text =
+"This is dummy text dor Category 1."
+
+var category2Text =
+"This is dummy text for Category 2."
+
+var category3Text =
+"This is dummy text for Category 3."
+
+var category4Text =
+"This is dummy text for Category 4."
+
+var reportText =
+"You see a picture with inappropriate content or personal data? Please log in and report it here on the portal." +
+"<p style=\"text-align:center\"><br>1. Click on the observation.<br> <img class=\"tutorialimage\" src=\"/static/image/report_1.png\"/>" +
+"<br><br>2. Click on \"Report\"-symbol in the information window." +
+"<br><img class=\"tutorialimage\" src=\"/static/image/report_2.png\"/> </p>"
+
+// If no entry selected
+var fullinfoContentText1 = "<h4>Information table</h4><p>Here you can get more information about an observation. Click on an observation for the details.<br>"+
+  "<p style=\"text-align: center;\"> <img class=\"tutorialimage\" src=\"/static/image/report_1.png\"/></p>"
+// else show attribute table
+var fullinfoContentText2 = ""
+// last slected entry and attributes
+var lastselected = null
+
+/* Open and close mapsidebar */
+var lasttab = ""
+var tab = ""
+// define sidebar elements
+
+
+function empty_content() {
+  for (i in content_elements) {
+    content_elements[i].innerHTML = ""
+  }
+}
+
+var openingsb = false
+var openingtl = false
+
+function open_mapsidebar(selectedtab) {
+  var toggle = true
+  tab = selectedtab
+
+  sb.style.visibility = "visible"
+
+  if (tab == "help") {
+    var bu = document.getElementById("help")
+    var bu2 = document.getElementById("fullinfo")
+    ac.style.display = "block"
+  }
+
+  if (tab == "fullinfo") {
+    var bu = document.getElementById("fullinfo")
+    var bu2 = document.getElementById("help")
+    ac.style.display = "none"
+  }
+
+  if (tab == "close") {
+    var bu = document.getElementById("fullinfo")
+    var bu2 = document.getElementById("help")
+    ac.style.display = "none"
+  }
+
+
+  // close mapsidebar
+  if ((mapsidebarOpen == true & toggle == true & lasttab == tab) | tab == "close") {
+    sb.style.visibility = "hidden"
+    sb.style.width = "0.1vw"
+    sb.style.padding = 0
+    bu.style.left= "-0.3vw"
+    bu2.style.left= "-0.3vw"
+    bu2.style.visibility = "visible"
+    t1.style.opacity = 0
+    empty_content()
+    t2.style.opacity = 0
+    ac.style.visibility = "hidden"
+    ac.style.opacity = 0
+    bu.style.backgroundColor = "#ffffff"
+    bu.style.color =  "#12446bff"
+    bu2.style.backgroundColor = "#ffffff"
+    bu2.style.color =  "#12446bff"
+    bu.style.fontWeight = "bold"
+    bu2.style.fontWeight = "bold"
+    mapsidebarOpen = false
+    toggle = false
+    var infopanel = document.getElementsByClassName("info")
+    infopanel[0].style.visibility = "visible"
+  }
+
+  // Set a relative size for the mapsidebar
+  var mapsidebarwidth = "22vw"
+  var newbuttonpos = "21.7vw"
+  // Test if screen has mobile size
+  mqList = window.matchMedia("(max-width:767px)")
+
+  if (mqList.matches == true) {
+    bu.style.left= "-1.5vw"
+    bu2.style.left= "-1.5vw"
+    mapsidebarwidth = "75vw"
+    newbuttonpos = "73.5vw"
+  }
+
+  // open mapsidebar
+  if ((mapsidebarOpen == false & toggle == true) | (mapsidebarOpen == true & lasttab != tab)) {
+    openingsb = true
+    openingsb = false
+    sb.style.width = mapsidebarwidth
+    sb.style.padding = 10
+    bu.style.left= newbuttonpos
+    bu2.style.left= newbuttonpos
+    lasttab = tab
+
+    if (tab == "help") {
+      empty_content()
+      show_content_help()
+      t1.style.opacity = 1
+      t2.style.opacity = 1
+      ac.style.visibility = "visible"
+      ac.style.opacity = 1
+    }
+
+    if (tab == "fullinfo") {
+      empty_content()
+      show_content_fullinfo(lastselected)
+      t1.style.opacity = 1
+      t2.style.opacity = 1
+      ac.style.visibility = "visible"
+      ac.style.opacity = 1
+    }
+    bu.style.backgroundColor = "#ffffff"
+    bu.style.color =  "#12446bff"
+    bu2.style.backgroundColor = "#ededed"
+    bu2.style.color = "#818181"
+    bu.style.fontWeight = "bold"
+    bu2.style.fontWeight = "normal"
+    mapsidebarOpen = true
+    toggle = false
+  }
+
+}
+
+function show_content_help() {
+  t1.innerHTML = mapsidebarContentText1
+  t2.innerHTML = mapsidebarContentText2
+  c1.innerHTML = category1Text
+  c2.innerHTML = category2Text
+  c3.innerHTML = category3Text
+  c4.innerHTML = category4Text
+  rpt.innerHTML = reportText
+}
+
+function open_photo_large(a){
+  window.open(a);
+}
+
+function show_content_fullinfo(fi) {
+  lastselected = fi
+  // check if tab is the correct one (needed since the function to change the content
+  //is called by clicking on an entry marker)
+  if (tab == "fullinfo") {
+    t1.innerHTML = fullinfoContentText1
+    if (clicked == true) {
+      fullinfoContentText2 = "<h4>Information table</h4><table>"
+      for (item in fi) {
+        if(fi[item].toString().includes("review")) {
+          fullinfoContentText2 = fullinfoContentText2.concat("</td></tr></table>",
+            "<div class = 'buttoncontainer' style = 'textAlign:center'><img src=", lastselected[item][1], "></img></div><table>")
+        } else if(fi[item] == "no photo") {
+          fullinfoContentText2 = fullinfoContentText2.concat("<tr><td>",item,"</td><td>no Image</td></tr>")
+        } else if(item == "Photo" & fi[item] != "no photo") {
+          fullinfoContentText2 = fullinfoContentText2.concat("</td></tr></table>",
+            "<div class = 'buttoncontainer' style = 'textAlign:center'><img src=", lastselected[item], "></img><button class='maptilebtn' onclick='open_photo_large(lastselected[item])'>Open Image</button></div><table>")
+        } else if(item == "report" && fi[item] == 1) {
+          fullinfoContentText2 = fullinfoContentText2.concat(
+            "<tr><td colspan='2' style='color: red;'>Photo was reported.</td></tr>"
+            /*
+            //if you want to add additional report information
+            "+<tr><td colspan='2' style='color: red;'>Reported "+fi["reportdate"]+".</td></tr>"+
+            "<tr><td colspan='2' style='color: red;'>Comment: "+fi["publiccomment"]+"</td></tr>"
+            */
+            )
+        } else if(item == "report" && fi[item] == 2) {
+          fullinfoContentText2 = fullinfoContentText2.concat(
+          "<tr><td colspan='2' style='color: red;'>Values were reported as wrong.</td></tr>"
+          /*
+          //if you want to add additional report information
+          "+<tr><td colspan='2' style='color: red;'>Reported "+fi["reportdate"]+".</td></tr>"+
+          "<tr><td colspan='2' style='color: red;'>Comment: "+fi["publiccomment"]+"</td></tr>"
+          */
+          )
+        } else if(item == "report" && fi[item] == 3) {
+          fullinfoContentText2 = fullinfoContentText2.concat(
+          "<tr><td colspan='2' style='color: red;'>Reported for other reasons.</td></tr>"
+          /*
+          //if you want to add additional report information
+          "+<tr><td colspan='2' style='color: red;'>Reported "+fi["reportdate"]+".</td></tr>"+
+          "<tr><td colspan='2' style='color: red;'>Comment: "+fi["publiccomment"]+"</td></tr>"
+          */
+          )
+        }else if(item == "report" && (Number.isNaN(fi[item]) | fi[item] == 1 | fi[item] == 0)) {
+          fullinfoContentText2 = fullinfoContentText2.concat("")
+        }
+        else if(item != "reportdate" && item != "reportcomment" && item != "publiccomment") {
+          fullinfoContentText2 = fullinfoContentText2.concat("<tr><td>",item,"</td><td>",fi[item],"</td></tr>")
+        }
+      }
+      fullinfoContentText2.concat("</table>")
+      t1.innerHTML = fullinfoContentText2
+    }
+  }
+}
+
+
+function open_help() {
+  open_mapsidebar("help")
+}
+
+
+function open_fullinfo() {
+  var infopanel = document.getElementsByClassName("info")
+  infopanel[0].style.visibility = "hidden"
+  open_mapsidebar("fullinfo")
+}
+
+function cancelreport() {
+  var overlay = document.getElementById('overlay')
+  var centerbox = document.getElementById('centerbox')
+  overlay.style.display = "none"
+  centerbox.style.display = "none"
+}
+</script>
+
+{% endblock %}

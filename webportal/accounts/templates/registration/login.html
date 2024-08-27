@@ -1,0 +1,73 @@
+{% extends  'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<link rel="stylesheet" href="/static/css/login.css?v=1.0.0">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Detect.js/2.2.2/detect.min.js"></script>
+<script src="/static/js/check_browser_compatibility.js"></script>
+
+<div class="createprofile_container">
+    <div class="createprofile">
+
+        <div class="register">
+            <h1>You have no account yet?</h1>
+            <p style="color:white">Join us!</p>
+            <form action="/accounts/register-user/" method="get">
+                <div style="text-align:center">
+                    <input type="submit" value="Register" class="button-register">
+                </div>
+            </form>
+        </div>
+
+        <div class="login">
+            <h1>Login here!</h1>
+            <form class="login_form" method="post" onsubmit="disableLoginButton()">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div id="Warning" style="color:orange;">
+                </div>
+
+                <div class="login_list">
+                    <span>
+                        <img src="/static/image/icon_username.svg" alt="mail icon" class="icon_login icon_mail"/>
+                    </span>
+                    Username / E-Mail
+                </div>
+                <input type="text" class="form-control" name="username" autofocus="" required="" id="id_username">
+                {{ form.username.errors }}
+                <br>
+                <div class="login_list">
+                    <span>
+                        <img src="/static/image/icon_password.svg" alt="password icon"
+                             class="icon_login icon_password"/>
+                    </span>
+                    Password
+                </div>
+
+                <div class="input-group" id="show_hide_password">
+                    <input type="password" name="password" class="form-control" required="" id="id_password"
+                           aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2"><a href=""><i class="fa fa-eye-slash"
+                                                                                       aria-hidden="true"></i></a></span>
+                    </div>
+                </div>
+                {{ form.password1.errors }}
+                <br>
+                <p><a class="link-login" href="/accounts/password_reset/">You can reset your password here.</a></p>
+                <!-- To solve the double click issue on logging in -->
+                <button id="login_button" type="submit" value="Einloggen" class="button-login">Login</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+        function disableLoginButton() {
+            document.getElementById("login_button").disabled = true;
+        }
+</script>
+
+{% endblock %}

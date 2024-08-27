@@ -1,0 +1,113 @@
+.wrapper {
+    margin-right:0em;
+    grid-template-columns: 0fr 12fr 0fr;
+}
+
+.content {
+    display: grid;
+    width: 100%;
+    margin-left:0px;
+    grid-template-columns: auto 7fr; /* auto to allow for smooth mapsidebar transition*/
+}
+
+.btn.btn-link {
+    color: #ffffff;
+}
+
+.mapsidetabs {
+    position: absolute;
+    top: 25%;
+    visibility: hidden;
+    z-index: 1001;
+}
+
+.mapsidebar {
+    visibility: hidden;
+}
+
+.mapsidebar {
+    width: 0.1vw;
+    transition: width 0.3s;
+    overflow-y: auto;
+    z-index: 1002;
+    background-color: #ffffff;
+}
+
+.mapsidebarbutton {
+    position: relative;
+    left: -0.3vw;
+    border-top-right-radius: 20%;
+    border-bottom-right-radius: 20%;
+    padding: 10px;
+    background-color: #ffffff;
+    color: #12446bff;
+    font-weight: bold;
+    z-index: 500;
+    transition: left 0.3s;
+    cursor: pointer;
+}
+
+.maptoptabs {
+    position: absolute;
+    left: 47vw;
+    z-index: 1000;
+    font-size: small;
+    /*visibility: hidden;*/
+}
+
+#centerbox {
+    display:none;
+    position: absolute;
+    z-index: 1002;
+    background-color: white;
+    max-width: 40vw;
+    top: 40vh;
+    left: 35vw;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#overlay {
+    display:none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1001;
+}
+
+
+/*** MOBILE NAV ***/
+@media (max-width:767px) {
+/* remove white margin from map.*/
+.wrapper {
+  margin-left:0em;
+  margin-right:0em;
+}
+
+/* place tab buttons differently on mobile */
+.mapsidebarbutton {
+  left: -1.5vw;
+}
+
+.maptoptabs {
+  left: 40vw;
+}
+
+.rs-selected {
+  left: 7vw;
+  width: 70vw;
+}
+
+/* resize report box on mobile */
+#centerbox {
+  top:30vh;
+  max-width: 80vw;
+  left: 10vw;
+}
+
+}

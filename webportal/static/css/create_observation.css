@@ -1,0 +1,124 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.untertext, .unterschrift, .form-check-label {
+    font-size: small;
+    padding-left: 1em;
+}
+
+.form-check {
+    padding-left: 1em;
+}
+
+input[type="range"] {
+    background-color: transparent;
+}
+
+.col-12.col-sm-12.col-md-6.abfrage .col-12 {
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+.uploadbutton {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    color: #495057;
+    background-color: #fff;
+    border: 2px solid var(--darkblue);
+    font-weight: bolder;
+    font-size: 12px;
+    border-radius: .25rem;
+    width: 100%;
+}
+
+#div_id_0-Category3Subject > label:nth-child(1) {
+    font-weight: bolder;
+    font-size: 12px;
+}
+
+.col-form-label {
+    padding-top: calc(.375rem + 1px);
+    padding-bottom: calc(.375rem + 1px);
+    margin-bottom: 0;
+    font-size: inherit;
+    line-height: 1.5;
+    font-size: 12px;
+}
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+}
+
+.btn1 {
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    color: #495057;
+    background-color: #fff;
+    border: 2px solid var(--darkblue);
+    font-weight: bolder;
+    font-size: 12px;
+    border-radius: .25rem;
+    width: 100%;
+}
+
+
+.upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+.asteriskField {
+    display: none;
+}
+
+.carousel-indicators {
+    position: relative;
+}
+
+.carousel-indicators li {
+    background-color: #fff;
+    background-color: var(--darkblue);
+}
+
+.nav-link {
+    display: block;
+    padding: .5rem 0.5rem;
+    font-size: 12px;
+    font-weight: bolder;
+}
+
+.linkslexicon {
+    font-size: 0.9em;
+}
+
+/* make entry type invisible to prevent user confusion as it is collected automatically */
+#div_id_1-Position {
+    display: none;
+}
+
+
+.toggle.ios, .toggle-on.ios, .toggle-off.ios {
+    border-radius: 20rem;
+}
+
+.toggle.ios .toggle-handle {
+    border-radius: 20rem;
+}

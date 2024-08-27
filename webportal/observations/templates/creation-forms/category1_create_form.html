@@ -1,0 +1,134 @@
+{% extends  'create_observation.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block lexicon %}
+    <div class="col-12 col-sm-12 col-md-9" style="position: absolute; z-index: 2000000; height: inherit; width: 100%; display: none;" id="Lexicon">
+                <div class="row" style="height:inherit;">
+                    <div style="height: inherit;width:100%;" class="col-12 col-sm-12 col-md-7" id="Placeholder"></div>
+                    <div style="height: inherit;background-color: rgba(255,255,255,0.8);width:100%;overflow: auto;" class="col-12 col-sm-12 col-md-5">
+                        <div class="row" style="margin-right: 0px;">
+                            <div class="col-12" style="margin-top: -10px;margin-bottom: -5px;">
+                                <span id="nav-close" style="font-size:50px;cursor:pointer;float:right;height: 60px;" onclick="closeLexicon();">×</span>
+                            </div>
+
+                            <div class="col-12 linkslexicon pl-4 pr-4 mb-4">
+                                <b>Tips for observations:</b>
+                                <br/>
+                                <div id="observationtipps"></div>
+                                <b>Time for observations:</b>
+                                <br/>
+                                <div id="observationtime"></div>
+                                <br/>
+                                <hr>
+                            </div>
+
+                            <div class="col-3" style="padding-right:0px">
+                                <img src="/static/image/category1.svg" style="width:100%;">
+                            </div>
+                            <div class="col-9" id="LexiTitel"><p><b id="subject-name">Please select first.</b><br><i id="subject-latin-name"></i></p></div>
+                            <div id="photo-carousell" class="col-12" style="padding:0;margin-top: 8px;">
+                            </div>
+                             <div class="col-12" style="margin-top: 15px;margin-bottom: -5px;">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                  <li class="nav-item">
+                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"></a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"></a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"></a>
+                                  </li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent" style="font-size:15px;margin-left:15px;">
+                                  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                  </div>
+                                  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                  </div>
+                                  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+{% endblock %}
+
+
+{% block creation_form %}
+
+    <form method="post" enctype="multipart/form-data" class="mt-3">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        {{ form.Category1Subject|as_crispy_field }}
+        {{ form.Category1Subject.errors }}
+
+        {{ form.Certainty|as_crispy_field }}
+        {{ form.Certainty.errors }}
+
+        {{ form.Number|as_crispy_field }}
+        {{ form.Number.errors }}
+
+        {{ form.Category1Feature1|as_crispy_field }}
+        {{ form.Category1Feature1.errors }}
+
+        {{ form.Category1Feature2|as_crispy_field }}
+        {{ form.Category1Feature2.errors }}
+
+        {{ form.Category1Feature3|as_crispy_field }}
+
+        <div class="row">
+            <div class="col-6">
+                {{ form.Lat|as_crispy_field }}
+            </div>
+
+            <div class="col-6">
+                {{ form.Lon|as_crispy_field }}
+            </div>
+            <div class="col-12">
+            </div>
+        </div>
+
+        {{ form.ObservationDate|as_crispy_field }}
+        {{ form.ObservationDate.errors }}
+
+        {{ form.ObservationTime|as_crispy_field }}
+        {{ form.ObservationTime.errors }}
+
+        <div class="col-12 col-md-12">
+            <img id="Image" alt="Please upload an image" src="/static/image/photo_upload.png"
+                 style="width:inherit;margin-top:16px;margin-bottom:16px;color: red;"/>
+        </div>
+
+        {{ form.Photo|as_crispy_field }}
+        {{ form.Photo.errors }}
+        <!-- Information if coordinates are outside bavaria or if GPS is too unprecise-->
+        <div id="Errortext_create" class="col-12" style="color:red"></div>
+
+          <div id="coord-warning" style="color: red;"></div>
+          <button type="button" class="button" style="width:100%;" onclick="checkformdata();">
+              <span class="spinner-border spinner-border-sm" id="sendspinner" role="status" aria-hidden="true" style="display:none;">
+                <span class="sr-only"></span>
+                  </span>
+              <span id="sendword">
+                  Send
+              </span></button>
+        <div style="display: none">
+            {{ form.Position }}
+        </div>
+        <div id="gpsaccuracy-form" style="display: none">
+          {{ form.AccuracyGPS|as_crispy_field  }}
+        </div>
+        <button id="submit_location" type="submit" class="button" style="width:100%; display:none;">Send</button>
+    </form>
+
+    <script src="/static/js/observations/category1_create_form.js"></script>
+
+
+{% endblock %}

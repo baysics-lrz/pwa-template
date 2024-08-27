@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Leaflet 1.5.1 -->
+<link rel="stylesheet" href="/static/leaflet/leaflet-1.5.1/leaflet.css"/>
+<script src="/static/leaflet/leaflet-1.5.1/leaflet.js"></script>
+<!-- custom styles -->
+<link rel="stylesheet" href="/static/css/home.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/map.css?v=1.0.0">
+<!-- GeoJson files -->
+<script src="/static/leaflet/spatial_files/landesgrenze.js" type="text/javascript"></script>
+
+<style>
+    .content {
+        margin-right: -1em;
+    }
+
+    .banner {
+        margin-right: 2em;
+        margin-left: 2em;
+    }
+</style>
+
+
+<main class="home-container mt-4 ">
+    <div class="home-headline mb-4">
+        <h2 class="h2-home text-center">Welcome to</h2><br>
+        <h1 class="home-title mb-3">YourProject</h1>
+    </div>
+
+    <div class="home-header mb-5">
+
+        <div class="home-intro">
+            <h1 class="pwa-title mb-3">New here?</h1>
+
+            <p>This is dummy text.</p>
+
+            <h2 class="h2-home mt-3 mb-3"><b>How can I participate?</b></h2>
+            <p>Enter observations on the following topics:</p>
+            <div class="accordion partproject-list mt-2 mb-2" id="accordionExample">
+                 <div class="card">
+                    <div class="card-header" id="headingfour">
+                        <h2 class="mb-0">
+                            <button class="mt-3 pl-3 pr-3 btn  btn-block text-left collapsed" type="button"
+                                    data-toggle="collapse" data-target="#collapseFour" aria-expanded="false"
+                                    aria-controls="collapseFour">
+                                <img class="partproject-list_icons" src="/static/image/category1.svg"/>
+                                <span class="pl-2">Category1</span>
+                                <i class="fa fa-sort-down float-right pl-5"></i>
+
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseFour" class="collapse" aria-labelledby="headingFour"
+                         data-parent="#accordionExample">
+                        <div class="card-body">
+                            This is dummy text.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="mt-3 pl-3 pr-3 btn  btn-block text-left" type="button" data-toggle="collapse"
+                                    data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                <img class="partproject-list_icons" src="/static/image/category2.svg"/>
+                                <span class="pl-2">Category2</span>
+                                <i class="fa fa-sort-down float-right pl-5"></i>
+
+                            </button>
+                        </h2>
+                    </div>
+
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                        <div class="card-body">
+                            This is dummy text.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" id="headingThree">
+                        <h2 class="mb-0">
+                            <button class="mt-3 pl-3 pr-3 btn  btn-block text-left collapsed" type="button"
+                                    data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+                                    aria-controls="collapseThree">
+                                <img class="partproject-list_icons" src="/static/image/category3.svg"/>
+                                <span class="pl-2">Category3</span>
+                                <i class="fa fa-sort-down float-right pl-5"></i>
+
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                         data-parent="#accordionExample">
+                        <div class="card-body">
+                            This is dummy text.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h2 class="mb-0">
+                            <button class="mt-3 pl-3 pr-3 btn  btn-block text-left collapsed" type="button"
+                                    data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                                    aria-controls="collapseTwo">
+                                <img class="partproject-list_icons" src="/static/image/category4.svg"/>
+                                <span class="pl-2">Category4</span>
+                                <i class="fa fa-sort-down float-right pl-5"></i>
+
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                        <div class="card-body">
+                            This is dummy text.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <h2 class="h2-home mt-3 mb-3"><b>How can I proceed?</b></h2>
+            <ol>
+                <li>Please make a <a href="/accounts/register-user/" class="home-links">user account</a>.</li>
+                <li>Go to <a href="/observations/overview/" class="home-links">"My contents"</a></li>
+                <li>Make your first contribution at <a href="/observations/make-entry/" class="home-links">"Make entry"</a></li>
+                <li>Find on <a href="/map/" class="home-links">"Map"</a> your and others' entries.</li>
+            </ol>
+            <p>For further information please visit <a href="/faq/" class="home-links">FAQs page </a> for questions and answers.</p>
+
+
+        </div>
+
+        <div class="home-map" style="height:100%;">
+
+            <div class="map">
+                <div id="map">
+                    <!-- js for the overview_map (must be called after map container)-->
+                    <script src="/static/js/home_map.js"></script>
+                </div>
+            </div>
+
+            <div class="text-center map-button" >
+                {% if user.is_authenticated %}
+                <a href="/observations/make-entry/" class="button CTA-Citizen" style="width:100%;">Make entry</a>
+                {% else %}
+                <a href="/accounts/login/" class="button CTA-Citizen" style="width:100%;">Make entry</a>
+                {% endif %}
+            </div>
+
+
+        </div>
+
+
+        <!---here the entries are queued from the db
+        --->
+
+        <script>
+
+
+            map.invalidateSize();
+            /* Fetch the entries from the DB. */
+
+            {% if category1_list %}
+            var category1Entry = {}
+            {% for category1 in category1_list %}
+
+
+            category1Entry[{{category1.id}}] = {
+                "oid":{{category1.id}},
+                "observation": "category1",
+                "lat": "{{category1.Lat}}",
+                "lon": "{{category1.Lon}}",
+            }
+
+            try{
+                draw_points(category1Entry[{{category1.id}}])
+            } catch {
+                console.log("error while trying to draw category1")
+            }
+
+
+            {% endfor %}
+            {% endif %}
+
+
+            {% if category2_list %}
+            var category2Entry = {}
+            {% for category2 in category2_list %}
+            category2Entry[{{category2.id}}] = {
+                "oid":{{category2.id}},
+                "observation": "category2",
+                "lat": "{{category2.Lat}}",
+                "lon": "{{category2.Lon}}",
+            }
+            try{
+                draw_points(category2Entry[{{category2.id}}])
+            } catch {
+                console.log("error while trying to draw category2")
+            }
+
+            {% endfor %}
+            {% endif %}
+
+
+            {% if category3_list %}
+            var category3Entry = {}
+            {% for category3 in category3_list %}
+            category3Entry[{{category3.id}}] = {
+                "oid":{{category3.id}},
+                "observation": "category3",
+                "lat": "{{category3.Lat}}",
+                "lon": "{{category3.Lon}}",
+            }
+            try{
+                draw_points(category3Entry[{{category3.id}}])
+            } catch {
+                console.log("error while trying to draw category3")
+            }
+
+            {% endfor %}
+            {% endif %}
+
+            {% if category4_list %}
+            var category4Entry = {}
+            {% for category4 in category4_list %}
+            category4Entry[{{category4.id}}] = {
+                "oid":{{category4.id}},
+                "observation": "category4",
+                "lat": "{{category4.Lat}}",
+                "lon": "{{category4.Lon}}",
+            }
+            try{
+                draw_points(category4Entry[{{category4.id}}])
+            } catch {
+                console.log("error while trying to draw category4")
+            }
+
+            {% endfor %}
+            {% endif %}
+
+        </script>
+
+    </div>
+
+    <div class="home-pwa mt-5">
+        <div class="home-pwa-title">
+            <h2 class="pwa-title mt-5 mb-xs-1 mb-sm-3 mb-md-5"><b>On computer as well as on smartphone</b></h2>
+
+        </div>
+        <div class="home-pwa-img">
+            <div>
+                <img alt="Smartphone App Preview" src="/static/image/mockup_mobile.png"
+                     class="img-fluid pwa-img">
+            </div>
+        </div>
+        <div class="home-pwa-text">
+            <h1 class="pwa-subtitle">You can install this interface<br> as Progressive Web app <br> on the homescreen of <br>
+                your smartphone!</h1>
+            <p>Whether for iOS or Android <br> just save the web APP <br> from the browser on your homescreen!
+            </p>
+            <p>It's best to use Chrome (Android) or Safari (IPhone). <br>
+                These two browsers will allow you use all functions.</p>
+            <div class="buttons d-flex flex-column flex-md-row">
+                <button type="button" class="btn a2hs-button btn-sm" style="display: none;">Install <i
+                        class="fa fa-arrow-circle-down "></i></button>
+                <button type="button" data-toggle="modal" data-target=".bd-example-modal-lg"
+                        class="button btn-sm" data-dismiss="modal">How it works
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,160 @@
+#main {
+    display: grid;
+    grid-area: profile-content;
+    grid-template-areas:
+            "map obeservationform";
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: auto;
+    padding: 0;
+    margin: 0;
+}
+
+/* container für Karte */
+#main .map {
+    grid-area: map;
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper{
+    margin-right: 0;
+}
+
+.col-md-3.col-6.col-sm-6.symbol {
+     text-align: center;
+}
+
+.col-md-3.col-6.col-sm-6.symbol img {
+    border-radius: 50%;
+}
+
+.observationbanner {
+    width: 100%;
+    background-color:rgba(255,255,255,.8);
+    margin-right: 15px;
+    margin-left: 15px;
+    padding: 10px;
+}
+
+.row.row_observationbanner {
+    margin: 20px;
+}
+
+.col-md-3.col-6.col-sm-6.symbol p {
+    margin: 10px;
+}
+
+#map {
+height:100% !important;
+}
+
+#ObservationsInfo {
+    height: 100%;
+    z-index: 5;
+    position: absolute;
+    width: 100%;
+    background-color:rgba(255,255,255,.8);
+    display:none;padding:30px
+}
+
+.ObservationsInfoHeadline  {
+  	color: var(--darkblue);
+  	background-color: transparent;
+  	text-decoration: none;
+}
+
+.mb-0 .btn {
+    text-decoration: none;
+}
+
+.ObservationsInfoHeadline b  {
+  	vertical-align: middle;
+  	text-decoration: none;
+}
+
+.card {
+    border-radius: 0;
+}
+.card-header {
+    padding: 0 0;
+    background-color: rgba(255,255,255,1);
+    border-bottom: 0;
+}
+
+.col-md-3.col-6.col-sm-6.symbol a img{
+        width:150px;
+}
+
+.observationmapdiv{
+    height: 100%;
+    z-index: -2;
+    position: absolute;
+    width: 100%;
+    overflow: hidden;
+}
+
+.observationbannerdiv{
+    height: 100%;
+    z-index: 2;
+    position: absolute;
+    width: 100%;
+    align-items: center;
+    display: flex;
+}
+
+
+.inputfield_slider{
+    color: var(--darkblue);
+    border: none;
+    font-size: 1.2em;
+    text-align: center;
+    display:block;
+    border-radius: 0.25rem;
+}
+.inputfield_slider::after {
+    content: "%";
+}
+
+@media (max-width:767px){
+    .observationbanner {
+        padding: 2em;
+        margin-right: 0;
+        margin-left: 0;
+        width: 100%;
+        background-color:rgba(255,255,255,.8);
+    }
+
+
+
+    .row.row_observationbanner{
+        margin: 0px;
+    }
+
+    .col-md-3.col-6.col-sm-6.symbol a img{
+        width:100px;
+    }
+
+    .observationbannerdiv{
+        display: grid;
+        align-items: end;
+        height: 100%;
+        z-index: 2;
+        position: absolute;
+        width: 100%;
+    }
+
+    .observationmapdiv {
+        height: 100%;
+        z-index: -2;
+        position: absolute;
+        width: 100%;
+        overflow:hidden;
+    }
+
+    .row.headerstreifen{
+        margin-top: 0px;
+    }
+
+
+}
+

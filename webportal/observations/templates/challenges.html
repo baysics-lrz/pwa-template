@@ -1,0 +1,390 @@
+{% extends  'base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<script src="/static/js/observations/challenges.js"></script>
+
+<link rel="stylesheet" href="/static/css/profile.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/challenges.css?v=1.0.0">
+<div class="row">
+    <div class="col-2 rectangle desktop-only"
+         style="background: var(--darkblue);">
+    </div>
+    <div class="col-12 col-sm-12 rectangle col-md-10">
+        <div class="mainheadline">
+            <b>Challenges</b>
+        </div>
+    </div>
+</div>
+
+<div class="row ">		
+    {% include "includes/left-menu.html" %}
+    <div class="col-12 col-sm-12 col-md-10 " style="padding-right: 0 ;">
+        <div class="challenges-container" >
+            <div class="challenges-content">
+                <div class="challengeintroduction">
+                    <p class="introductiontext">Hello {{active_user}},<br>wellcome to your challenges!<br> Here you can see all your achievements: </p>
+                    <p clasS="introductiontext">Would you like to see how you score amongst other users? Click here to see the ranking: <a href="/observations/rank">Top lists</a>.</p>
+                </div>
+
+                <div class="category1titel">
+                    <h1 class="challengetitel">Category 1</h1>
+
+                    {% if category1_list|length == 1 %}
+                    <p>You have already made <b> {{category1_list|length}} </b> entries.</p>
+                    {% elif category1_list|length < 1 %}
+                    <p>You haven't made any entries yet. Start now to get a badge for this category.</p>
+                    {% else %}
+                    <p>You have already made <b>{{category1_list|length}} </b> entries. Observe more to get more badges.</p>
+                    {% endif %}
+                </div>
+
+                <div class="category1" >
+                    {% if category1_list|length >= 1 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_1.png">
+                    {% elif category1_list|length < 1 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_1_deact.png">
+                    {% endif %}
+
+                    {% if category1_list|length >= 10 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_10.png">
+                    {% elif category1_list|length < 10 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_10_deact.png">
+                    {% endif %}
+
+                    {% if category1_list|length >= 25 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_25.png">
+                    {% elif category1_list|length < 25 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_25_deact.png">
+                    {% endif %}
+
+                    {% if category1_list|length >= 50 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_50.png">
+                    {% elif category1_list|length < 50 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_50_deact.png">
+                    {% endif %}
+
+                    {% if category1_list|length >= 100 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_100.png">
+                    {% elif category1_list|length < 100 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_100_deact.png">
+                    {% endif %}
+
+                    {% if category1_list|length >= 200 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_200.png">
+                    {% elif category1_list|length < 200 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_200_deact.png">
+                    {% endif %}
+
+                    {% if category1listnames|length < 3 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_3ver_deact.png" >
+                    {% elif category1listnames|length >= 3 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_3ver.png">
+                    {% endif %}
+
+                    {% if category1listnames|length < 5 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_5ver_deact.png">
+                    {% elif category1listnames|length >= 5 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_5ver.png">
+                    {% endif %}
+
+                    {% if category1listnames|length < 12 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_all_deact.png">
+                    {% elif category1listnames|length >= 12 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category1_all.png">
+                    {% endif %}
+                </div>
+
+
+                <div class="category2titel">
+                    <h1 class="challengetitel">Category 2</h1>
+
+                    {% if category2_list|length == 1 %}
+                    <p>You have already made <b>{{category2_list|length}} </b> entries.</p>
+                    {% elif category2_list|length < 1 %}
+                    <p>You haven't made any entries yet. Start now to get a badge for this category.</p>
+                    {% else %}
+                    <p>You have already made <b> {{category2_list|length}} </b> entries. Observe more to get more badges. </p>
+                    {% endif %}
+                </div>
+
+                <div class="category2">
+
+                    {% if category2_list|length >= 1 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_1.png">
+                    {% elif category2_list|length < 1 %}
+                         <img class="scale-in-center badge-game" src="/static/image/challenge/category2_1_deact.png">
+                    {% endif %}
+
+                    {% if category2_list|length >= 10 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_10.png">
+                    {% elif category2_list|length < 10 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_10_deact.png">
+                    {% endif %}
+
+                    {% if category2_list|length >= 25 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_25.png">
+                    {% elif category2_list|length < 25 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_25_deact.png">
+                    {% endif %}
+
+                    {% if category2_list|length >= 50 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_50.png">
+                    {% elif category2_list|length < 50 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_50_deact.png">
+                    {% endif %}
+
+                    {% if category2_list|length >= 100 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_100.png">
+                    {% elif category2_list|length < 100 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_100_deact.png">
+                    {% endif %}
+
+                    {% if category2_list|length >= 200 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_200.png">
+                    {% elif category2_list|length < 200 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_200_deact.png">
+                    {% endif %}
+
+                    {% if category2listnames|length < 3 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_3ver_deact.png">
+                    {% elif category2listnames|length >= 3 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_3ver.png">
+                    {% endif %}
+
+                    {% if category2listnames|length < 5 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_5ver_deact.png">
+                    {% elif category2listnames|length >= 5 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category_5ver.png">
+                    {% endif %}
+
+                    {% if category2listnames|length < 25 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_all_deact.png">
+                    {% elif category2listnames|length >= 25 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category2_all.png">
+                    {% endif %}
+
+                </div>
+
+
+                <div class="category3titel">
+                    <h1 class="challengetitel">Category 3</h1>
+
+                    {% if category3_list|length == 1 %}
+                    <p>You have already made <b>{{category3_list|length}} </b> entries. </p>
+                    {% elif category3_list|length < 1 %}
+                    <p>You haven't made any entries yet. Start now to get a badge for this category.</p>
+                    {% else %}
+                    <p>You have already made <b> {{category3_list|length}} </b> entries. Observe more to get more badges.</p>
+                    {% endif %}
+                </div>
+
+                <div class="category3">
+
+                    {% if category3_list|length >= 1 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_1.png">
+                    {% elif category3_list|length < 1 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_1_deact.png">
+                    {% endif %}
+
+                    {% if category3_list|length >= 10 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_10.png">
+                    {% elif category3_list|length < 10 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_10_deact.png">
+                    {% endif %}
+
+                    {% if category3_list|length >= 25 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_25.png">
+                    {% elif category3_list|length < 25 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_25_deact.png">
+                    {% endif %}
+
+                    {% if category3_list|length >= 50 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_50.png">
+                    {% elif category3_list|length < 50 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_50_deact.png">
+                    {% endif %}
+
+                    {% if category3_list|length >= 100 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_100.png">
+                    {% elif category3_list|length < 100 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_100_deact.png">
+                    {% endif %}
+
+                    {% if category3_list|length >= 200 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_200.png">
+                    {% elif category3_list|length < 200 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_200_deact.png">
+                    {% endif %}
+
+                    {% if category3listnames|length < 3 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_3ver_deact.png">
+                    {% elif category3listnames|length >= 3 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_3ver.png">
+                    {% endif %}
+
+                    {% if category3listnames|length < 5 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_5ver_deact.png">
+                    {% elif category3listnames|length >= 5 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_5ver.png">
+                    {% endif %}
+
+                    {% if category3listnames|length < 23 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_all_deact.png">
+                    {% elif category3listnames|length >= 23 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category3_all.png">
+                    {% endif %}
+                </div>
+
+
+                <div class="category4titel">
+                    <h1 class="challengetitel">Category 4</h1>
+                    {% if category4_list|length == 1 %}
+                    <p>You have already made<b> {{category4_list|length}}</b> entires.</p>
+                    {% elif category4_list|length < 1 %}
+                    <p>You haven't made any entries yet. Start now to get a badge for this category.</p>
+                    {% else %}
+                    <p>You have already made <b> {{category4_list|length}} </b> entries. Observe more to get more badges.</p>
+                    {% endif %}
+                </div>
+
+                <div class="category4">
+                    {% if category4_list|length >= 1 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_1.png">
+                    {% elif category4_list|length < 1 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_1_deact.png">
+                    {% endif %}
+
+                    {% if category4_list|length >= 10 %}
+                        <img class="badge-game" src="/static/image/challenge/category4_10.png">
+                    {% elif category4_list|length < 10 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_10_deact.png">
+                    {% endif %}
+
+                    {% if category4_list|length >= 25 %}
+                         <img class="scale-in-center badge-game" src="/static/image/challenge/category4_25.png">
+                    {% elif category4_list|length < 25 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_25_deact.png">
+                    {% endif %}
+
+                    {% if category4_list|length >= 50 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_50.png">
+                    {% elif category4_list|length < 50 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_50_deact.png">
+                    {% endif %}
+
+                    {% if category4_list|length >= 100 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_100.png">
+                    {% elif category4_list|length < 100 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_100_deact.png">
+                    {% endif %}
+
+                    {% if category4_list|length >= 200 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_200.png">
+                    {% elif category4_list|length < 200 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_200_deact.png">
+                    {% endif %}
+
+                    {% if category4listnames|length < 3 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_3ver_deact.png">
+                    {% elif category4listnames|length >= 3 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_3ver.png">
+                    {% endif %}
+
+                    {% if category4listnames|length < 5 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_5ver_deact.png">
+                    {% elif category4listnames|length >= 5 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_5ver.png">
+                    {% endif %}
+
+                    {% if category4listnames|length < 21 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_all_deact.png">
+                    {% elif category4listnames|length >= 21 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/category4_all.png">
+                    {% endif %}
+                </div>
+
+
+                <div class="alltitel">
+                    <h1 class="challengetitel">Total entries</h1>
+                    {% if allentries == 1 %}
+                    <p>You have already made <b>{{allentries}} </b> entries. </p>
+                    {% elif allentries < 1 %}
+                    <p>You haven't made any entries yet. Start now to get a badge!</p>
+                    {% else %}
+                    <p>You have already made <b>{{allentries}} </b> entries. Observe more to get more badges.</p>
+
+                    {% endif %}
+                </div>
+
+                <div class="all">
+                    {% if allentries >= 1 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/all_1.png">
+                    {% elif allentries < 1 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/all_1_deact.png">
+                    {% endif %}
+
+                    {% if allentries >= 10 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/all_10.png">
+                    {% elif allentries < 10 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/all_10_deact.png">
+                    {% endif %}
+
+                    {% if allentries >= 25 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/all_25.png">
+                    {% elif allentries < 25 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/all_25_deact.png">
+                    {% endif %}
+
+                    {% if allentries >= 50 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/all_50.png">
+                    {% elif allentries < 50 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/all_50_deact.png">
+                    {% endif %}
+
+                    {% if allentries >= 100 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/all_100.png">
+                    {% elif allentries < 100 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/all_100_deact.png">
+                    {% endif %}
+
+                    {% if allentries >= 200 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/all_200.png">
+                    {% elif allentries < 200 %}
+                        <img class="scale-in-center badge-game" src="/static/image/challenge/all_200_deact.png">
+                    {% endif %}
+                </div>
+
+                <div class="specialtitel">
+                    <h1 class="challengetitel">Special challenges</h1>
+                    <p>Welcome to special challenges!</p>
+                </div>
+
+                <div class="special">
+                    {% if category3_list|length > 0 and category2_list|length > 0 and category1_list|length > 0 and  category4_list|length > 0 %}
+                    <img class="scale-in-center badge-special" src="/static/image/challenge/omniobserver.png">
+
+                    {% else %}
+                    <img class="scale-in-center badge-special" src="/static/image/challenge/omniobserver_deact.png">
+                    {% endif %}
+
+                    {% if traveler >= 10  %}
+                    <img class="scale-in-center badge-special" src="/static/image/challenge/traveler_10.png">
+
+                    {% else %}
+                    <img class="scale-in-center badge-special" src="/static/image/challenge/traveler_10_deact.png">
+                    {% endif %}
+                </div>
+
+            </div> 
+        </div>
+    </div>
+</div>
+
+{% else %}
+<p><a href="/accounts/login/">Please log in to continue.</a></p>
+
+{% endif %}
+
+{% endblock %}

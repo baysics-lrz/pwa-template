@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 56 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g>
+        <rect x="2.092" y="9.021" width="52.377" height="9.618" style="fill:none;stroke:rgb(63,63,63);stroke-width:3.04px;"/>
+        <path d="M52.854,18.559L46.924,62.046L9.637,62.046L3.707,18.559L3.743,18.518L52.818,18.518L52.854,18.559ZM7.187,21.56L12.293,59.003L44.268,59.003L49.373,21.56L7.187,21.56Z" style="fill:rgb(63,63,63);"/>
+        <path d="M28.28,30.209L28.28,50.355" style="fill:none;stroke:rgb(63,63,63);stroke-width:1.78px;stroke-linecap:round;stroke-linejoin:miter;"/>
+        <path d="M38.422,30.209L38.422,50.355" style="fill:none;stroke:rgb(63,63,63);stroke-width:1.78px;stroke-linecap:round;stroke-linejoin:miter;"/>
+        <path d="M18.139,30.209L18.139,50.355" style="fill:none;stroke:rgb(63,63,63);stroke-width:1.78px;stroke-linecap:round;stroke-linejoin:miter;"/>
+        <path d="M34.798,9.021L21.763,9.021C21.763,5.424 24.683,2.504 28.28,2.504C31.877,2.504 34.798,5.424 34.798,9.021Z" style="fill:none;stroke:rgb(63,63,63);stroke-width:2.28px;stroke-linecap:round;stroke-linejoin:miter;"/>
+    </g>
+</svg>

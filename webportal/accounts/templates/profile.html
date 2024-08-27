@@ -1,0 +1,108 @@
+{% extends  'base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<link rel="stylesheet" href="/static/css/profile.css?v=1.0.0">
+<script>
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+</script>
+
+<div class="row">
+	<div class="col-2 rectangle desktop-only">
+	</div>
+	<div class="col-12 col-sm-12 rectangle col-md-10">
+		<div class="mainheading">
+			<b>Settings</b>
+		</div>
+	</div>
+</div>
+
+<div class="row" style="height:83vh;">
+    {% include "includes/left-menu.html" %}
+	<div class="col-12 col-sm-12 col-md-10" style="margin-top: 50px;margin-bottom: 150px;">
+		<div class="row" style="padding-top: 55px;">
+
+			<div class="col-md-6 image col-12 col-sm-12">
+				<br>
+				<p>
+					<b>{{user.username}}</b><br>
+						{% if user.email %}
+						{{user.email}}
+						{% else %}
+					Your email address<br> is not registered.
+					{% endif %}
+				</p>
+				<p>
+					<i data-toggle="modal" data-target="#exampleModal" class="fa fa-info-circle showusername"></i>
+					<label for="name_checkbox" ><b>Make username visible to public:</b></label>
+					{{user.name_agreement}}
+				</p>
+
+				<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog  modal-dialog-centered">
+						<div class="modal-content">
+
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Make username visible to public</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+							<div class="modal-body">
+								Make your username visible to other users under 'Change username'. You always have the possibility to show your name as anonymous again.
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+			<div class="col-md-6 col-12 col-sm-12">
+				<p>
+					<span class="Settinglinks">
+						<img src="/static/image/icon_password.svg" alt="password icon" class="icon_login icon_password"
+							 style="height: 25px;"/>
+					</span>
+					<a href="/accounts/change-password/">Change password</a>
+				</p>
+				<p>
+					<span class="Settinglinks">
+						<img src="/static/image/icon_mail.svg" alt="password icon" class="icon_login icon_password"
+							 style="height: 18px;"/>
+					</span>
+					<a href="/accounts/edit-emailaddress/">Change E-Mail</a>
+				</p>
+				<p>
+					<span class="Settinglinks">
+						<img src="/static/image/icon_username.svg" alt="password icon" class="icon_login icon_password"
+							 style="height: 20px;"/>
+					</span>
+					<a href="/accounts/edit-username/">Change username</a>
+				</p>
+				<p>
+					<span class="Settinglinks">
+						<img src="/static/image/icon_delete.svg" alt="password icon" class="icon_login icon_password"
+							 style="height: 25px;"/>
+					</span>
+					<a href="/accounts/delete-account/{{user.pk}}/">Delete user account</a>
+				</p>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+{% else %}
+        <p><a href="/accounts/login/">Please login to proceed.</a></p>
+{% endif %}
+
+{% endblock %}
+
+<script>
+	$('#exampleModal').modal(options)
+</script>

@@ -1,0 +1,470 @@
+{% extends  'base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<link rel="stylesheet" href="/static/css/profile.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/entries.css?v=1.0.0">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/date-eu.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/title-numeric.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/datetime-moment.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.25/dataRender/datetime.js"></script>
+
+
+
+<style>
+    tr.selected{background-color:var(--lightblue)}
+</style>
+<div class="row" >
+	<div class="col-2 rectangle desktop-only" >
+	</div>
+	<div class="col-12 col-sm-12 rectangle col-md-10">
+		<div class="mainheadline">
+			<b>My entries</b>
+		</div>
+
+	</div>
+</div>
+
+<div class="row" id="Loggedincontent">
+	{% include "includes/left-menu.html" %}
+	<div class="col-12 col-sm-12 col-md-10" id="entriesContent">
+        <div class="row" style="height:inherit">
+            <div class="col-12 col-sm-12 col-md-9" style="padding:0;height:inherit;overflow:auto;">
+                <div class="mobile-only" id="showIntroMobil">
+
+                        <p>Hello {{user.username}},</p><p> this is a dummy text.
+
+                    </p>
+                </div>
+
+                <p style="margin:15px">
+                    Choose an icon:
+                    <a href="/observations/category1/show-category1-list">
+                        <span style="width:50px;display:inline-block;margin-left: 10px;">
+                            <img src="/static/image/category1.svg" style="width:35px">
+                        </span>
+                    </a>
+                    <a href="/observations/category2/show-category2-list/">
+                        <span style="width:50px;display:inline-block;">
+                            <img src="/static/image/category2.svg" style="width:35px">
+                        </span>
+                    </a>
+                    <a href="/observations/category3/show-category3-list">
+                        <span style="width:50px;display:inline-block;">
+                            <img src="/static/image/category3.svg" style="width:35px">
+                        </span>
+                    </a>
+                    <a href="/observations/category4/show-category4-list">
+                        <span style="width:50px;display:inline-block;">
+                            <img src="/static/image/category4.svg" style="width:35px">
+                        </span>
+                    </a>
+                </p>
+
+                <table id="Entries">
+                    <thead>
+                        <tr>
+                            <th><span class="desktop-only">ID</span></th>
+                            <th>Date</th>
+                            <th>Subject</th>
+                            <th>Place</th>
+                            <th class="desktop-only">Report</th>
+                            <th class="desktop-only">Admin Comment</th>
+                            <th class="mobile-only"></th>
+                            <th class="mobile-only"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for category1 in category1s %}
+                        <tr class="category1" style="cursor:pointer">
+                            <td><span class="desktop-only" title="{{category1.pk}}">{{category1.pk}}</span></td>
+                            <td data-sort='{{ category1.ObservationDate|date:"Y-m-d" }}'> {{ category1.ObservationDate }} </td>
+                            <td> {{ category1.Category1Subject }} </td>
+                            <td> {{ category1.Municipal }} </td>
+                            {% if category1.PublicComment.text %}
+                            <td class="desktop-only" style="color:var(--red); line-height: 1.5em;">
+                                {% if 'Werte' in category1.PublicComment.title %}
+                                <b>Wrong measurments</b> {% elif 'Image' in category1.PublicComment.title %}
+                                <b>Wrong picture </b>{% else %}
+                                <b>Other</b> {% endif %} <br>{{category1.PublicComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                            {% if category1.ReportComment.text %}
+                            <td class="desktop-only" style="color:var(--red); line-height: 1.5em;">
+                                {{category1.ReportComment.title}} - {{category1.ReportComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+
+                            <td class="mobile-only">
+                                <span class="Settinglinks mobile-only" style="width: 25px;">
+                                    <a href="/observations/updatecategory1/{{category1.pk}}/">
+                                        <img src="/static/image/edit_icon.svg" alt="password icon" class="icon_login icon_password"
+                                             style="height: 25px;"/>
+                                    </a>
+                                </span>
+                            </td>
+                            <td class="mobile-only">
+                                <span class="Settinglinks mobile-only" style="width: 25px;">
+                                    <a href="/observations/deletecategory1/{{category1.pk}}/">
+                                        <img src="/static/image/icon_delete.svg" alt="password icon" class="icon_login icon_password"
+                                             style="height: 25px;"/>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    {% for category2 in category2s %}
+                        <tr class="category2" style="cursor:pointer;">
+                            <td><span class="desktop-only" title="{{category2.pk}}">{{category2.pk}}</span></td>
+                            <td data-sort='{{ category2.ObservationDate|date:"Y-m-d" }}'> {{ category2.ObservationDate }} </td>
+                            <td> {{ category2.Category2Subject }} </td>
+                            <td>{{category2.Municipal}}</td>
+                            </td>
+                            {% if category2.PublicComment.text %}
+                            <td class="desktop-only" style="color:var(--red); line-height: 1.5em;">
+                                {% if 'Werte' in category2.PublicComment.title %}
+                               <b>Wrong measurments</b> {% elif 'Image' in category2.PublicComment.title %}
+                                <b>Wrong picture</b> {% else %}
+                                <b>Other</b> {% endif %} <br> {{category2.PublicComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                            {% if category2.ReportComment.text %}
+                            <td class="desktop-only" style="color:var(--red); line-height: 1.5em;">
+                                {{category2.ReportComment.title}} - {{category2.ReportComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                            <td class="mobile-only">
+                                <span class="Settinglinks mobile-only" style="width: 25px;">
+                                    <a href="/observations/updatecategory2/{{category2.pk}}/">
+                                        <img src="/static/image/edit_icon.svg" alt="password icon" class="icon_login icon_password"
+                                             style="height: 25px;"/>
+                                    </a>
+                                </span>
+                            </td>
+                            <td class="mobile-only">
+                                <span class="Settinglinks mobile-only" style="width: 25px;">
+                                    <a href="/observations/deletecategory2/{{category2.pk}}/">
+                                        <img src="/static/image/icon_delete.svg" alt="password icon" class="icon_login icon_password"
+                                             style="height: 25px;"/>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    {% for category3 in category3s %}
+                        <tr class="category3" style="cursor:pointer;">
+                            <td><span class="desktop-only" title="{{category3.pk}}">{{category3.pk}}</span></td>
+                            <td data-sort='{{ category3.ObservationDate|date:"Y-m-d" }}'> {{ category3.ObservationDate }} </td>
+                            <td> {{ category3.Category3Subject }} </td>
+                            <td> {{category3.Municipal}}</td>
+                            {% if category3.PublicComment.text %}
+                            <td class="desktop-only" style="color:var(--red); line-height: 1.5em;">
+                                {% if 'Werte' in category3.PublicComment.title %}
+                                <b>Wrong measurments</b> {% elif 'Image' in category3.PublicComment.title %}
+                                <b>Wrong picture </b>{% else %}
+                                <b>Other</b> {% endif %}<br> {{category3.PublicComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                            {% if category3.ReportComment.text %}
+                            <td class="desktop-only" style="color:var(--red); line-height: 1.5em; ">
+                                {{category3.ReportComment.title}} - {{category3.ReportComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                            <td class="mobile-only">
+                                <span class="Settinglinks mobile-only" style="width: 25px;">
+                                    <a href="/observations/updatecategory3/{{category3.pk}}/">
+                                        <img src="/static/image/edit_icon.svg" alt="password icon" class="icon_login icon_password"
+                                             style="height: 25px;"/>
+                                    </a>
+                                </span>
+                            </td>
+                            <td class="mobile-only">
+                                <span class="Settinglinks mobile-only" style="width: 25px;">
+                                    <a href="/observations/deletecategory3/{{category3.pk}}/">
+                                        <img src="/static/image/icon_delete.svg" alt="password icon" class="icon_login icon_password"
+                                             style="height: 25px;"/>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    {% for category4 in category4s %}
+                        <tr class="category4" style="cursor:pointer;">
+                            <td><span class="desktop-only" title="{{category4.pk}}">{{category4.pk}}</span></td>
+                            <td  data-sort='{{ category4.ObservationDate|date:"Y-m-d" }}' > {{ category4.ObservationDate }} </td>
+                            <td> {{ category4.Category4Subject }} </td>
+                            <td>{{category4.Municipal}}</td>
+                            {% if category4.PublicComment %}
+                            <td class="desktop-only" style="color:var(--red); line-height: 1.5em;">
+                                {% if 'Werte' in category4.PublicComment.title %}
+                                <b>Wrong measurments</b> {% elif 'Image' in category4.PublicComment.title %}
+                                <b>Wrong picture </b>{% else %}
+                                <b>Other</b> {% endif %}<br> {{category4.PublicComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                            {% if category4.ReportComment.text %}
+                            <td class="desktop-only" style="color:var(--red); line-height: 1.5em;">
+                                {{category4.ReportComment.title}} - {{category4.ReportComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                            <td class="mobile-only">
+                                <span class="Settinglinks mobile-only" style="width: 25px;">
+                                    <a href="/observations/updatecategory4/{{category4.pk}}/">
+                                        <img src="/static/image/edit_icon.svg" alt="password icon" class="icon_login icon_password"
+                                             style="height: 25px;"/>
+                                    </a>
+                                </span>
+                            </td>
+                            <td class="mobile-only">
+                                <span class="Settinglinks mobile-only" style="width: 25px;">
+                                    <a href="/observations/deletecategory4/{{category4.pk}}/">
+                                        <img src="/static/image/icon_delete.svg" alt="password icon" class="icon_login icon_password"
+                                             style="height: 25px;"/>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="col-3 desktop-only" style="padding:0; height:inherit; overflow:auto">
+                <div id="showintro">
+                        <p>Hello {{user.username}},</p>
+                    <p> this is a dummy text.</p>
+                </div>
+                <div id="emptyphoto" class="showentry">
+                    Here you can edit or delete entries.
+                </div>
+
+                {% for category1 in category1s %}
+                <div class="showentry" id="DetailC1{{category1.pk}}" style="display:none;">
+                    {% if category1.Photo %}
+                    <img src=  "{{ MEDIA_URL }}{{ category1.Photo }}" width="100%" style="margin-bottom:15px;"><br/>
+                    {% endif %}
+                    <p>
+                        <span class="Settinglinks" style="width: 30px;">
+                            <img src="/static/image/edit_icon.svg" alt="password icon" class="icon_login icon_password"
+                                 style="height: 25px;"/>
+                        </span>
+                        <a href="/observations/updatecategory1/{{category1.pk}}/">Edit</a>
+                    </p>
+                    <p>
+                        <span class="Settinglinks" style="width: 30px;">
+                            <img src="/static/image/icon_delete.svg" alt="password icon" class="icon_login icon_password"
+                                 style="height: 25px;"/>
+                        </span>
+                        <a style="cursor:pointer;" data-toggle="modal" data-target="#exampleModalCenter{{category1.pk}}">Delete</a>
+                    </p>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter{{category1.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle{{category1.pk}}" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle{{category1.pk}}">Delete entry</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Do you want to delete this {{category1.ObservationDate}}, {{category1.Category1Subject}} entry?
+                      </div>
+                      <div class="modal-footer">
+                      <form action="{% url 'deletecategory1' pk=category1.pk %}" method="post">
+                      {% csrf_token %}
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                      <input type="submit" class="btn btn-danger" style="background: var(--red);" value="Yes">
+                      </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+
+                {% for category2 in category2s %}
+                <div class="showentry" id="DetailC2{{category2.pk}}" style="display:none;">
+                    {% if category2.Photo %}
+                    <img src=  "{{ MEDIA_URL }}{{ category2.Photo }}" width="100%" style="margin-bottom:15px;"><br/>
+                    {% endif %}
+                    <p>
+                        <span class="Settinglinks" style="width: 30px;">
+                            <img src="/static/image/edit_icon.svg" alt="password icon" class="icon_login icon_password"
+                                 style="height: 25px;"/>
+                        </span>
+                        <a href="/observations/updatecategory2/{{category2.pk}}/">Edit</a>
+                    </p>
+                    <p>
+                        <span class="Settinglinks" style="width: 30px;">
+                            <img src="/static/image/icon_delete.svg" alt="password icon" class="icon_login icon_password"
+                                 style="height: 25px;"/>
+                        </span>
+                        <a style="cursor:pointer;" data-toggle="modal" data-target="#exampleModalCenterO{{category2.pk}}">Delete</a>
+                    </p>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenterO{{category2.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitleO{{category2.pk}}" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitleO{{category2.pk}}">Delete entry</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Do you want to delete this {{category2.ObservationDate}}, {{category2.Category2Subject}} entry?
+                      </div>
+                     <div class="modal-footer">
+                     <form action="{% url 'deletecategory2' pk=category2.pk %}" method="post">
+                     {% csrf_token %}
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                     <input type="submit" class="btn btn-danger" style="background: var(--red);" value="Yes">
+                     </form>
+                     </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+
+                {% for category3 in category3s %}
+                <div class="showentry" id="DetailC3{{category3.pk}}" style="display:none;">
+                    {% if category3.Photo %}
+                    <img src=  "{{ MEDIA_URL }}{{ category3.Photo }}" width="100%" style="margin-bottom:15px;"><br/>
+                    {% endif %}
+                    <p>
+                        <span class="Settinglinks" style="width: 30px;">
+                            <img src="/static/image/edit_icon.svg" alt="password icon" class="icon_login icon_password"
+                                 style="height: 25px;"/>
+                        </span>
+                        <a href="/observations/updatecategory3/{{category3.pk}}/">Edit</a>
+                    </p>
+                    <p>
+                        <span class="Settinglinks" style="width: 30px;">
+                            <img src="/static/image/icon_delete.svg" alt="password icon" class="icon_login icon_password"
+                                 style="height: 25px;"/>
+                        </span>
+                        <a style="cursor: pointer;" data-toggle="modal" data-target="#exampleModalCenter{{category3.pk}}">Delete</a>
+                    </p>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter{{category3.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle{{category3.pk}}" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle{{category3.pk}}"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Do you want to delete this {{category3.ObservationDate}}, {{category3.Category3Subject}} entry?
+                      </div>
+                      <div class="modal-footer">
+                        <form action="{% url 'deletecategory3' pk=category3.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                        <input type="submit" class="btn btn-danger" style="background: var(--red);" value="Yes">
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+
+                {% for category4 in category4s %}
+                <div class="showentry" id="DetailC4{{category4.pk}}" style="display:none;">
+                    {% if category4.Photo %}
+                    <img src=  "{{ MEDIA_URL }}{{ category4.Photo }}" width="100%" style="margin-bottom:15px;"><br/>
+                    {% endif %}
+                    <p>
+                        <span class="Settinglinks" style="width: 30px;">
+                            <img src="/static/image/edit_icon.svg" alt="password icon" class="icon_login icon_password"
+                                 style="height: 25px;"/>
+                        </span>
+                        <a href="/observations/updatecategory4/{{category4.pk}}/">Edit</a>
+                    </p>
+                    <p>
+                        <span class="Settinglinks" style="width: 30px;">
+                            <img src="/static/image/icon_delete.svg" alt="password icon" class="icon_login icon_password"
+                                 style="height: 25px;"/>
+                        </span>
+                        <a style="cursor: pointer;" data-toggle="modal" data-target="#exampleModalCenter{{category4.pk}}">Delete</a>
+                    </p>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter{{category4.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle{{category4.pk}}" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle{{category4.pk}}">Delete entry</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Do you want to delete this {{category4.ObservationDate}}, {{category4.Category4Subject}} entry?
+                      </div>
+                        <div class="modal-footer">
+                        <form action="{% url 'deletecategory4' pk=category4.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                        <input type="submit" class="btn btn-danger" style="background: var(--red);" value="Yes">
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/observations/ListEntries.js"></script>
+{% else %}
+<p><a href="/accounts/login/">Please log in to continue.</a></p>
+{% endif %}
+
+{% endblock %}

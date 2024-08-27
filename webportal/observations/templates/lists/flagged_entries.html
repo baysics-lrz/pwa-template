@@ -1,0 +1,233 @@
+{% extends  'base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<link rel="stylesheet" href="/static/css/profile.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/entries.css?v=1.0.0">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/date-eu.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/title-numeric.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/datetime-moment.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.25/dataRender/datetime.js"></script>
+
+<style>
+    tr.selected{background-color:#b0bed9}
+</style>
+<div class="row" >
+	<div class="col-2 rectangle desktop-only"
+		 style="background:var(--darkblue);">
+	</div>
+	<div class="col-12 col-sm-12 rectangle col-md-10">
+		<div class="mainheadline">
+			<b>Flagged entries</b>
+		</div>
+
+	</div>
+</div>
+
+<div class="row" id="Loggedincontent">
+{% include "includes/left-menu.html" %}
+	<div class="col-12 col-sm-12 col-md-10" id="entriesContent">
+        <div class="row" style="height:inherit">
+            <div class="col-12 col-sm-12 col-md-9" style="padding:0;height:inherit;overflow:auto;">
+                <div class="mobile-only" id="showIntroMobil">
+
+                        <p>Hello {{user.username}},</p>
+                    <p>
+                       You can see this content because you have an admin account.
+                    </p>
+                </div>
+
+
+                <table id="Entries">
+                    <thead>
+                        <tr>
+                           <th><span class="desktop-only">ID</span></th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Subject</th>
+                            <th>Place</th>
+                            <th class="desktop-only">Flag Nr.</th>
+                            <th class="desktop-only">User-report</th>
+                            <th class="desktop-only">Admin-comment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for category1 in category1s %}
+                        <tr class="category1" style="cursor:pointer">
+                            <td><span class="desktop-only" title="{{category1.pk}}">{{category1.pk}}</span></td>
+                            <td>Category1</td>
+                            <td data-sort='{{ category1.ObservationDate|date:"Y-m-d" }}'> {{ category1.ObservationDate }} </td>
+                            <td> {{ category1.Category1Subject }} </td>
+                            <td> {{ category1.Municipal }} </td>
+                            <td>{{ category1.Flag }}</td>
+                            {% if category1.PublicComment.text %}
+                            <td class="desktop-only" style="color:#dc3545; line-height: 1.5em;">
+                                {% if 'Werte' in category1.PublicComment.title %}
+                                <b>Wrong value</b> {% elif 'Image' in category1.PublicComment.title %}
+                                <b>Wrong picture </b>{% else %}
+                                <b>Others</b> {% endif %} <br>{{category1.PublicComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                            {% if category1.ReportComment.text %}
+                            <td class="desktop-only" style="color:#dc3545; line-height: 1.5em;">
+                                {{category1.ReportComment.title}} - {{category1.ReportComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+
+                    {% for category2 in category2s %}
+                        <tr class="category2" style="cursor:pointer;">
+                            <td><span class="desktop-only" title="{{category2.pk}}">{{category2.pk}}</span></td>
+                            <td>Category2</td>
+                            <td data-sort='{{ category2.ObservationDate|date:"Y-m-d" }}'> {{ category2.ObservationDate }} </td>
+                            <td> {{ category2.Category2Subject }} </td>
+                            <td>{{category2.Municipal}}</td>
+                            <td>{{category2.Flag}}</td>
+                            {% if category2.PublicComment.text %}
+                            <td class="desktop-only" style="color:#dc3545; line-height: 1.5em;">
+                                {% if 'Werte' in Category2.PublicComment.title %}
+                               <b>Wrong value</b> {% elif 'Image' in category2.PublicComment.title %}
+                                <b>Wrong picture</b> {% else %}
+                                <b>Others</b> {% endif %} <br> {{category2.PublicComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                            {% if category2.ReportComment.text %}
+                            <td class="desktop-only" style="color:#dc3545; line-height: 1.5em;">
+                                {{category2.ReportComment.title}} - {{category2.ReportComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+
+                    {% for category3 in category3s %}
+                        <tr class="category3" style="cursor:pointer;">
+                            <td><span class="desktop-only" title="{{category3.pk}}">{{category3.pk}}</span></td>
+                            <td>Category3</td>
+                            <td data-sort='{{ category3.ObservationDate|date:"Y-m-d" }}'> {{ category3.ObservationDate }} </td>
+                            <td> {{ category3.Category3Subject }} </td>
+                            <td> {{category3.Municipal}}</td>
+                            <td>{{category3.Flag}}</td>
+                            {% if category3.PublicComment.text %}
+                            <td class="desktop-only" style="color:#dc3545; line-height: 1.5em;">
+                                {% if 'Werte' in category3.PublicComment.title %}
+                                <b>Wrong value</b> {% elif 'Image' in category3.PublicComment.title %}
+                                <b>Wrong picture</b>{% else %}
+                                <b>Others</b> {% endif %}<br> {{category3.PublicComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                            {% if category3.ReportComment.text %}
+                            <td class="desktop-only" style="color:#dc3545; line-height: 1.5em; ">
+                                {{category3.ReportComment.title}} - {{category3.ReportComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+
+                    {% for category4 in category4s %}
+                        <tr class="category4" style="cursor:pointer;">
+                            <td><span class="desktop-only" title="{{category4.pk}}">{{category4.pk}}</span></td>
+                            <td>Category4</td>
+                            <td  data-sort='{{ category4.ObservationDate|date:"Y-m-d" }}' > {{ category4.ObservationDate }} </td>
+                            <td> {{ category4.Category4Subject }} </td>
+                            <td>{{category4.Municipal}}</td>
+                            <td>{{category4.Flag}}</td>
+                            {% if category4.PublicComment %}
+                            <td class="desktop-only" style="color:#dc3545; line-height: 1.5em;">
+                                {% if 'Werte' in category4.PublicComment.title %}
+                                <b>Wrong value</b> {% elif 'Image' in category4.PublicComment.title %}
+                                <b>Wrong picture</b>{% else %}
+                                <b>Others</b> {% endif %}<br> {{category4.PublicComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                            {% if category4.ReportComment.text %}
+                            <td class="desktop-only" style="color:#dc3545; line-height: 1.5em;">
+                                {{category4.ReportComment.title}} - {{category4.ReportComment.text}}
+                            </td>
+                            {% else %}
+                            <td class="desktop-only">
+                                -
+                            </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-3 desktop-only" style="padding:0; height:inherit; overflow:auto">
+                <div id="showintro">
+                        <p>Hello {{user.username}},</p>
+                    <p>You can see this content because you have an admin account.</p>
+                </div>
+                 {% for category1 in category1s %}
+                <div class="showentry" id="DetailC1{{category1.pk}}" style="display:none;">
+                    {% if category1.Photo %}
+                    <img src=  "{{ MEDIA_URL }}{{ category1.Photo }}" width="100%" style="margin-bottom:15px;"><br/>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% for category2 in category2s %}
+                <div class="showentry" id="DetailC2{{category2.pk}}" style="display:none;">
+                    {% if category2.Photo %}
+                    <img src=  "{{ MEDIA_URL }}{{ category2.Photo }}" width="100%" style="margin-bottom:15px;"><br/>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% for category3 in category3s %}
+                <div class="showentry" id="DetailC3{{category3.pk}}" style="display:none;">
+                    {% if category3.Photo %}
+                    <img src=  "{{ MEDIA_URL }}{{ category3.Photo }}" width="100%" style="margin-bottom:15px;"><br/>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% for category4 in category4 %}
+                <div class="showentry" id="DetailC4{{category4.pk}}" style="display:none;">
+                    {% if category4.Photo %}
+                    <img src=  "{{ MEDIA_URL }}{{ category4.Photo }}" width="100%" style="margin-bottom:15px;"><br/>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/observations/ListEntries.js"></script>
+{% else %}
+<p><a href="/accounts/login/">Please log in to continue.</a></p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,41 @@
+from django.urls import include, re_path
+
+from observations.views import *
+
+urlpatterns = [
+    re_path('flagged-entries/', flagged_entries, name='flagged_entries'),
+    re_path('rank/', RankView.as_view(), name='rank'),
+    re_path('overview/', OverviewPageView.as_view(), name='overviewprofile'),
+    re_path('challenges/', ChallengesPageView.as_view(), name='challenges'),
+    re_path('make-entry/', SelectionPageView.as_view(), name='selection'),
+    re_path('show-my-list/', show_my_list, name='mylist'),
+    re_path('createcategory1', CreateCategory1.as_view(), name='createcategory1'),
+    re_path('createcategory2', CreateCategory2.as_view(), name='createcategory2'),
+    re_path('createcategory3', CreateCategory3.as_view(), name='createcategory3'),
+    re_path('createcategory4', CreateCategory4.as_view(), name='createcategory4'),
+    re_path('updatecategory1/(?P<pk>\d+)', UpdateCategory1.as_view(), name='updatecategory1'),
+    re_path('updatecategory2/(?P<pk>\d+)', UpdateCategory2.as_view(), name='updatecategory2'),
+    re_path('updatecategory3/(?P<pk>\d+)', UpdateCategory3.as_view(), name='updatecategory3'),
+    re_path('updatecategory4/(?P<pk>\d+)', UpdateCategory4.as_view(), name='updatecategory4'),
+    re_path('deletecategory1/(?P<pk>\d+)/', DeleteCategory1.as_view(), name='deletecategory1'),
+    re_path('deletecategory2/(?P<pk>\d+)/', DeleteCategory2.as_view(), name='deletecategory2'),
+    re_path('deletecategory3/(?P<pk>\d+)/', DeleteCategory3.as_view(), name='deletecategory3'),
+    re_path('deletecategory4/(?P<pk>\d+)/', DeleteCategory4.as_view(), name='deletecategory4'),
+    re_path('category1/show-category1-list', show_category1_list, name='show_category1_list'),
+    re_path('category2/show-category2-list', show_category2_list, name='show_category2_list'),
+    re_path('category3/show-category3-list', show_category3_list, name='show_category3_list'),
+    re_path('category4/show-category4-list', show_category4_list, name='show_category4_list'),
+    re_path('category1/download-category1-photo', download_category1_photo, name='download_category1_photo'),
+    re_path('category2/download-category2-photo', download_category2_photo, name='download_category2_photo'),
+    re_path('category3/download-category3-photo', download_category3_photo, name='download_category3_photo'),
+    re_path('category4/download-category4-photo', download_category4_photo, name='download_category4_photo'),
+    re_path('category1/download-csv', download_category1, name='download_category1'),
+    re_path('category1/download-xls', download_category1_xlsx, name='download_category1_xlsx'),
+    re_path('category2/download-csv', download_category2, name='download_category2'),
+    re_path('category2/download-xls', download_category2_xlsx, name='download_category2_xlsx'),
+    re_path('category3/download-csv', download_category3, name='download_category3'),
+    re_path('category3/download-xls', download_category3_xlsx, name='download_category3_xlsx'),
+    re_path('category4/download-csv', download_category4, name='download_category4'),
+    re_path('category4/download-xls', download_category4_xlsx, name='download_category4_xlsx'),
+
+]

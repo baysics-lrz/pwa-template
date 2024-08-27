@@ -1,0 +1,51 @@
+{% extends  'base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<link rel="stylesheet" href="/static/css/profile.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/entries.css?v=1.0.0">
+<div class="row">
+	<div class="col-2 rectangle desktop-only">
+	</div>
+	<div class="col-12 col-sm-12 rectangle col-md-10">
+		<div class="mainheading">
+			<b>Settings</b>
+		</div>
+	</div>
+</div>
+<div class="row" id="Loggedincontent">
+    {% include "includes/left-menu.html" %}
+	<div class="col-12 col-sm-12 col-md-10" id="InputContent" style="border-left-style:unset;">
+		<div class="settings-content">
+            <div>
+                <h4><b>Change email address</b></h4>
+                <form method="post">
+                    {% csrf_token %}
+                    <p style="color:var(--red);">{{ form.non_field_errors }}</p>
+                    <p style="color:var(--red);">{{form.email.errors}}</p>
+                    <div class="form-group row">
+                        <label for="id_email" class="col-sm-5 col-form-label"><b>E-Mail address:</b></label>
+                        <div class="col-sm-7">
+                            {{form.email}}
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <a class="button" href="/accounts/profile/" style="color:var(--darkblue);border-color:var(--darkblue);background-color:white;font-weight:bold;border-style: solid;border-width: 1px;">Cancel</a>
+                        <input type="submit" class="button" style="background-color: var(--red);font-weight: bold;line-height: 14px;" value="Change">
+                    </div>
+                </form>
+            </div>
+		</div>
+	</div>
+</div>
+
+<script>
+  var element = document.getElementById("id_email");
+  element.classList.add("form-control");
+</script>
+
+{% else %}
+        <p><a href="/accounts/login/">Please log in to continue.</a></p>
+{% endif %}
+
+{% endblock %}

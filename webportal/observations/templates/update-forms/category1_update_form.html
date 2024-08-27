@@ -1,0 +1,63 @@
+{% extends  'update_observation.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block update_form %}
+
+<form method="post" enctype="multipart/form-data" class="mt-3">
+    {% csrf_token %}
+
+    {{ form.Category1Subject|as_crispy_field }}
+
+    {{ form.Certainty|as_crispy_field }}
+
+    {{ form.Number|as_crispy_field }}
+
+    {{ form.Category1Feature1|as_crispy_field }}
+
+    {{ form.Category1Feature2|as_crispy_field }}
+
+    {{ form.Category1Feature3|as_crispy_field }}
+
+    {{ form.Lat|as_crispy_field }}
+
+    {{ form.Lon|as_crispy_field }}
+
+    <!-- Information if coordinates are outside bavaria or if GPS is too unprecise-->
+    <div id="coord-warning" style="color: red;"></div>
+
+    {{ form.ObservationDate|as_crispy_field }}
+
+    {{ form.ObservationTime|as_crispy_field }}
+
+    <div class="col-12 col-md-12">
+        {% if form.instance.Photo %}
+            <img id="Image" alt="Image upload" src='{{ form.instance.Photo.url }}'
+                style="width:inherit;margin-top:16px;margin-bottom:16px;color: red;"/>
+        {% else %}
+            <img id="Image" alt="Image upload" src='#'
+                style="width:inherit;margin-top:16px;margin-bottom:16px;color: red;display: none"/>
+        {% endif %}
+    </div>
+
+    {{ form.Photo|as_crispy_field }}
+
+
+      <button type="button" class="button" style="width:100%;" onclick="getSpatialInfo();">
+          <span class="spinner-border spinner-border-sm" id="sendspinner" role="status" aria-hidden="true" style="display:none;">
+            <span class="sr-only"></span>
+              </span>
+          <span id="sendword">
+              Send
+          </span></button>
+    <div style="display: none">
+        {{ form.Position }}
+    </div>
+    <div id="gpsaccuracy-form" style="display: none">
+      {{ form.AccuracyGPS|as_crispy_field  }}
+    </div>
+    <button id="submit_location" type="submit" class="button" style="width:100%; display:none;">Send</button>
+</form>
+
+
+{% endblock %}

@@ -1,0 +1,425 @@
+.register-link{
+    text-decoration: none;
+    color: var(--primary);
+}
+
+.register-link:hover {
+    color:var(--primary);
+    font-weight: bold;
+}
+
+input[type=checkbox]:focus, input[type=radio]:focus, input[type=text]:focus {
+    outline: 0;
+}
+
+.link-login {
+    color: var(--darkblue);
+}
+
+.link-login:hover{
+    color: var(--darkblue);
+    font-weight: bold;
+}
+
+.createprofile_container {
+    display: grid;
+    width: 100%;
+    grid-area: content;
+    grid-template-areas: ". createprofilecontainer .";
+    grid-template-columns: 1fr 4fr 1fr;
+}
+
+.createprofile {
+    display: grid;
+    grid-area: createprofilecontainer;
+    align-self: center;
+    height: 75%;
+    border-radius: 15px;
+    border: 2px solid var(--darkblue);
+    grid-template-areas: "register login";
+    grid-template-columns: 1fr 2fr;
+    overflow: hidden;
+    transition: grid-template-columns 1s ease-in-out;
+    margin-top:160px;
+}
+
+.loginprofile {
+    display: none;
+    grid-area: createprofilecontainer;
+    align-self: center;
+    background-color: white;
+    z-index: 20;
+    height: 70%;
+    border-radius: 15px;
+    border: 2px solid var(--darkblue);
+    grid-template-areas: "register login";
+    grid-template-columns: 2fr 1fr;
+    overflow: hidden;
+}
+
+.register {
+    display: grid;
+    grid-area: register;
+    background: var(--darkblue);
+    justify-content: center;
+    align-content: center;
+    color: white;
+    padding: 30px;
+}
+
+.login h1,
+.register h1 {
+    font-size: 1.8em;
+    font-weight: bolder;
+    text-align: center;
+}
+
+.register p {
+    margin: 1em;
+    text-align: center;
+}
+
+.login p {
+    margin: 1em;
+    text-align: center;
+}
+
+.login {
+    display: grid;
+    grid-area: login;
+    background-color: white;
+    align-content: center;
+    justify-content: center;
+    padding: 15px;
+    overflow: auto;
+}
+
+.login_form {
+    display: grid;
+    width: 200px;
+}
+
+.login_list {
+    margin: 0.5em 0;
+    display: grid;
+    grid-template-columns: 30px auto;
+}
+
+.login_list span{
+    display: grid;
+    align-self: center;
+    padding: 0 30px 0 0;
+}
+
+.icon_mail {
+    width : 22px;
+}
+
+.icon_password {
+    height: 22px;
+}
+
+.icon_username {
+    width: 22px;
+}
+
+.login_input .label {
+    background-color: #E1E5E8;
+    border: none;
+    border-radius: 3px;
+    width: 300px;
+    padding: 5px 20px;
+    outline: none;
+    height: 35px;
+}
+
+.login_input:focus {
+    border: 1px solid var(--primary);
+    background-color: white;
+}
+
+.login_form label {
+    display: grid;
+    justify-self: center;
+    margin-top: 30px;
+    position: relative;
+    padding-left: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.login_form label span {
+    background:white ;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    border: 1px solid var(--darkblue);
+    position: absolute;
+    vertical-align: center;
+    top: 3px;
+    left: 0;
+    cursor: pointer;
+    transition: all .2s linear;
+}
+
+.login_form input[type="checkbox"] + span {
+    border-radius: 50%;
+}
+
+.login_form label:hover span {
+    border: 0.2em solid var(--darkblue);
+}
+
+.login_form  input[type="checkbox"]:checked + span {
+    border: 3px solid var(--primary);
+}
+
+.button-login {
+    background: var(--darkblue);
+    color: white;
+    border: none;
+    width: 60%;
+    justify-self: center;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+.button-register {
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin-top: 30px;
+    padding: 10px;
+    width: 80%;
+    color: white;
+    justify-self: center;
+}
+
+.switch-register {
+    background: white;
+    color: var(--darkblue);
+}
+
+.switch-login {
+    display: grid;
+    grid-area: login;
+    background: var(--darkblue);
+    justify-content: center;
+    align-content: center;
+    color: white;
+}
+
+.switch-login h1,
+.switch-register h1 {
+    font-size: 1.8em;
+    font-weight: bolder;
+    text-align: center;
+}
+
+.switch-register p {
+    margin: 1em;
+    text-align: center;
+}
+
+.switch-login p {
+    margin: 1em;
+    text-align: center;
+}
+
+.switch-button-register {
+    border-radius: 5px;
+    margin-top: 30px;
+    padding: 10px;
+    width: 80%;
+    justify-self: center;
+    background: var(--darkblue);
+    border: none;
+    color: white;
+}
+
+.switch-button-login {
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin-top: 30px;
+    padding: 10px;
+    width: 80%;
+    color: white;
+    justify-self: center;
+}
+
+.switch-register {
+    display: grid;
+    grid-area: register;
+    background-color: white;
+    align-content: center;
+    justify-content: center;
+}
+
+.register_form {
+    display: grid;
+    width: 450px;
+}
+
+.registerdiv {
+ display: grid;
+    grid-area: createprofilecontainer;
+    align-self: center;
+    height:750px;
+    border-radius: 15px;
+    border: 2px solid var(--darkblue);
+    grid-template-areas: "login register";
+    grid-template-columns: 6fr 5fr;
+    overflow: hidden;
+    transition: grid-template-columns 1s ease-in-out;
+    margin-bottom:80px;
+}
+
+.register_list {
+    margin: 0.5em 0;
+    display: grid;
+    grid-template-columns: 30px auto;
+}
+
+.register_list span{
+    display: grid;
+    align-self: center;
+    padding: 0 30px 0 0;
+}
+
+.register_input {
+    background-color: #E1E5E8;
+    border: none;
+    border-radius: 3px;
+    width: 300px;
+    padding: 5px 20px;
+    outline: none;
+    height: 35px;
+}
+
+.register_input:focus {
+    border: 1px solid var(--primary);
+    background-color: white;
+
+}
+
+.register_form label {
+    display: grid;
+    justify-self: center;
+    margin-top: 15px;
+    position: relative;
+    padding-left: 30px;
+}
+
+.register_form label span {
+    background:white ;
+    width: 18px;
+    height: 10px;
+    display: inline-block;
+    border: 1px solid var(--darkblue);
+    position: absolute;
+    vertical-align: center;
+    top: 3px;
+    left: 0;
+    cursor: pointer;
+    transition: all .2s linear;
+}
+
+.register_form input[type="checkbox"] + span {
+    border-radius: 50%;
+}
+
+.register_form label:hover span {
+    border: 0.2em solid var(--darkblue);
+}
+
+.register_form  input[type="checkbox"]:checked + span {
+    border: 3px solid var(--primary);
+}
+
+.agbs {
+    font-size: 0.6em;
+}
+
+
+@media (max-width: 1350px ) and (min-width: 1050px) {
+    .createprofile {
+        grid-template-areas: "register login";
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .registerdiv {
+        grid-template-areas: "login register";
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 1049px) {
+    .createprofile_container {
+        grid-template-columns: auto;
+        padding: 30px 0;
+    }
+
+    .createprofile {
+        grid-template-areas: "login " "register";
+        grid-template-columns: 1fr;
+        height: 100%;
+        margin-bottom: 200px;
+    }
+
+    .registerdiv {
+        grid-template-areas: "login" " register";
+        grid-template-columns: 1fr;
+        height: 100%;
+    }
+
+    .register {
+        padding: 30px 0;
+    }
+
+    .login {
+        padding: 15px 0;
+    }
+
+    .register h1,
+    .login h1 {
+        font-size: 1em;
+    }
+
+    .login p,
+    .register p {
+        margin: 0.7em;
+        font-size: 0.9em;
+    }
+
+    .login-form {
+        font-size: 0.9em;
+    }
+
+    .icon_mail {
+        width : 18px;
+    }
+
+    .icon_password {
+        height: 18px;
+    }
+
+    .login_input {
+        width: 250px;
+        height: 30px;
+    }
+
+}
+
+#main {
+	background-color: unset;
+}
+
+.smallletters{
+    font-size:75%;
+}
+
+.smaller_line_break{
+    font-size: 20%;
+}

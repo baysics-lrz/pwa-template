@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+        <h1 class="headline_news mb-5 m5-4">News</h1>
+        <div class="row ">
+            <div class="col">
+             {% if articles %}
+                {% for article in articles %}
+                    <div class="card mb-5">
+                        {% if article.photo %}
+                        <img  class="card-img-top" src=  "{{ MEDIA_URL }}{{ article.photo }}" width="100%" style="margin-bottom:15px;"><br/>
+                        {% endif %}
+
+                        <div class="card-body">
+                            <h3 class="card-title headline-2 mb-4">{{ article.title }}</h3>
+                            <h6 class="card-subtitle mb-4 text-muted">{{ article.last_updated }}
+                                from {{ article.author.username }}</h6>
+                            {% if article.header %}
+                            <p class="card-title headline-3 mb-4">{{ article.header }}</p>
+                            {% endif %}
+                            <p class="card-text">{{ article.text }}</p>
+
+                            {% if article.photo2 %}
+                            <img class="img-fluid" src=  "{{ MEDIA_URL }}{{ article.photo2 }}" width="100%" style="margin-bottom:15px;"><br/>
+                            {% endif %}
+                            {% if article.photo2caption %}
+                            <p class="card-text">{{ article.photo2caption }}</p>
+                            {% endif %}
+                            {% if article.header2 %}
+                            <p class="card-title headline-3 mb-4">{{ article.header2 }}</p>
+                            {% endif %}
+                            {% if article.text2 %}
+                            <p class="card-text">{{ article.text2 }}</p>
+                            {% endif %}
+
+
+                            {% if article.photo3 %}
+                            <img class="img-fluid" src=  "{{ MEDIA_URL }}{{ article.photo3 }}" width="100%" style="margin-bottom:15px;"><br/>
+                            {% endif %}
+                            {% if article.photo3caption %}
+                            <p class="card-text">{{ article.photo3caption }}</p>
+                            {% endif %}
+                            {% if article.header3 %}
+                            <p class="card-title headline-3 mb-4">{{ article.header3 }}</p>
+                            {% endif %}
+                            {% if article.text3 %}
+                            <p class="card-text">{{ article.text3 }}</p>
+                            {% endif %}
+
+                            {% if article.photo4 %}
+                            <img  class="img-fluid" src=  "{{ MEDIA_URL }}{{ article.photo4 }}" width="100%" style="margin-bottom:15px;"><br/>
+                            {% endif %}
+                            {% if article.photo4caption %}
+                            <p class="card-text">{{ article.photo4caption }}</p>
+                            {% endif %}
+                            {% if article.header4 %}
+                            <p class="card-title headline-3 mb-4">{{ article.header4 }}</p>
+                            {% endif %}
+                            {% if article.text4 %}
+                            <p class="card-text">{{ article.text4 }}</p>
+                            {% endif %}
+
+                            {% if article.photo5 %}
+                            <img class="img-fluid" src=  "{{ MEDIA_URL }}{{ article.photo5 }}" width="100%" style="margin-bottom:15px;"><br/>
+                            {% endif %}
+                            {% if article.photo5caption %}
+                            <p class="card-text">{{ article.photo5caption }}</p>
+                            {% endif %}
+                            {% if article.header5 %}
+                            <p class="card-title headline-3 mb-4">{{ article.header5 }}</p>
+                            {% endif %}
+                            {% if article.text5 %}
+                            <p class="card-text">{{ article.text5 }}</p>
+                            {% endif %}
+
+                            {% if article.photo6 %}
+                            <img  class=class="img-fluid" src=  "{{ MEDIA_URL }}{{ article.photo6 }}" width="100%" style="margin-bottom:15px;"><br/>
+                            {% endif %}
+                            {% if article.photo6caption %}
+                            <p class="card-text">{{ article.photo6caption }}</p>
+                            {% endif %}
+                            {% if article.header6 %}
+                            <p class="card-title headline-3 mb-4">{{ article.header6 }}</p>
+                            {% endif %}
+                            {% if article.text6 %}
+                            <p class="card-text">{{ article.text6 }}</p>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                  <br>
+                  <br>
+                {% endfor %}
+             {% else %}
+                <h2 class="mt-5">No news available</h2>
+             {% endif %}
+
+            </div>
+        </div>
+</div>
+{% endblock %}

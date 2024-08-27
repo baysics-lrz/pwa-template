@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 119 119" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-322,0)">
+        <g id="ranking_3" transform="matrix(1,0,0,1,-0.666667,0)">
+            <rect x="322.667" y="0" width="119" height="119" style="fill:none;"/>
+            <clipPath id="_clip1">
+                <rect x="322.667" y="0" width="119" height="119"/>
+            </clipPath>
+            <g clip-path="url(#_clip1)">
+                <g transform="matrix(1,0,0,3.54667,-72.3333,-281)">
+                    <g transform="matrix(1,0,0,0.281955,308,55.8271)">
+                        <circle cx="146.5" cy="142.5" r="59.5" style="fill:rgb(210,210,210);"/>
+                    </g>
+                    <g transform="matrix(1,0,0,0.281955,303.478,13.7347)">
+                        <text x="131px" y="317.574px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:72px;fill:rgb(189,189,189);">3</text>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

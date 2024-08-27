@@ -1,0 +1,113 @@
+body {
+    font-size: 1em;
+}
+.contact-container{
+    display: grid;
+    width: 100%;
+    grid-area: content;
+    grid-template-areas:"contact-form .";
+    grid-template-columns: 1fr 4fr 5fr 1fr;
+    margin-top: 2em;
+}
+
+
+.success {
+    background-color: var(--darkblue);
+    color: white;
+    margin: 0.5em 0;
+    border-radius: 4px;
+    padding: 1em;
+}
+
+#hideme{
+    -webkit-animation: cssAnimation 4s forwards;
+    animation: cssAnimation 4s forwards;
+}
+@keyframes cssAnimation {
+    0%   {opacity: 1;}
+    90%  {opacity: 1;}
+    100% {opacity: 0;}
+}
+@-webkit-keyframes cssAnimation {
+    0%   {opacity: 1;}
+    90%  {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+input[type=text], input[type=email]{
+    height: 2em;
+    font-size: 0.8em;
+}
+
+input[type=text]:focus, input[type=email]:focus, textarea.form-control:focus {
+    box-shadow: 0 0 5px var(--primary);
+    outline: none;
+    padding: 3px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    border: 1px solid var(--primary);
+    font-size: 0.8em;
+}
+
+textarea.form-control {
+    font-size: 0.8em;
+    height: 6em;
+}
+
+.submit-btn-wrapper {
+    text-align: right;
+    margin-top: 2em;
+}
+.submit-btn {
+    text-align: center;
+    background-color: var(--primary);
+    border: none;
+    color: white;
+    padding: 8px 32px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none ;
+}
+.submit-btn:hover{
+    font-size: 1.1em;
+}
+.form-group{
+    margin-bottom: 0;
+}
+.contact-form{
+    display: grid;
+    grid-area: contact-form;
+}
+
+.cta-btn {
+    text-decoration: none;
+    color: var(--darkblue);
+}
+.cta-btn:hover{
+    color: var(--primary);
+}
+@media (max-width: 1024px) {
+    .contact-container{
+        grid-template-areas:
+                "contact-form ";
+        grid-template-columns:  1fr ;
+        margin-top: 0;
+        margin-bottom: 2em;
+    }
+}
+
+@media (max-width:767px) {
+
+    .contact-container {
+        display: grid;
+        grid-area: content;
+        grid-template-areas: ". contact-form .";
+        grid-template-columns: 1fr 5fr 1fr;
+    }
+    .contact-form{
+        display: grid;
+        grid-area: contact-form;
+        margin:0 auto;
+    }
+}
+

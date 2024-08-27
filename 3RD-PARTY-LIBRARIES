@@ -1,0 +1,16 @@
+ The following is a list of software packages used in the template and their license to our best knowledge; please indicate any errors to us. These libraries remain under their original license as indicated.
+
+- Django-multiselectfield (LGPL-3.0 license)
+- Django-crispy-forms (MIT license)
+- Django-simple-captcha (MIT lisense)
+- towel (BSD-3-Clause license)
+- Django-pwa (MIT license)
+- rangeslider.js - v2.1.1 (MIT license)
+- Leaflet 1.5.1 (BSD-2-Clause License)
+- leaflet.markercluster (MIT license)
+- leaflet.canvaslayer (MIT license)
+- leaflet.pointinpolygon (MIT license)
+- Bavarian Digital Elevation Modell DGM 50m from Bayerische Vermessungsverwaltung – www.geodaten.bayern.de (This product is discontinued and currently DGM1 is offered), https://www.geodaten.bayern.de/odd/m/3/html/nutzungsbedingungen.html (at the time of download: Creative Commons 3.0 Deutschland Lizenz, currently changed to Creative Commons Namensnennung 4.0 International Lizenz)
+- Bavarian administrative Borders ALKIS Verwaltungsgebiete from Bayerische Vermessungsverwaltung – www.geodaten.bayern.de, https://www.geodaten.bayern.de/odd/m/3/html/nutzungsbedingungen.html (at the time of download: Creative Commons 3.0 Deutschland Lizenz, currently changed to Creative Commons Namensnennung 4.0 International Lizenz)
+- Datatables.net and colRecorder (MIT license)
+- Bootstrap (MIT license: https://getbootstrap.com/)

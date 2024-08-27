@@ -1,0 +1,15 @@
+{% url 'impressum' as impressum %}
+{% url 'datapolicy' as datapolicy %}
+{% url 'termsofuse' as termsofuse %}
+
+<!-- Footer für Desktop -->
+    <div id="header2" class="grid-nav" >
+    <ul class="menu-second-row desktop-only" id="showhidesecondrow">
+        <li class="menu-item"><a class="{% if request.path == termsofuse %} activenavigation {% endif %}" href="/terms-of-use/" style="font-weight: normal;padding-right: 0.5em;">Terms of Use</a></li>|
+        <li class="menu-item"><a class="{% if request.path == impressum %} activenavigation {% endif %}"  href="/impressum/" style="font-weight: normal;padding-right: 0.5em;padding-left: 0.5em;">Impressum</a></li>|
+        <li class="menu-item"><a class="{% if request.path == datapolicy %} activenavigation {% endif %}"  href="/data-policy/" style="font-weight: normal;padding-right: 0.5em;padding-left: 0.5em;">Data Policy</a></li>|
+       <li class="menu-item"><a class="{% if 'contact' in request.get_full_path %} activenavigation {% endif %}" href="/contact/send/" style="font-weight: normal;padding-right: 0.5em;padding-left: 0.5em;">Contact</a></li>
+    </ul>
+    </div>
+
+

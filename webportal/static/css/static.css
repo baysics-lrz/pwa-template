@@ -1,0 +1,35 @@
+
+.legal-container{
+    display: grid;
+    width: 100%;
+    grid-area: content;
+    grid-template-areas: ". legal-content .";
+    grid-template-columns: 2fr 10fr 2fr;
+}
+
+.legalcontent {
+    display: grid;
+    grid-area: legal-content;
+    margin-bottom: 10em;
+}
+
+
+
+@media (max-width: 766px) {
+    .legal-container {
+        display: grid;
+        grid-area: content;
+        grid-template-areas: ". legal-content .";
+        grid-template-columns: 1fr 5fr 1fr;
+    }
+}
+
+@media (max-width:568px){
+    .legal-container{
+        display: grid;
+        grid-area: content;
+        grid-template-areas: ". legal-content .";
+        grid-template-columns: 1fr 10fr 1fr;
+    }
+
+}

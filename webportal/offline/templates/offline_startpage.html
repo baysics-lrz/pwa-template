@@ -1,0 +1,97 @@
+{% extends  'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="/static/css/offline.css?v=1.0.0">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dexie/3.2.0-rc.2/dexie.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dexie-export-import@1.0.3/dist/dexie-export-import.min.js"></script>
+<div class="offline-container" align="center ">
+    <div class="offline-image">
+    <img class="offline_symbol  mb-5 mt-2" src="/static/image/symbol_offline.svg"/>
+    </div>
+    <div class="offline-text ml-5 mr-5">
+        <div>
+            <p class="ml-3 mr-3 mb-4 mt-5">You are offline. However, you can still create these observations:</p>
+            <div class="row ml-3 mr-3 mb-4" style="display: inline-block; text-align: left;">
+                <div class="col text-center">
+                        <a class="offline-link btn button-offline mb-4" href="/offline/category1interface">Category1</a>
+                        <a class="offline-link btn button-offline mb-4" href="/offline/category2interface">Category2</a>
+                        <a class="offline-link btn button-offline mb-4" href="/offline/category3interface">Category3</a>
+                        <a class="offline-link btn button-offline mb-4" href="/offline/category4interface">Category4</a>
+                </div>
+            </div>
+
+            <script>
+                    async function f(){
+                    theDBName = 'Portal';
+                    theDB = new Dexie(theDBName);
+
+                    let {verno, tables} = await theDB.open();
+
+                    theDB.close();
+                    theDB = new Dexie(theDBName);
+                    theDB.version(verno).stores(tables.reduce((p,c) => {p[c.name] = c.schema.primKey.keyPath || ""; return p;}, {}));
+
+                    theBlob = await theDB.export();
+                    text = document.getElementById('blobdownload').innerHTML;
+                    document.getElementById('blobdownload').innerHTML = text + "<a class='file-upload-button' href='" + URL.createObjectURL(theBlob)+ "' download='Portaldownload.json'>Download data</a>";
+                    linkgen = document.getElementById('linkgeneration');
+                    linkgen.parentNode.removeChild(linkgen);
+                    }
+
+            </script>
+
+            <div id="blobdownload"><p>Do you have a problem uploading? Next time you are connected to the internet, you can download
+                your data here:</p>
+                <button class='button file-upload-button mb-5' id="linkgeneration" onclick="f()">Generate data</button>
+            </div>
+
+            <p class="mt-3">
+                Upload perviously downloaded data here:
+            </p>
+
+             <label class="file-upload-button mb-5">
+                <input name="upload" type="file"/>
+                Choose a file
+             </label>
+
+        </div>
+    </div>
+</div>
+
+<script>
+let db = new Dexie('exportSample');
+db.version(1).stores({
+  foos: 'id'
+});
+
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const dropZoneDiv = document.getElementById('dropzone');
+  // Handle file drop:
+  document.getElementsByName('upload')[0].onchange = async ev => {
+      const file = document.getElementsByName('upload')[0].files[0];
+    try {
+      console.log("Importing " + file.name);
+      await db.delete();
+      db = await Dexie.import(file, {
+        progressCallback
+      });
+      console.log("Import complete");
+      alert('Upload was successful');
+    } catch (error) {
+      console.error(''+error);
+      alert('The upload did not work');
+    }
+    document.getElementsByName('upload')[0].value = "";
+  }
+});
+
+function progressCallback ({totalRows, completedRows}) {
+  console.log(`Progress: ${completedRows} of ${totalRows} rows completed`);
+}
+
+
+</script>
+
+
+{% endblock %}

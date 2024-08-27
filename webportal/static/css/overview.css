@@ -1,0 +1,237 @@
+.row {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+.overview-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows:50% 50%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    gap: 10px;
+    height: 79vh;
+    grid-template-areas:
+            "observation map"
+            "eintraege challeges";
+}
+
+
+.wrapper{
+    margin-right: 0;
+}
+
+
+.observationcontainer{
+    display: grid;
+    grid-area: observation;
+    border: 2px solid #eaeef1;
+    border-radius: 20px;
+
+    grid-template-areas:
+            "observations";
+
+}
+.categoryicon{
+    transition: transform 250ms;
+    transition-timing-function: ease-out;
+}
+
+.categoryicon:hover{
+    transform: scale(1.05);
+
+}
+
+.observations {
+    display: grid;
+    grid-area: observations;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas:
+            "observationtitle observationtitle observationtitle observationtitle"
+            "category1container category2container category3container category4container";
+}
+
+.observationtitle {
+    display: grid;
+    grid-area: observationtitle;
+    margin-top: 1em;
+    margin-left: 1em;
+}
+.category1container {
+    display: grid;
+    grid-area: category1container;
+    text-align: center;
+}
+.subtext {
+    font-size: 0.9em;
+    padding-top: 1em;
+}
+.category3container {
+    display: grid;
+    grid-area: category3container;
+    text-align: center;
+}
+
+.category2container {
+    display:grid;
+    grid-area: category2container;
+    text-align: center;
+}
+
+.category4container {
+    display: grid;
+    grid-area: category4container;
+    text-align: center;
+}
+
+
+
+.challegescontainer {
+    display: grid;
+    grid-area: challeges;
+    border: 2px solid #eaeef1;
+    border-radius: 20px;
+    grid-template-areas:
+            "challege";
+}
+
+.challeges {
+    display: grid;
+    grid-area: challege;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas:
+            "challegetitel challegetitel challegetitel challegetitel"
+            "challenge1container challenge2container challenge3container challenge4container"
+            "challegebutton challegebutton challegebutton challegebutton";
+}
+
+.challegetitel {
+    display: grid;
+    grid-area: challegetitel;
+    margin-top: 1em;
+    margin-left: 1em;
+}
+
+.challegebutton {
+    display: grid;
+    grid-area: challegebutton;
+    align-content: end;
+
+}
+
+.challenge1container {
+    display: grid;
+    grid-area: challenge1container;
+    text-align: center;
+}
+
+.challenge2container {
+    display: grid;
+    grid-area: challenge2container;
+    text-align: center;
+}
+
+.challenge3container {
+    display:grid;
+    grid-area: challenge3container;
+    text-align: center;
+}
+
+.challenge4container {
+    display: grid;
+    grid-area: challenge4container;
+    text-align: center;
+}
+.eintraegecontainer {
+    display: grid;
+    grid-area: eintraege;
+    border: 2px solid #eaeef1;
+    border-radius: 20px;
+
+}
+.mapcontainer {
+    display: grid;
+    grid-area: map;
+    grid-template-areas: "overviewheader"
+                        "overviewmap"
+                    "overviewbutton";
+    grid-template-rows: 1fr 5fr 1fr;
+    border: 2px solid #eaeef1;
+    border-radius: 20px;
+}
+
+.overview-headline {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.buttonoverview {
+    text-align:center;
+    font-size: 0.9em;
+    background-color: var(--primary);
+    border: none;
+    color: white;
+    padding: 5px 20px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 7px;
+    transition: transform 250ms;
+    transition-timing-function: ease-out;
+}
+.buttonoverview:hover {
+    transform: scale(1.1);
+
+}
+
+@media (max-width:568px){
+    .overview-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        padding-top: 10px;
+        padding-bottom: 20px;
+        gap: 10px;
+        height: 100%;
+        grid-template-areas:
+                "observation "
+                "map"
+                "eintraege "
+                "challeges";
+    }
+    .challeges {
+        display: grid;
+        grid-area: challege;
+        grid-template-columns: 1fr 1fr;
+        row-gap: 20px;
+        grid-template-areas:
+                "challegetitel challegetitel"
+                "challenge1container challenge2container "
+                "challenge3container challenge4container"
+                "challegebutton challegebutton";
+    }
+
+    .observations {
+        display: grid;
+        grid-area: observations;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+                "observationtitle observationtitle"
+                "category1container category2container "
+                "category3container category4container";
+    }
+    .categorytext {
+        font-size: 1em;
+        line-height: 1.5em;
+        padding-top: 1em;
+    }
+    mapcontainer {
+        display: grid;
+        grid-area: map;
+        grid-template-areas: "overviewheader"
+        "overviewmap"
+        "overviewbutton";
+        grid-template-rows: 1fr 5fr 1fr;
+        border: 2px solid #eaeef1;
+        border-radius: 20px;
+    }
+
+}

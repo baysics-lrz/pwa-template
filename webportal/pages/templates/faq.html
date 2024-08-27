@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="/static/css/entries.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/FAQs.css?v=1.0.0">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/date-eu.js"></script>
+<script type="text/javascript"
+        src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/datetime-moment.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/title-numeric.js"></script>
+<script type="text/javascript"
+        src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.datatables.net/rowreorder/1.2.7/js/dataTables.rowReorder.min.js"></script>
+<script src="/static/js/FAQ.js"></script>
+
+
+<main class="faq-container mb-5">
+
+    <div class="faq-content mt-5 mb-5">
+        <h1 class="faq_headline">FAQs</h1>
+        <p class="mb-5">On this page you will find the most frequently asked questions.
+            If there is no answer to your question, you are welcome to contact us at:
+            <a class="link-faq" href="mailto:mail@mail.com">mail@mail.com</a>
+            or contact us through <a class="link-faq" href="/contact/send/">our contact form.</a></p>
+
+    
+        <h2 class="mb-4">Frequent questions and answers:</h2>
+
+        <table id="faq-table" class="mt-4">
+            <thead>
+            <tr>
+                <th class="min-tablet-p">Categories</th>
+                <th class="max-phone-l">Questions</th>
+                <th class="max-phone-l">Answers</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Category 1</td>
+                    <td>Dummy text for questions.</td>
+                    <td>Dummy text for answers.</td>
+                </tr>
+                <tr>
+                    <td>Category 2</td>
+                    <td>Dummy text for questions.</td>
+                    <td>Dummy text for answers.</td>
+                </tr>
+                <tr>
+                    <td>Category 3</td>
+                    <td>Dummy text for questions.</td>
+                    <td>Dummy text for answers.</td>
+                </tr>
+                <tr>
+                    <td>Category 4</td>
+                    <td>Dummy text for questions.</td>
+                    <td>Dummy text for answers.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</main>
+
+{% endblock %}

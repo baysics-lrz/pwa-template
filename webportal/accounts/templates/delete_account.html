@@ -1,0 +1,80 @@
+{% extends  'base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<link rel="stylesheet" href="/static/css/profile.css?v=1.0.0">
+<div class="row" >
+	<div class="col-2 rectangle desktop-only">
+	</div>
+	<div class="col-12 col-sm-12 rectangle col-md-10">
+		<div class="mainheading">
+			<b>Settings</b>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+  {% include "includes/left-menu.html" %}
+	<div class="col-12 col-sm-12 col-md-10 " style="margin-top: 50px;margin-bottom: 150px; height:50vh;">
+		<h4>Delete user account</h4>
+        <p> Your user account {{user.username}} will be deleted.</p>
+        <!-- Button trigger modal -->
+        <a href="/accounts/profile/" class="btn btn-secondary" data-dismiss="modal">Cancel</a>
+        <button type="button" class="button" data-toggle="modal" data-target="#exampleModal"
+                style="background-color:var(--red);font-weight: bold;line-height: 14px;">
+          Delete
+        </button>
+	</div>
+</div>
+
+<script>
+    function checkfkt() {
+        if (document.getElementById("defaultCheck1").checked ==true) {
+            document.getElementById("deletebutton").disabled = false;
+        }
+        else
+        {
+            document.getElementById("deletebutton").disabled = true;
+        }
+    }
+</script>
+
+<form method="post">
+    {% csrf_token %}
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete user account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <div class="modal-body">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" onclick="checkfkt();">
+                  <label class="form-check-label" for="defaultCheck1">
+                    The user account is to be permanently deleted.
+                  </label>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <a href="/accounts/profile/" class="btn btn-secondary">Cencel</a>
+                <input type="submit" value="Delete" class="btn btn-danger" id="deletebutton" disabled>
+              </div>
+
+            </div>
+          </div>
+        </div>
+</form>
+
+{% else %}
+        <p><a href="/accounts/login/">Please log in to continue.</a></p>
+
+{% endif %}
+
+{% endblock %}

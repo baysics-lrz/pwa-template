@@ -1,0 +1,156 @@
+{% extends  'base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<link rel="stylesheet" href="/static/css/profile.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/topicselection.css?v=1.0.0">
+<div class="row headerstreifen">
+    <div class="col-2 rectangle desktop-only" style="background:var(--darkblue);">
+    </div>
+    <div class="col-12 col-sm-12 rectangle col-md-10">
+        <div class="mainheadline">
+            <b>Observations</b>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="Loggedincontent" >
+  {% include "includes/left-menu.html" %}
+    <div class="col-12 col-sm-12 col-md-10" style="margin-bottom: 10px;position: relative;height: inherit;;padding-left: 0px;padding-right: 0px;">
+        <div id="ObservationsInfo">
+            <span style="font-size:40px;text-align: right;width: 100%;display: inline-block;font-size: 55px; " align="right; cursor: pointer;" onclick="closeBeobErkl()"><b style="cursor: pointer;">&times;</b></span>
+            <p style="padding-right:10%">
+                Possible observations:</p>
+            <div id="accordion">
+              <div class="card">
+                <div class="card-header" id="headingcategory1">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapsecategory1" aria-expanded="false" aria-controls="collapsecategory1" style="text-decoration:none;">
+                      <span class="ObservationsInfoHeadline">
+                          <span style="width:50px;display:inline-block;">
+                            <img src="/static/image/category1.svg" style="width:35px">
+                          </span>
+                          <b>Category1</b>
+                      </span>
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapsecategory1" class="collapse" aria-labelledby="headingcategory1" data-parent="#accordion">
+                  <div class="card-body">
+                    Description: This is a dummy text.
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header" id="headingcategory2">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapsecategory2" aria-expanded="false" aria-controls="collapsecategory2" style="text-decoration:none;">
+                      <span class="ObservationsInfoHeadline">
+                        <span style="width:50px;display:inline-block;">
+                            <img src="/static/image/category2.svg" style="width:35px">
+                        </span>
+                        <b>Category2</b>
+                      </span>
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapsecategory2" class="collapse" aria-labelledby="headingcategory2" data-parent="#accordion">
+                  <div class="card-body">
+                    Description: This is a dummy text.
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header" id="headingCategory3">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseCategory3" aria-expanded="false" aria-controls="collapseCategory3" style="text-decoration:none;">
+                      <span class="ObservationsInfoHeadline">
+                        <span style="width:50px;display:inline-block;">
+                            <img src="/static/image/category3.svg" style="width:35px">
+                        </span>
+                        <b>Category3</b>
+                      </span>
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseCategory3" class="collapse" aria-labelledby="headingCategory3" data-parent="#accordion">
+                  <div class="card-body">
+                    Description: This is a dummy text.
+                   </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header" id="headingcategory4">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapsecategory4" aria-expanded="false" aria-controls="collapsecategory4" style="text-decoration:none;">
+                      <span class="ObservationsInfoHeadline">
+                        <span style="width:50px;display:inline-block;">
+                            <img src="/static/image/category4.svg" style="width:35px">
+                        </span>
+                        <b>Category4</b>
+                      </span>
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapsecategory4" class="collapse" aria-labelledby="headingcategory4" data-parent="#accordion">
+                  <div class="card-body">
+                    Description: This is a dummy text.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+        </div>
+        <div class="observationmapdiv">
+            <img src="/static/image/observation_map.jpg">
+
+        </div>
+        <div class="observationbannerdiv">
+          <a href="/map">
+          <button class="btn btn-secondary mx-auto mobile-only" style="border-radius:100%; width:22vw; height:22vw;">
+            <img src="/static/image/map-svgrepo-com.svg" style="width: 70%;">
+            <br>Map
+          </button>
+          </a>
+            <div class="observationbanner">
+                <b>What would you like to report?</b> <img class="menu-button" src="/static/image/info_icon_orange.svg" onclick="openBeobErkl();" style="font-size: 1rem;">
+                <div class="row row_observationbanner">
+                    <div class="col-md-3 col-6 col-sm-6 symbol" data-toggle="tooltip" title="" data-html="true" data-placement="bottom">
+                        <a href="/observations/createcategory1"><img src="/static/image/category1.svg"></a>
+                        <br>
+                        <p>Category 1</p>
+                    </div>
+                    <div class="col-md-3 col-6 col-sm-6 symbol">
+                        <a href="/observations/createcategory2"><img src="/static/image/category2.svg"></a>
+                        <br>
+                        <p>Category 2</p>
+                    </div>
+                    <div class="col-md-3 col-6 col-sm-6 symbol">
+                        <a href="/observations/createcategory3"><img src="/static/image/category3.svg"></a>
+                        <br>
+                        <p>Category 3</p>
+                    </div>
+                    <div class="col-md-3 col-6 col-sm-6 symbol">
+                        <a href="/observations/createcategory4"><img src="/static/image/category4.svg"></a>
+                        <br>
+                        <p>Category 4</p>
+                    </div>
+                    <script>
+                        $(document).ready(function(){
+                            $('[data-toggle="tooltip"]').tooltip();
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<p><a href="/accounts/login/">Please log in to continue.</a></p>
+{% endif %}
+
+{% endblock %}

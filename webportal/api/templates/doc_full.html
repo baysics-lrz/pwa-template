@@ -1,0 +1,1485 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    ul {
+        padding-left: 25px;
+    }
+</style>
+
+<div class="container">
+
+    <h2>API full documentation</h2>
+
+    <br/>
+
+    <h3>Content</h3>
+    <ul>
+        <li>
+            <a href="#basic">Overview</a>
+            <ul>
+                <li>
+                    <a href="#basic-parameter">Requests</a>
+                </li>
+                <li>
+                    <a href="#basic-response">Responses</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#login">Login</a>
+        </li>
+        <li>
+            <a href="#user-info">User information</a>
+        </li>
+        <li>
+            <a href="#category1">Category1</a>
+            <ul>
+                <li>
+                    <a href="#category1-parameter">Requests</a>
+                </li>
+                <li>
+                    <a href="#category1-GET">GET</a> /
+                    <a href="#category1-ADD">ADD</a> /
+                    <a href="#category1-UPDATE">UPDATE</a> /
+                    <a href="#category1-DELETE">DELETE</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#category2">Category2</a>
+            <ul>
+                <li>
+                    <a href="#category2-parameter">Requests</a>
+                </li>
+                <li>
+                    <a href="#category2-GET">GET</a> /
+                    <a href="#category2-ADD">ADD</a> /
+                    <a href="#category2-UPDATE">UPDATE</a> /
+                    <a href="#category2-DELETE">DELETE</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#category3">Category3</a>
+            <ul>
+                <li>
+                    <a href="#category3-parameter">Requests</a>
+                </li>
+                <li>
+                    <a href="#category3-GET">GET</a> /
+                    <a href="#category3-ADD">ADD</a>/
+                    <a href="#category3-UPDATE">UPDATE</a> /
+                    <a href="#category3-DELETE">DELETE</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#category4">Category4</a>
+            <ul>
+                <li>
+                    <a href="#category4-parameter">Requests</a>
+                </li>
+                <li>
+                    <a href="#category4-GET">GET</a> /
+                    <a href="#category4-ADD">ADD</a> /
+                    <a href="#category4-UPDATE">UPDATE</a> /
+                    <a href="#category4-DELETE">DELETE</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <br/>
+    <br/>
+    <br/>
+
+    <h3>REST Web-Services</h3>
+
+    <div id="basic">
+        <h4>Overview</h4>
+        Welcome to the documentation of the portal's REST API!
+        <br/>
+        The API can be used after successful <a href="/accounts/register-user">registration</a> and
+        <a href="#login">Token-Authentification</a> from any program or programming language.
+        For beginners we recommend here the programming language <a href="https://www.python.org/">Python</a>
+        with library <a href="https://docs.python-requests.org">requests</a> or the program <a
+            href="https://www.postman.com/">Postman</a>.
+        <br/>
+        <br/>
+        <div id="basic-parameter">
+            <h5>Requests</h5>
+            <ul>
+                <li>
+                    <b>Filtering parameters for Information GET</b>
+                    <br/>
+                    Filtering parameters are passed to the "GET" interfaces as URL parameters
+                </li>
+                <li>
+                    <b>Other parameters</b>
+                    <br/>
+                    Requests like "ADD" or "UPDATE" must be passed in JSON or 'form-data' format.
+                    Note that when uploading a photo file, the 'form-data' format must be used, since files in JSON
+                    format cannot be transferred.
+                </li>
+            </ul>
+        </div>
+        <br/>
+        <div id="basic-response">
+            <h5>Responses</h5>
+            Response parameters are given in JSON format only.
+        </div>
+        <br/>
+    </div>
+
+    <div id="login">
+        <h4>Login</h4>
+        Interface: <i>http://127.0.0.1:8000/api/accounts/login</i>
+        <br/>
+        Request: POST
+        <br/>
+        Format (JSON or form-data):
+        <br/>
+        <ul>
+            <li>
+                username:
+                <ul>
+                    <li>
+                        your username
+                    </li>
+                    <li>
+                        Data type: String
+                    </li>
+                </ul>
+            </li>
+            <li>
+                password:
+                <ul>
+                    <li>
+                        your password
+                    </li>
+                    <li>
+                        Data type: String
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        Response (upon successful registration): HTTP/1.1 200 OK
+        <br/>
+        <ul>
+            <li>
+                token:
+                <ul>
+                    <li>
+                        A token string with which the user can authenticate
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        Response (for incorrect request): HTTP/1.1 400 Bad Request
+        <br/>
+
+        <b>Example:</b>
+        <ul>
+            <li>
+                Request:
+                <br/>
+                POST http://127.0.0.1:8000/api/accounts/login HTTP/1.1
+                <pre>
+                    {
+                        "username": "your username",
+                        "password": "your password"
+                    }
+                </pre>
+            </li>
+            <li>
+                Response:
+                <br/>
+                HTTP/1.1 200 OK
+                <pre>
+                        {
+                            "token": "0e434ffb8fd31a0b787f85d607547f5994e0a5f3",
+                        }
+                </pre>
+            </li>
+        </ul>
+
+        <br/>
+
+        <b>Information:</b>
+        <br/>
+        The obtained token 0e434ffb8fd31a0b787f85d607547f5994e0a5f3 can now be used to identify yourself to all interfaces.
+        For this, you have to add the field <i>authentification</i> "Token 0e434ffb8fd31a0b787f85d607547f5994e0a5f3".
+        <br/>
+    </div>
+
+    <br/>
+    <div id="user-info">
+        <h4>User information</h4>
+        Interface to get information about the ID, user name and e-mail of the logged-in user.
+        <br/>
+        Interface: <i>http://127.0.0.1:8000/api/accounts/user</i>
+        <br/>
+        Request: POST
+        <br/>
+        Header:
+        <br/>
+        <ul>
+            <li>
+                Authentification:
+                <ul>
+                    <li>
+                       The authentification-token of the user
+                    </li>
+                    <li>
+                        Format: Token {token_string}
+                    </li>
+                </ul>
+            </li>
+        </ul>
+         Response:
+        <br/>
+        Response (with correct authorization): HTTP/1.1 200 OK
+        <br/>
+        <ul>
+            <li>
+                id:
+                <ul>
+                    <li>
+                        The User-ID of the user
+                    </li>
+                </ul>
+            </li>
+            <li>
+                username:
+                <ul>
+                    <li>
+                        The username of the user
+                    </li>
+                </ul>
+            </li>
+            <li>
+                email:
+                <ul>
+                    <li>
+                       The email-address of the user
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        Response (in case of incorrect authentication): HTTP/1.1 403 Forbidden
+        <br/>
+    </div>
+
+    <br/>
+    <br/>
+    <br/>
+
+    <div id="category1">
+        <h3>Category1</h3>
+
+        <div id="category1-parameter">
+            <h4>Parameter</h4>
+            <ul>
+                <li>
+                    <b>id (Read-Only):</b>
+                    <ul>
+                        <li>
+                           The unique identification number of the category1 entry
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category1Subject:</b>
+                    <ul>
+                        <li>
+                            The category1 subject
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Certainty:</b>
+                    <ul>
+                        <li>
+                            Statement about whether the observer is certain or uncertain about the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Certain" or "Uncertain"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Number:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                        <li>
+                            Value: A positive number (above 0)
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category1Feature1:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            selection:
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category1Feature2:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category1Feature3:</b>
+                    <ul>
+                        <li>
+                            dummy text:
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            selection:
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Lat:</b>
+                    <ul>
+                        <li>
+                            Latitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Lon:</b>
+                    <ul>
+                        <li>
+                            Longitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Municipal (Read-Only):</b>
+                    <ul>
+                        <li>
+                            The municipal in which the observation is made
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>ObservationDate:</b>
+                    <ul>
+                        <li>
+                            The date of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Format: "YYYY-MM-DD"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>ObservationTime:</b>
+                    <ul>
+                        <li>
+                            The date of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Format: "HH-MM-SS"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Photo:</b>
+                    <ul>
+                        <li>
+                            The URL to the corresponding photo
+                        </li>
+                        <li>
+                            The file (when uploading) or URL-string of the uploaded photo
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <br/>
+
+        <div id="category1-GET">
+            <h4>GET</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category1</i>
+            <br/>
+            Request: GET
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Filter-Parameter: <a href="#category1-parameter">category1-Parameter</a>
+            <br/>
+            Response (with correct parameters): HTTP/1.1 200 OK
+            <br/>
+           Response (with wrong authentification): HTTP/1.1 403 Forbidden
+        </div>
+
+        <br/>
+
+        <div id="category1-ADD">
+            <h4>ADD</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category1/add</i>
+            <br/>
+            Request: POST
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Parameter (JSON or form-data): <a href="#category1-parameter">category1-Parameter</a>
+            <br/>
+            Response (with correct parameters): HTTP/1.1 201 Created
+            <br/>
+           Response (with wrong authentification): HTTP/1.1 403 Forbidden
+            <br/>
+            Response (with incorrect parameters): HTTP/1.1 400 Bad Request
+        </div>
+
+        <br/>
+
+        <div id="category1-UPDATE">
+            <h4>UPDATE</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category1/update/{id}</i>
+            <br/>
+            ({id} is the identification number of the category1 entry to be processed)
+            <br/>
+            Request: PUT
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Parameter (JSON or form-data): <a href="#category1-parameter">category1-Parameter</a>
+            <br/>
+            Response (with correct parameters): HTTP/1.1 200 OK
+            <br/>
+           Response (with wrong authentification): HTTP/1.1 403 Forbidden
+            <br/>
+            Response (with incorrect parameters): HTTP/1.1 400 Bad Request
+            <br/>
+            Response (with invalid id): HTTP/1.1 404 Not Found
+        </div>
+
+        <br/>
+
+        <div id="category1-DELETE">
+            <h4>DELETE</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category1/delete/{id}</i>
+            <br/>
+            ({id} is the identification number of the category1 entry to be processed)
+            <br/>
+            Request: DELETE
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Parameter (JSON or form-data): none
+            <br/>
+            Response (with correct parameters): HTTP/1.1 204 No Content
+            <br/>
+            Response (with wrong authentification): HTTP/1.1 403 Forbidden
+            <br/>
+            Response (with invalid id): HTTP/1.1 404 Not Found
+        </div>
+
+    </div>
+
+    <br/>
+    <br/>
+    <br/>
+
+    <div id="category2">
+        <h3>Category2</h3>
+
+        <div id="category2-parameter">
+            <h4>Parameter</h4>
+            <ul>
+                <li>
+                    <b>id (Read-Only):</b>
+                    <ul>
+                        <li>
+                            The unique identification number of the category2 entry
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Subject:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Certainty:</b>
+                    <ul>
+                        <li>
+                            Statement about whether the observer is certain or uncertain about the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Certain" or "Uncertain"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature1:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature2:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature3:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature4:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature5:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature6:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection:
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature7:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                        <li>
+                            Value: A number between 0 and 100
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature8:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                        <li>
+                            Value: A number between 0 and 100
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Lat:</b>
+                    <ul>
+                        <li>
+                            Latitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Lon:</b>
+                    <ul>
+                        <li>
+                            Longitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Municipal (Read-Only):</b>
+                    <ul>
+                        <li>
+                            The municipal in which the observation is made
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>ObservationDate:</b>
+                    <ul>
+                        <li>
+                            The date of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Format: "YYYY-MM-DD"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Photo:</b>
+                    <ul>
+                        <li>
+                            The URL to the corresponding photo
+                        </li>
+                        <li>
+                            The file (when uploading) or URL-string of the uploaded photo
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <br/>
+
+        <div id="category2-GET">
+            <h4>GET</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category2</i>
+            <br/>
+            Request: GET
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Filter-Parameter: <a href="#category2-parameter">category2-Parameter</a>
+            <br/>
+            Response (with correct parameters): HTTP/1.1 200 OK
+            <br/>
+            Response (with wrong authentification): HTTP/1.1 403 Forbidden
+        </div>
+
+        <br/>
+
+        <div id="category2-ADD">
+            <h4>ADD</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category2/add</i>
+            <br/>
+            Request: POST
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Parameter (JSON or form-data): <a href="#category2-parameter">category2-Parameter</a>
+            <br/>
+            Response (with correct parameters): HTTP/1.1 201 Created
+            <br/>
+            Response (with wrong authentification): HTTP/1.1 403 Forbidden
+            <br/>
+            Response (with incorrect parameters): HTTP/1.1 400 Bad Request
+        </div>
+
+        <br/>
+
+        <div id="category2-UPDATE">
+            <h4>UPDATE</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category2/update/{id}</i>
+            <br/>
+            ({id} is the identification number of the category2 entry to be processed)
+            <br/>
+            Request: PUT
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Parameter (JSON or form-data): <a href="#category2-parameter">category2-Parameter</a>
+            <br/>
+            Response (with correct parameters): HTTP/1.1 200 OK
+            <br/>
+            Response (with wrong authentification): HTTP/1.1 403 Forbidden
+            <br/>
+            Response (with incorrect parameters): HTTP/1.1 400 Bad Request
+            <br/>
+            Response (with invalid id): HTTP/1.1 404 Not Found
+        </div>
+
+        <br/>
+
+        <div id="category2-DELETE">
+            <h4>DELETE</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category2/delete/{id}</i>
+            <br/>
+            ({id} is the identification number of the category2 entry to be processed)
+            <br/>
+            Request: DELETE
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Parameter (JSON or form-data): none
+            <br/>
+            Response (with correct parameters): HTTP/1.1 204 No Content
+            <br/>
+            Response (with wrong authentification): HTTP/1.1 403 Forbidden
+            <br/>
+            Response (with invalid id): HTTP/1.1 404 Not Found
+        </div>
+
+    </div>
+
+    <br/>
+    <br/>
+    <br/>
+
+    <div id="category3">
+        <h3>Category3</h3>
+
+        <div id="category3-parameter">
+            <h4>Parameter</h4>
+            <ul>
+                <li>
+                    <b>id (Read-Only):</b>
+                    <ul>
+                        <li>
+                            The unique identification number of the category3 entry
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category3Subject:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Certainty:</b>
+                    <ul>
+                        <li>
+                            Statement about whether the observer is certain or uncertain about the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Certain" or "Uncertain"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category3Feature1:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection:
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category3Feature2:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Lat:</b>
+                    <ul>
+                        <li>
+                            Latitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Lon:</b>
+                    <ul>
+                        <li>
+                            Longitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Municipal (Read-Only):</b>
+                    <ul>
+                        <li>
+                            The municipal in which the observation is made
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>ObservationDate:</b>
+                    <ul>
+                        <li>
+                            The date of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Format: "YYYY-MM-DD"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Photo:</b>
+                    <ul>
+                        <li>
+                            The URL to the corresponding photo
+                        </li>
+                        <li>
+                            The file (when uploading) or URL-string of the uploaded photo
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <br/>
+
+        <div id="category3-GET">
+            <h4>GET</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category3</i>
+            <br/>
+            Request: GET
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Filter-Parameter: <a href="#category3-parameter">Category3-Parameter</a>
+            <br/>
+            Response (with correct parameters): HTTP/1.1 200 OK
+            <br/>
+            Response (with wrong authentification): HTTP/1.1 403 Forbidden
+        </div>
+
+        <br/>
+
+        <div id="category3-ADD">
+            <h4>ADD</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category3/add</i>
+            <br/>
+            Request: POST
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Parameter (JSON or form-data): <a href="#category3-parameter">Category3-Parameter</a>
+            <br/>
+            Response (with correct parameters): HTTP/1.1 201 Created
+            <br/>
+            Response (with wrong authentification): HTTP/1.1 403 Forbidden
+            <br/>
+            Response (with incorrect parameters): HTTP/1.1 400 Bad Request
+        </div>
+
+        <br/>
+
+        <div id="category3-UPDATE">
+            <h4>UPDATE</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category3/update/{id}</i>
+            <br/>
+            ({id} is the identification number of the category3 entry to be processed)
+            <br/>
+            Request: PUT
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Parameter (JSON or form-data): <a href="#category3-parameter">Category3-Parameter</a>
+            <br/>
+            Response (with correct parameters): HTTP/1.1 200 OK
+            <br/>
+            Response (with wrong authentification): HTTP/1.1 403 Forbidden
+            <br/>
+            Response (with incorrect parameters): HTTP/1.1 400 Bad Request
+            <br/>
+            Response (with invalid id): HTTP/1.1 404 Not Found
+        </div>
+
+        <br/>
+
+        <div id="category3-DELETE">
+            <h4>DELETE</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category3/delete/{id}</i>
+            <br/>
+            ({id} is the identification number of the category3 entry to be processed)
+            <br/>
+            Request: DELETE
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Parameter (JSON or form-data): none
+            <br/>
+            Response (with correct parameters): HTTP/1.1 204 No Content
+            <br/>
+            Response (with wrong authentification): HTTP/1.1 403 Forbidden
+            <br/>
+            Response (with invalid id): HTTP/1.1 404 Not Found
+        </div>
+
+    </div>
+
+    <br/>
+    <br/>
+    <br/>
+
+    <div id="category4">
+        <h3>Category4</h3>
+        <div id="category4-parameter">
+            <h4>Parameter</h4>
+            <ul>
+                <li>
+                    <b>id (Read-Only):</b>
+                    <ul>
+                        <li>
+                            The unique identification number of the category4 entry
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category4Subject:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Certainty:</b>
+                    <ul>
+                        <li>
+                            Statement about whether the observer is certain or uncertain about the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Certain" or "Uncertain"
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <b>Category4Feature1:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category4Feature2:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category4Feature3:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <b>Lat:</b>
+                    <ul>
+                        <li>
+                            Latitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Lon:</b>
+                    <ul>
+                        <li>
+                            Longitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Municipal (Read-Only):</b>
+                    <ul>
+                        <li>
+                            The municipal in which the observation is made
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>ObservationDate:</b>
+                    <ul>
+                        <li>
+                            The date of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Format: "YYYY-MM-DD"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Photo:</b>
+                    <ul>
+                        <li>
+                            The URL to the corresponding photo
+                        </li>
+                        <li>
+                            The file (when uploading) or URL-string of the uploaded photo
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <br/>
+
+        <div id="category4-GET">
+            <h4>GET</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category4</i>
+            <br/>
+            Request: GET
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Filter-Parameter: <a href="#category4-parameter">Category4-Parameter</a>
+            <br/>
+            Response (with correct parameters): HTTP/1.1 200 OK
+            <br/>
+            Response (with wrong authentification): HTTP/1.1 403 Forbidden
+        </div>
+
+        <br/>
+
+        <div id="category4-ADD">
+            <h4>ADD</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category4/add</i>
+            <br/>
+            Request: POST
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Parameter (JSON or form-data): <a href="#category4-parameter">Category4-Parameter</a>
+            <br/>
+            Response (with correct parameters): HTTP/1.1 201 Created
+            <br/>
+            Response (with wrong authentification): HTTP/1.1 403 Forbidden
+            <br/>
+            Response (with incorrect parameters): HTTP/1.1 400 Bad Request
+        </div>
+
+        <br/>
+
+        <div id="category4-UPDATE">
+            <h4>UPDATE</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category4/update/{id}</i>
+            <br/>
+            ({id} is the identification number of the category4 entry to be processed)
+            <br/>
+            Request: PUT
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Parameter (JSON or form-data): <a href="#category4-parameter">Category4-Parameter</a>
+            <br/>
+            Response (with correct parameters): HTTP/1.1 200 OK
+            <br/>
+            Response (with wrong authentification): HTTP/1.1 403 Forbidden
+            <br/>
+            Response (with incorrect parameters): HTTP/1.1 400 Bad Request
+            <br/>
+            Response (with invalid id): HTTP/1.1 404 Not Found
+        </div>
+
+        <br/>
+
+        <div id="category4-DELETE">
+            <h4>DELETE</h4>
+            Interface: <i>http://127.0.0.1:8000/api/observations/category4/delete/{id}</i>
+            <br/>
+            ({id} is the identification number of the category4 entry to be processed)
+            <br/>
+            Request: DELETE
+            <br/>
+            Header:
+            <br/>
+            <ul>
+                <li>
+                    Authentification:
+                    <ul>
+                        <li>
+                           The authentification-token of the user
+                        </li>
+                        <li>
+                            Format: Token {token_string}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            Parameter (JSON or form-data): none
+            <br/>
+            Response (with correct parameters): HTTP/1.1 204 No Content
+            <br/>
+            Response (with wrong authentification): HTTP/1.1 403 Forbidden
+            <br/>
+            Response (with invalid id): HTTP/1.1 404 Not Found
+        </div>
+
+    </div>
+
+    <br/>
+
+</div>
+
+{% endblock %}

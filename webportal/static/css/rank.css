@@ -1,0 +1,69 @@
+.rank_list {
+    display: grid;
+    grid-area: content;
+    grid-template-areas: ". rank-1 rank-2 ."
+    ". rank-3 rank-4 .";
+    grid-template-columns: 1fr 2fr 2fr 1fr;
+   }
+.rank-1 {
+    display: grid;
+    grid-area: rank-1;
+}
+.rank-2 {
+    display: grid;
+    grid-area: rank-2;
+}
+.rank-3 {
+    display: grid;
+    grid-area: rank-3;
+}
+.rank-4 {
+    display: grid;
+    grid-area: rank-4;
+}
+
+.table_rank {
+    border-collapse: collapse;
+    width: 25%;
+    margin-bottom: 100px;
+    justify-self: center;
+}
+
+.img_rank {
+    justify-self: center;
+}
+
+.table_rank tr {
+    border: 1px solid #E1E5E8;
+    text-align: center;
+}
+
+
+@media (min-width: 768px) and (max-width: 1200px){
+
+}
+
+
+@media (min-width: 416px) and (max-width: 767px) {
+    .rank_list {
+        display: grid;
+        grid-area: content;
+        grid-template-areas: "rank-1"
+        "rank-2"
+        "rank-3"
+        "rank-4";
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width:415px) {
+    .rank_list {
+        display: grid;
+        grid-area: content;
+        grid-template-areas: "rank-1"
+        "rank-2"
+        "rank-3"
+        "rank-4";
+        grid-template-columns: 1fr;
+    }
+}

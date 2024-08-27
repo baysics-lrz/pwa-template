@@ -1,0 +1,297 @@
+{% extends  'base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<script>
+$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+
+	var category1count = 0
+	// make the context items variables so other js can use them
+	var category1list = []
+	{% if category1_list %}  // if category1_list exists
+		{% for category1 in category1_list %} // loop through all entries
+			category1list.push({category: "category1",	lat: "{{category1.Lat}}",	lon: "{{category1.Lon}}"})
+			category1count += 1
+		{% endfor %}
+	{% endif %}
+
+	var category2count = 0
+	var category2list = []
+	{% if category2_list %}
+		{% for category2 in category2_list %}
+			category2list.push({category: "category2",	lat: "{{category2.Lat}}",	lon: "{{category2.Lon}}"})
+			category2count += 1
+		{% endfor %}
+	{% endif %}
+
+	var category3count = 0
+	// make the context items variables so other js can use them
+	var category3list = []
+	{% if category3_list %}
+		{% for category3 in category3_list %}
+		category3list.push({category: "category3", lat: "{{category3.Lat}}", lon: "{{category3.Lon}}"})
+		category3count += 1
+		{% endfor %}
+	{% endif %}
+
+	var category4count = 0
+	// make the context items variables so other js can use them
+	var category4list = []
+	{% if category4_list %}
+		{% for category4 in category4_list %}
+			category4list.push({category: "category4", lat: "{{category4.Lat}}",	lon: "{{category4.Lon}}"})
+			category4count += 1
+		{% endfor %}
+	{% endif %}
+</script>
+
+<link rel="stylesheet" href="/static/css/profile.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/overview.css?v=1.0.0">
+<!-- Leaflet 1.5.1 -->
+<link rel="stylesheet" href="/static/leaflet/leaflet-1.5.1/leaflet.css" />
+<script src="/static/leaflet/leaflet-1.5.1/leaflet.js"></script>
+<!-- custom styles -->
+<link rel="stylesheet" href="/static/css/map.css">
+<!-- GeoJson files -->
+<script src="/static/leaflet/spatial_files/landesgrenze.js" type="text/javascript"></script>
+
+<div class="row">
+	<div class="col-2 rectangle desktop-only"
+		 style="background:var(--darkblue);">
+
+	</div>
+	<div class="col-12 col-sm-12 rectangle col-md-10">
+		<div class="mainheadline">
+			<b>Overview</b>
+		</div>
+	</div>
+</div>
+
+<div class="row ">
+	{% include "includes/left-menu.html" %}
+	<div class="col-12 col-sm-12 col-md-10">
+		<div class="overview-container">
+			<div class="observationcontainer">
+				<div class="observations">
+
+						<div class="observationtitle">
+							<h1 class="overview-headline">Observations</h1>
+							<p>	What would you like to observe?</p>
+						</div>
+
+						<div class="category1container">
+							<a href="/observations/createcategory1"><img  class="categoryicon" src="/static/image/category1.svg" style="width:60%"></a>
+							<p class="categorytext">Category 1</p>
+						</div>
+
+						<div class="category2container">
+							<a href="/observations/createcategory2"><img class="categoryicon" src="/static/image/category2.svg" style="width:60%"></a>
+							<p class="categorytext">Category 2</p>
+						</div>
+
+						<div class="category3container">
+							<a href="/observations/createcategory3"><img class="categoryicon" src="/static/image/category3.svg" style="width:60%"></a>
+							<p class="categorytext">Category 3</p>
+						</div>
+
+						<div class="category4container">
+							<a href="/observations/createcategory4"><img class="categoryicon" src="/static/image/category4.svg" style="width:60%"></a>
+							<p class="categorytext">Category 4</p>
+						</div>
+				</div>
+
+			</div>
+
+			<div class="challegescontainer">
+
+				<div class="challeges">
+
+					<div class="challegetitel">
+						<h1 class="overview-headline">Challenges</h1>
+
+					</div>
+
+					<div class="challenge1container">
+						{% if category1_list|length >= 200 %}
+						<a href="#"><img src="/static/image/challenge/category1_200.png" style="width:60%"></a>
+
+						{% elif category1_list|length >= 100 %}
+						<a href="#"><img src="/static/image/challenge/category1_100.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>200</b> entries</p>
+
+						{% elif category1_list|length >= 50 %}
+						<a href="#"><img src="/static/image/challenge/category1_50.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>100</b> entries</p>
+
+						{% elif category1_list|length >= 25 %}
+						<a href="#"><img src="/static/image/challenge/category1_25.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>50</b> entries</p>
+
+						{% elif category1_list|length >= 10 %}
+						<a href="#"><img src="/static/image/challenge/category1_10.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>25</b> entries</p>
+
+						{% elif category1_list|length >= 1 %}
+						<a href="#"><img src="/static/image/challenge/category1_1.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>10</b> entries</p>
+
+						{% elif category1_list|length < 1 %}
+						<a href="#"><img src="/static/image/challenge/category1_1_deact.png" style="width:60%"></a>
+						<p class="subtext">Make your first </br> entry in this category.</p>
+
+						{% endif %}
+
+					</div>
+
+					<div class="challenge2container">
+
+						{% if category2_list|length >= 200 %}
+						<a href="#"><img src="/static/image/challenge/category2_200.png" style="width:60%"></a>
+
+						{% elif category2_list|length >= 100 %}
+						<a href="#"><img src="/static/image/challenge/category2_100.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>200</b> entries</p>
+
+						{% elif category2_list|length >= 50 %}
+						<a href="#"><img src="/static/image/challenge/category2_50.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>100</b> entries</p>
+
+						{% elif category2_list|length >= 25 %}
+						<a href="#"><img src="/static/image/challenge/category2_25.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>50</b> entries</p>
+
+						{% elif category2_list|length >= 10  %}
+						<a href="#"><img src="/static/image/challenge/category2_10.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>25</b> entries</p>
+
+						{% elif category2_list|length >= 1  %}
+						<a href="#"><img src="/static/image/challenge/category2_1.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>10</b> entries</p>
+
+						{% elif category2_list|length < 1 %}
+						<a href="#"><img src="/static/image/challenge/category2_1_deact.png" style="width:60%"></a>
+						<p class="subtext"> Make your first </br> entry in this category.</p>
+
+						{% endif %}
+
+					</div>
+
+					<div class="challenge3container">
+
+						{% if category3_list|length >= 200 %}
+						<a href="#"><img src="/static/image/challenge/category3_200.png" style="width:60%"></a>
+
+						{% elif category3_list|length >= 100 %}
+						<a href="#"><img src="/static/image/challenge/category3_100.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>200</b> entries</p>
+
+						{% elif category3_list|length >= 50 %}
+						<a href="#"><img src="/static/image/challenge/category3_50.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>100</b> entries</p>
+
+						{% elif category3_list|length >= 25 %}
+						<a href="#"><img src="/static/image/challenge/category3_25.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>50</b> entries</p>
+
+						{% elif category3_list|length >= 10 %}
+						<a href="#"><img src="/static/image/challenge/category3_10.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>25</b> entries</p>
+
+						{% elif category3_list|length >= 1 %}
+						<a href="#"><img src="/static/image/challenge/category3_1.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>10</b> entries</p>
+
+						{% elif category3_list|length < 1 %}
+						<a href="#"><img src="/static/image/challenge/category3_1_deact.png" style="width:60%"></a>
+						<p class="subtext">Make your first </br> entry in this category.</p>
+
+						{% endif %}
+
+					</div>
+
+					<div class="challenge4container">
+						{% if category4_list|length >= 200 %}
+						<a href="#"><img src="/static/image/challenge/category4_200.png" style="width:60%"></a>
+
+						{% elif category4_list|length >= 100 %}
+						<a href="#"><img src="/static/image/challenge/category4_100.png" style="width:60%"></a>
+						<br class="subtext"> Next:  </br> <b>200</b> entries</p>
+
+						{% elif category4_list|length >= 50 %}
+						<a href="#"><img src="/static/image/challenge/category4_50.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>100</b>b entries</p>
+
+						{% elif category4_list|length >= 25 %}
+						<a href="#"><img src="/static/image/challenge/category4_25.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>50</b> entries</p>
+
+						{% elif category4_list|length >= 10 %}
+						<a href="#"><img src="/static/image/challenge/category4_10.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>25</b> entries</p>
+
+						{% elif category4_list|length >= 1 %}
+						<a href="#"><img src="/static/image/challenge/category4_1.png" style="width:60%"></a>
+						<p class="subtext"> Next:  </br><b>10</b> entries</p>
+
+						{% elif category4_list|length < 1 %}
+						<a href="#"><img src="/static/image/challenge/category4_1_deact.png" style="width:60%"></a>
+						<p class="subtext"> Make your first <br> entry in this category. </p>
+
+						{% endif %}
+
+					</div>
+					<div class=" challegebutton text-right mr-3 mb-3">
+						<a href="/observations/challenges/">	<button class="mt-2   buttonoverview"  role="button">All challenges</button></a>
+					</div>
+				</div>
+
+			</div>
+			<div class="eintraegecontainer">
+
+				<h1 class="mt-3 ml-3 overview-headline">My Entries</h1>
+				{% if allentries == 0 %}
+				<p class="ml-3 subtext">You haven't made any entries yet. Try now!</p>
+				{% elif allentries == 1 %}
+				<p class="ml-3 subtext">You have made {{allentries}} entries.</p>
+				{% else %}
+				<p class="ml-3 subtext">You have made {{allentries}} entries.</p>
+				{% endif %}
+
+				<canvas id="myObsChart" width="100%" height="23%" style="width: 70%;height: 70%; padding: 10px;" ></canvas>
+
+				<div class="text-right mr-3 mb-3">
+				 <a href="/observations/show-my-list/">	<button class="mt-2  buttonoverview"  role="button">Your entries</button></a>
+				</div>
+
+			</div>
+			<div class="mapcontainer">
+				<h1 class="mt-3 ml-3 overview-headline overviewheader">Map of your entries </h1>
+				<!-- hier bitte height anpassen -->
+				<div id="map"  class="overviewmap">
+					<!-- the overview map -->
+				</div>
+				<!-- js for the overview_map (must be called after map container)-->
+				<script src="/static/js/overview_map.js"></script>
+
+				<div class="text-right mr-3 mb-3 overviewbutton">
+					<a href="/map/">	<button class="mt-2  buttonoverview"  role="button">Map</button></a>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="/static/js/observations/overview_chart.js"></script>
+
+
+{% else %}
+        <p><a href="/accounts/login/">Please log in to continue.</a></p>
+
+{% endif %}
+
+{% endblock %}

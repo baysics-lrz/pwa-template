@@ -1,0 +1,1186 @@
+<!--
+  The js being inside a html file is a workaround for django,
+  as it natively doesn't support template tags in js.
+-->
+<!-- spinner to show that things are loading -->
+
+<div id="centerspinner" class="spinner-border" role="status"
+     style="position: absolute; left: 47vw; top: 40vh; z-index: 1002;">
+    <span class="sr-only">Loading...</span>
+</div>
+
+<!-- Leaflet 1.5.1 -->
+<link rel="stylesheet" href="/static/leaflet/leaflet-1.5.1/leaflet.css"/>
+<script src="/static/leaflet/leaflet-1.5.1/leaflet.js"></script>
+<!-- Leaflet Plugin: Esri geosearch -->
+<script src="https://unpkg.com/esri-leaflet"></script>
+<link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css">
+<script src="https://unpkg.com/esri-leaflet-geocoder"></script>
+<!-- Leaflet Plugin: Markerclusters -->
+<link rel="stylesheet" href="/static/leaflet/plugins/markercluster/MarkerCluster.css"/>
+<link rel="stylesheet" href="/static/leaflet/plugins/markercluster/MarkerCluster.Default.css"/>
+<script src="/static/leaflet/plugins/markercluster/leaflet.markercluster.js"></script>
+<!-- Leaflet Plugin: PointInPolygon -->
+<script src="/static/leaflet/plugins/Leaflet.PointInPolygon/wise-leaflet-pip_custom.js"></script>
+<!-- custom styles -->
+<link rel="stylesheet" href="/static/css/map.css">
+<!-- GeoJson files -->
+<script src="/static/leaflet/spatial_files/landesgrenze.js" type="text/javascript"></script>
+<script src="/static/leaflet/spatial_files/bayern_buffer.js" type="text/javascript"></script>
+<script src="/static/js/spatial.js"></script>
+
+
+<div id="map"></div>
+<style>
+    /* using relative size neends to be adjusted with parent */
+    /* In the entry for for category1s and the update forms relative size causes
+    problems, so for now there are absolute values. */
+    #map {
+        height: 60%;
+
+    }
+
+</style>
+
+
+<script>
+
+    // check if new data entry or updating entry
+    var interface_type = "entry"
+    var update_type = ""
+    var obs_of_interest = -999
+    if (window.location.href.includes("update")) {
+        interface_type = "update"
+        if (window.location.href.includes("category1")) {
+            update_type = "category1"
+        } else if (window.location.href.includes("category2")) {
+            update_type = "category2"
+        } else if (window.location.href.includes("category3")) {
+            update_type = "category3"
+        } else if (window.location.href.includes("category4")) {
+            update_type = "category4"
+        }
+        var url_split = window.location.href.split("/")
+        obs_of_interest = url_split[url_split.length - 2]
+    }
+    console.log("data interface type:", interface_type)
+
+    // convert the django template static to a js variable
+    var static_path = "/static/"
+
+    // CSS variables
+    var icon_scale = getComputedStyle(document.documentElement).getPropertyValue('--animation-icon-scale')
+    var wave_scale = getComputedStyle(document.documentElement).getPropertyValue('--animation-wave-scale')
+    var wave_opacity = getComputedStyle(document.documentElement).getPropertyValue('--wave-opacity')
+    var category1_color = getComputedStyle(document.documentElement).getPropertyValue('--category1-color')
+    var category2_color = getComputedStyle(document.documentElement).getPropertyValue('--category2-color')
+    var category3_color = getComputedStyle(document.documentElement).getPropertyValue('--category3-color')
+    var category4_color = getComputedStyle(document.documentElement).getPropertyValue('--category4-color')
+
+
+    /* Only allow a single Marker to be set for a new observation. */
+    var activeMarker = false
+
+    /* Decide if the info panel is open. */
+    var infoOpen = false
+
+    /* Create a Leaflet map at a certrain view and zoom level. */
+    var map = L.map('map', {
+        // Remove automatic zoom control so we can reposition it freely
+        zoomControl: false,
+        minZoom: 4,
+    }).setView([49, 11], 7)
+
+
+    /* Allow a location request. */
+    function getLocation() {
+        if (navigator.geolocation) {
+
+            function error() {
+                alert("No location available.")
+            }
+
+            const options = {
+                enableHighAccuracy: true
+            }
+            navigator.geolocation.getCurrentPosition(showPosition, error, options)
+
+            const event = new Event('automatic-location')
+            document.dispatchEvent(event)
+        } else {
+            alert("Geolocation is not supported by this browser.")
+        }
+    }
+
+
+    /* set custom marker icon. */
+    var pinIcon = L.divIcon({
+        html: "<img class = 'pinIcon' src='/static/image/marker.svg' />",
+        className: 'circleBox',
+        iconSize: (24, 40),
+        iconAnchor: [19, 38],
+        popupAnchor: [0, -32]
+    })
+
+    var category1pinIcon = L.divIcon({
+        html: "<img class = 'pinIcon' src='/static/image/category1_pos.svg' />",
+        className: 'circleBox',
+        iconSize: (24, 40),
+        iconAnchor: [19, 38],
+        popupAnchor: [0, -32]
+    })
+
+    var category2pinIcon = L.divIcon({
+        html: "<img class = 'pinIcon' src='/static/image/category2_pos.svg' />",
+        className: 'circleBox',
+        iconSize: (24, 40),
+        iconAnchor: [19, 38],
+        popupAnchor: [0, -32]
+    })
+
+    var category3pinIcon = L.divIcon({
+        html: "<img class = 'pinIcon' src='/static/image/category3_pos.svg' />",
+        className: 'circleBox',
+        iconSize: (24, 40),
+        iconAnchor: [19, 38],
+        popupAnchor: [0, -32]
+    })
+
+    var category4pinIcon = L.divIcon({
+        html: "<img class = 'pinIcon' src='/static/image/category4_pos.svg' />",
+        className: 'circleBox',
+        iconSize: (24, 40),
+        iconAnchor: [19, 38],
+        popupAnchor: [0, -32]
+    })
+
+
+
+    /* Zoom to the requested location and set a marker. */
+    function showPosition(position) {
+
+        /* Round them to the 6th decimal. */
+        var lat = String(Math.round(position.coords.latitude * 1000000) / 1000000)
+        var lng = String(Math.round(position.coords.longitude * 1000000) / 1000000)
+        // If a marker was already set reposition it
+        if (activeMarker == true) {
+            marker.setLatLng([lat, lng])
+        }
+        // If no marker is active, create a new marker
+        else {
+            var markerpinicon = pinIcon
+            if (interface_type == "update" & update_type == "category1") {
+                markerpinicon = category1pinIcon
+            } else if (interface_type == "update" & update_type == "category2") {
+                markerpinicon = category2pinIcon
+            } else if (interface_type == "update" & update_type == "category3") {
+                markerpinicon = category3pinIcon
+            }  else if (interface_type == "update" & update_type == "category4") {
+                markerpinicon = category4pinIcon
+            }
+            marker = new L.marker(
+                [lat, lng],
+                {
+                    draggable: 'true',
+                    icon: markerpinicon,
+                    zIndexOffset: 1000 // Place the pin above other layers.
+                }
+            ).addTo(map)
+            marker.on("dragend", onDrag)
+            activeMarker = true;
+        }
+        // Set the zoom level
+        enterLatLng(lat, lng, position.coords.accuracy)
+        map.setView([lat, lng], 16)
+    }
+
+
+    /* Defining the base map layers. "maxZoom" set to the provided Zoom level
+    of the map provider. */
+
+    // Bright map with few labels (Carto Voyage style).
+    var CartoDB_VoyagerLabelsUnder = L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png',
+        {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }
+    ).addTo(map);
+
+    // OSM (German layout, distracting labels, but more accurate descriptions)
+    var OpenStreetMap_DE = L.tileLayer(
+        'https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png',
+        {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            maxZoom: 19//17.5
+        });
+
+    //OpenTopo (Topographical map for hiking)
+    var OpenTopo = L.tileLayer(
+        'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+        {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, SRTM | contributors &copy; <a href="https://opentopomap.org">OpenTopoMap (CC-BY-SA)</a>',
+            maxZoom: 19//16.5
+        }
+    )
+
+    // Bayernatlas (Digital Ortho-Photo/aerial image 80 cm resolution colored)
+    var dopLayer = L.tileLayer.wms(
+        'https://geoservices.bayern.de/wms/v2/ogc_dop80_oa.cgi?',
+        {
+            attribution: '&copy; <a href="https://www.geodaten.bayern.de">LDBV</a> Bayerische Vermessungsverwaltung',
+            layers: "by_dop80c",
+            format: 'image/png',
+            transparent: true,
+            maxZoom: 19,
+            minZoom: 4
+        }
+    )
+
+    /* Add the borders of the interaction area (i.e. Bavarian state border).*/
+    var bayerischeGrenze = L.geoJSON(
+        bygrenze,
+        {
+            fill: null,
+            color: "#134a74"
+        }).addTo(map)
+
+    function lableFeatures(feature, layer) {
+        layer.bindPopup(feature.properties.NAME)
+    }
+
+
+    /* Add the borders of the interaction area (i.e. Bavarian state border).*/
+    var bayern_buffer = L.geoJSON(
+        bay_buff,
+        {
+        })
+
+
+    /* Create a layer groups for the layer control panel.*/
+    var basemaps = {
+        "bright": CartoDB_VoyagerLabelsUnder,
+        "OSM": OpenStreetMap_DE,
+        "topographic": OpenTopo,
+        "imagery": dopLayer
+    }
+
+
+    /* Build a custom button that allows for location requests. */
+    var locationButton = L.Control.extend(
+        {
+            options:
+                {
+                    position: 'bottomright'
+                },
+            onAdd: function (map) {
+                /* Create a DOM-Util with the default style of a leaflet button
+                and customize it a little. */
+                var container = L.DomUtil.create(
+                    'div',
+                    'leaflet-bar leaflet-control leaflet-control-position'
+                )
+                container.style.backgroundColor = 'white'
+                container.style.width = '30px'
+                container.style.height = '30px'
+                container.onclick = function () {
+                    getLocation()
+                }
+                // disable pins under button
+                L.DomEvent.on(container, "click", L.DomEvent.stopPropagation)
+                return container
+            },
+        }
+    )
+
+
+    L.control.scale({position: 'bottomleft', imperial: false}).addTo(map);
+
+    /* Add the custom location request button. */
+    map.addControl(new locationButton())
+
+
+    /* Place the leaflet zoom buttons above the location request button. */
+    L.control.zoom({position: 'bottomright'}).addTo(map)
+
+    /* Adding the Esri geocoding search plugin. Replace or set up a payment
+    plan if we surpass 1 mio free searches per month. */
+    var searchControl = L.esri.Geocoding.geosearch().addTo(map)
+    /* ESRI-Geocoding: isten for the results event and add every result to the map. */
+    searchControl.on("results", function (data) {
+            /* Round them to the 6th decimal. */
+            var lat = String(Math.round(data.latlng.lat * 1000000) / 1000000)
+            var lng = String(Math.round(data.latlng.lng * 1000000) / 1000000)
+            // If a marker was already set reposition it
+            if (activeMarker == true) {
+                marker.setLatLng([lat, lng])
+            }
+            // If no marker is active, create a new marker
+            else {
+                var markerpinicon = pinIcon
+                if (interface_type == "update" & update_type == "category1") {
+                    markerpinicon = category1pinIcon
+                } else if (interface_type == "update" & update_type == "category2") {
+                    markerpinicon = category2pinIcon
+                } else if (interface_type == "update" & update_type == "category3") {
+                    markerpinicon = category3pinIcon
+                }  else if (interface_type == "update" & update_type == "category4") {
+                    markerpinicon = category4pinIcon
+                }
+                marker = new L.marker(
+                    [lat, lng],
+                    {
+                        draggable: 'true',
+                        icon: markerpinicon,
+                        zIndexOffset: 1000 // Place the pin above other layers.
+                    }
+                ).addTo(map)
+                marker.on("dragend", onDrag)
+                activeMarker = true;
+            }
+
+            // Set the zoom level
+            map.setView([lat, lng], 16)
+        }
+    )
+
+    // On change of the basemap layer do
+    map.on('baselayerchange', function (e) {
+        var baselayerzoom = {
+            "OSM": 17,
+            "topographic": 16,
+            "bright": 19,
+            "imagery": 18
+        }
+
+        // set max zoom to max zoom of selected basemap
+        map.options.maxZoom = baselayerzoom[e.name]
+        // check if the current zoom level is higher than visible in the new map
+        if (map.getZoom() > baselayerzoom[e.name]) {
+            //change zoom level
+            map.setZoom(baselayerzoom[e.name])
+        }
+    })
+
+    /* Build the the custom observation icons. */
+    function returnIcon(iconType, ringe) {
+        /* Separate the design with concentrical rings and without. */
+        if (ringe == true) {
+            /* Building the inner HTML. */
+            var html = "<div class='" + iconType + "Wave'></div>" +
+                "<div class='" + iconType + "Ring1'></div><div class='" +
+                iconType + "Ring2'></div><div class='" + iconType +
+                "Ring3'></div>" + "<img class = '" + iconType +
+                "Icon' src='/static/image/" + iconType + ".svg'/>"
+        } else {
+            var html = "<div class='" + iconType + "Wave'></div>" +
+                "<img class = '" + iconType +
+                "Icon' src='/static/image/" + iconType + ".svg'/>"
+        }
+        var customIcon = L.divIcon({
+            html: html,
+            className: 'circlebox', iconSize: (20, 20)
+        })
+        return customIcon
+    }
+
+
+    /* Icons of the various types. The second parameter control if the
+    icon will have the concentrical rings.*/
+    var category1Icon = returnIcon("category1", false)
+    var category1IconOwn = returnIcon("category1", true)
+    var category2Icon = returnIcon("category2", false)
+    var category2IconOwn = returnIcon("category2", true)
+    var category3Icon = returnIcon("category3", false)
+    var category3IconOwn = returnIcon("category3", true)
+    var category4Icon = returnIcon("category4", false)
+    var category4IconOwn = returnIcon("category4", true)
+
+
+    /* Building the custom cluster group icons. */
+    function returnClusterIcon(iconType, ringe) {
+        if (ringe == true) {
+            /* Building the inner HTML. */
+            var html = "<div class='" + iconType + "Ring1'></div><div class='" +
+                iconType + "Ring2'></div><div class='" + iconType +
+                "Ring3'></div>" + "<img class = '" + iconType +
+                "Icon' src='/static/image/" + iconType + ".svg'/>" +
+                "<div class='clusterField'>"
+        } else {
+            var html = "<img class='clusterIcon' src='/static/image/" +
+                iconType + ".svg'/>" + "<div class='clusterField'>"
+        }
+        /* Building a MarkerCluster. */
+        var customClusterIcon = L.markerClusterGroup(
+            {
+                iconCreateFunction: function (cluster) {
+                    var markers = cluster.getAllChildMarkers()
+                    var n = 0;
+                    // Manage the number of clustered icons
+                    for (var i = 0; i < markers.length; i++) {
+                        n = markers.length
+                    }
+
+                    var clustericon = L.divIcon(
+                        {
+                            html: html + n + "</div>",
+                            className: 'clusterBox',
+                            iconSize: L.point(24, 24)
+                        }
+                    )
+                    return clustericon
+                },
+                polygonOptions: {color: '#134a74'},
+            },
+        )
+        return customClusterIcon
+    }
+
+
+    /* MarkerCluster groups  of the various types. The second parameter
+    controls if the icon will have the concentrical rings.*/
+    var category1Cluster = returnClusterIcon("category1", false)
+    var category1ClusterOwn = returnClusterIcon("category1", true)
+    var category2Cluster = returnClusterIcon("category2", false)
+    var category2ClusterOwn = returnClusterIcon("category2", true)
+    var category3Cluster = returnClusterIcon("category3", false)
+    var category3ClusterOwn = returnClusterIcon("category3", true)
+    var category4Cluster = returnClusterIcon("category4", false)
+    var category4ClusterOwn = returnClusterIcon("category4", true)
+
+
+
+    /* On highlighting a marker fetch information and build the html for
+    an info panel. */
+    function highlightFeature(e) {
+        infoOpen = true
+        var t = e.target.options.observation
+        var l = e.target.options.label
+        var i = e.target.options.primaryInfo
+        var i2 = e.target.options.secondaryInfo
+        var i3 = e.target.options.tertiaryInfo
+        var i4 = e.target.options.quaternaryInfo
+        var i5 = e.target.options.quinaryInfo
+        var od = e.target.options.observationDate
+        var p = e.target.options.photo
+        var iDescription = ""
+        var i2Description = ""
+        if (i2 == "" | i2 == null) {
+            i2 = "NaN"
+        }
+        if (i3 == "" | i3 == null) {
+            i3 = "NaN"
+        }
+        if (i4 == "" | i4 == null) {
+            i4 = "NaN"
+        }
+        if (i5 == "" | i5 == null) {
+            i5 = "NaN"
+        }
+        console.log(t)
+        if (t == "category1") {
+            description1 = "dummy attribute: "
+            description2 = "dummy attribute: "
+            description3 = "dummy attribute: "
+            i = e.target.options.secondaryInfo
+            i2 = e.target.options.tertiaryInfo
+            i3 = ""
+        } else if (t == "category2") {
+            description1 = "dummy attribute: "
+            description2 = "dummy attribute: "
+            description3 = "dummy attribute: "
+            i3 = ""
+        } else if (t == "category3") {
+            description1 = "dummy attribute: "
+            description2 = "dummy attribute: "
+            description3 = ""
+            i3 = ""
+        } else if (t == "category4") {
+            description1 = "dummy attribute: "
+            description2 = "dummy attribute: "
+            description3 = "dummy attribute: "
+            i2 = e.target.options.quaternaryInfo // Set second label as Category4Feature2.
+            i3 = e.target.options.quinaryInfo // Set second label as Category4Feature3.
+            i3 = ""
+        }
+
+        /* Check if there should be drawn a photo. */
+        var infoImg = ""
+        if (p != "no photo") {
+            // Construct an image DOM with the photo url.
+            infoImg = "<img src='" + p + "' class = \"infoImage\"/>"
+        }
+
+        // report comment
+        var comment = ""
+
+
+        /* Should we allow only a specific image size in the first place? */
+        var htmlHighlight = "<div id=\"head\"><b>" + l + "</b></div>" +
+            "<b> Recorded: <br/>" + od + "<br/>" + comment +
+            description1 + i + "<br/>" +
+            description2 + i2 + "<br/>" +
+            description3 + i3 +
+            infoImg + "</b>"
+
+
+        info._div.style.display = "flex"
+        info._div.style.maxWidth = "40vw"
+        info._div.style.maxHeight = "40vh"
+        // Test if screen has mobile size
+        mqList = window.matchMedia("(max-width:767px)")
+        if (mqList.matches == true) {
+            //info._div.style.overflowY = "auto"
+            info._div.style.maxWidth = "80vw"
+        }
+        info.update(htmlHighlight)
+    }
+
+    /* Clear the info panel. */
+    function resetHighlight(e) {
+        infoOpen = false
+        var layer = e.target;
+        info._div.style.display = "none"
+        info.update("<b id=\"head\">Info.</b>");
+    }
+
+    /* Build an info panel which shows a quick overview of observations. */
+    var info = L.control({position: 'bottomleft'});
+    info.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'info');
+        this.update("<b id=\"head\">Info.</b>");
+        return this._div;
+    }
+
+
+    /* Method that is used to update the info panel. */
+    info.update = function (ih) {
+        if (ih == "undefined") {
+            this._div.innerHTML = "<b id=\"head\">Info.</b>"
+        } else {
+            this._div.innerHTML = ih
+        }
+    }
+
+    info.addTo(map)
+
+    var infoElements = document.getElementsByClassName("info")
+    infoElements[0].onclick = function () {
+        infoClick(infoElements[0])
+    }
+
+    /* Add a dragable marker-pin for updating. */
+    function createUpdateMarker(lat, lon) {
+        console.log("trial 2")
+        var lat = parseFloat(lat.replace(",", "."))
+        var lon = parseFloat(lon.replace(",", "."))
+        console.log("trial 3")
+        var markerpinicon = pinIcon
+        if (interface_type == "update" & update_type == "category1") {
+            markerpinicon = category1pinIcon
+        } else if (interface_type == "update" & update_type == "category2") {
+            markerpinicon = category2pinIcon
+        } else if (interface_type == "update" & update_type == "category3") {
+            markerpinicon = category3pinIcon
+        }  else if (interface_type == "update" & update_type == "category4") {
+            markerpinicon = category4pinIcon
+        }
+        marker = new L.marker([lat, lon],
+            {
+                draggable: 'true',
+                icon: markerpinicon,
+                zIndexOffset: 1000
+            }
+        )
+        activeMarker = true;
+        /* Round them to the 6th decimal. */
+        var lat = String(Math.round(lat * 1000000) / 1000000)
+        var lng = String(Math.round(lon * 1000000) / 1000000)
+        marker.addTo(map)
+
+        /* Fill 2 input boxes in fht form with the coordinates from
+         the marker. */
+
+        // Bind a drag-function to the marker
+        marker.on("dragend", onDrag);
+        marker.bindPopup("Lat: " + lat + "<br>" + "Lon: " + lng)
+        enterLatLng(lat, lng, 0)
+    }
+
+
+    /* Fetch the entries from the DB. */
+    {% if category1_list %}
+        var category1Entry = {}
+        {% for category1 in category1_list %}
+
+            /* Check if there is a photo or not. */
+            var photoUrl = "no photo"
+            {% if category1.Photo %}
+                // Photo exists.
+                photoUrl = "{{category1.Photo.url}}"
+                // point to the smaller resized photo (thumbnail) for the map
+                photoUrl = photoUrl.slice(0, -4).concat("_small.jpg")
+                photoUrl = photoUrl.split("/")
+                photoUrl.splice(2, 0, "thumbnails")
+                photoUrl = photoUrl.join("/")
+            {% endif %}
+            {% if an1.Flag %}
+                if ({{category1.Flag}} == 1){
+                photoUrl = static_path + "image/review.png"
+                photoUrlOrig = photoUrl
+            }
+            {% endif %}
+
+            category1Entry[{{category1.id}}] = {
+                "oid":{{category1.id}},
+                "observation": "category1",
+                "label": "{{category1.Category1Subject}}",
+                "lat": "{{category1.Lat}}",
+                "lon": "{{category1.Lon}}",
+                "observationDate": "{{category1.ObservationDate}}",
+            }
+            // check if all entries need be shown or only one for updating
+            if (interface_type == "update") {
+                if (obs_of_interest == {{category1.id}} & (update_type == "category1")) {
+                    createUpdateMarker(category1Entry[{{category1.id}}].lat, category1Entry[{{category1.id}}].lon)
+                }
+            } else if (interface_type == "entry") {
+                try{
+                  draw_points(category1Entry[{{category1.id}}])
+                } catch {
+                  console.log("error while trying to draw category1")
+                }
+            }
+
+        {% endfor %}
+    {% endif %}
+
+    {% if category2_list %}
+        var category2Entry = {}
+        {% for category2 in category2_list %}
+
+            /* Check if there is a photo or not. */
+            var photoUrl = "no photo"
+            {% if category2.Photo %}
+                // Photo exists.
+                photoUrl = "{{category2.Photo.url}}"
+                // point to the smaller resized photo (thumbnail) for the map
+                photoUrl = photoUrl.slice(0, -4).concat("_small.jpg")
+                photoUrl = photoUrl.split("/")
+                photoUrl.splice(2, 0, "thumbnails")
+                photoUrl = photoUrl.join("/")
+            {% endif %}
+            {% if category2.Flag %}
+                if ({{category2.Flag}} == 1){
+                photoUrl = static_path + "image/review.png"
+                photoUrlOrig = photoUrl
+            }
+            {% endif %}
+
+            category2Entry[{{category2.id}}] = {
+                "oid":{{category2.id}},
+                "observation": "category2",
+                "label": "{{category2.Category2Subject}}",
+                "lat": "{{category2.Lat}}",
+                "lon": "{{category2.Lon}}",
+                "observationDate": "{{category2.ObservationDate}}",
+            }
+            // check if all entries need be shown or only one for updating
+            if (interface_type == "update") {
+                if (obs_of_interest == {{category2.id}} & (update_type == "category2")) {
+                    createUpdateMarker(category2Entry[{{category2.id}}].lat, category2Entry[{{category2.id}}].lon)
+                }
+            } else if (interface_type == "entry") {
+                try{
+                  draw_points(category2Entry[{{category2.id}}])
+                } catch {
+                  console.log("error while trying to draw category2")
+                }
+            }
+        {% endfor %}
+    {% endif %}
+
+
+    {% if category3_list %}
+        var category3Entry = {}
+        {% for category3 in category3_list %}
+
+            /* Check if there is a photo or not. */
+            var photoUrl = "no photo"
+            {% if category3.Photo %}
+                // Photo exists.
+                photoUrl = "{{category3.Photo.url}}"
+                // point to the smaller resized photo (thumbnail) for the map
+                photoUrl = photoUrl.slice(0, -4).concat("_small.jpg")
+                photoUrl = photoUrl.split("/")
+                photoUrl.splice(2, 0, "thumbnails")
+                photoUrl = photoUrl.join("/")
+            {% endif %}
+            // If Flag was set, show an "under review" image
+            {% if category3.Flag %}
+                if ({{category3.Flag}} == 1){
+                photoUrl = static_path + "image/review.png"
+                photoUrlOrig = photoUrl
+            }
+            {% endif %}
+
+            category3Entry[{{category3.id}}] = {
+                "oid":{{category3.id}},
+                "observation": "category3",
+                "label": "{{category3.Category3Subject}}",
+                "lat": "{{category3.Lat}}",
+                "lon": "{{category3.Lon}}",
+                "observationDate": "{{category3.ObservationDate}}",
+            }
+
+            // check if all entries need be shown or only one for updating
+            if (interface_type == "update") {
+                if (obs_of_interest == {{category3.id}} & update_type == "category3") {
+                    createUpdateMarker(category3Entry[{{category3.id}}].lat, category3Entry[{{category3.id}}].lon)
+                }
+            } else if (interface_type == "entry") {
+                try{
+                  draw_points(category3Entry[{{category3.id}}])
+                } catch {
+                  console.log("error while trying to draw category3")
+                }
+            }
+        {% endfor %}
+    {% endif %}
+
+
+    {% if category4_list %}
+        var category4Entry = {}
+        {% for category4 in category4_list %}
+
+            /* Check if there is a photo or not. */
+            var photoUrl = "no photo"
+            {% if category4.Photo %}
+                // Photo exists.
+                photoUrl = "{{category4.Photo.url}}"
+                // point to the smaller resized photo (thumbnail) for the map
+                photoUrl = photoUrl.slice(0, -4).concat("_small.jpg")
+                photoUrl = photoUrl.split("/")
+                photoUrl.splice(2, 0, "thumbnails")
+                photoUrl = photoUrl.join("/")
+            {% endif %}
+            {% if category4.Flag %}
+                if ({{category4.Flag}} == 1){
+                photoUrl = static_path + "image/review.png"
+                photoUrlOrig = photoUrl
+            }
+            {% endif %}
+
+            category4Entry[{{category4.id}}] = {
+                "oid":{{category4.id}},
+                "observation": "category4",
+                "label": "{{category4.Category4Subject}}",
+                "lat": "{{category4.Lat}}",
+                "lon": "{{category4.Lon}}",
+                "observationDate": "{{category4.ObservationDate}}",
+            }
+            // check if all entries need be shown or only one for updating
+            if (interface_type == "update") {
+                if (obs_of_interest == {{category4.id}} & (update_type == "category4")) {
+                    createUpdateMarker(category4Entry[{{category4.id}}].lat, category4Entry[{{category4.id}}].lon)
+                }
+            } else if (interface_type == "entry") {
+                try{
+                  draw_points(category4Entry[{{category4.id}}])
+                } catch {
+                  console.log("error while trying to draw category4")
+                }
+            }
+        {% endfor %}
+    {% endif %}
+
+    /* Draws the db entries onto the map. */
+    function draw_points(dictEntry) {
+        /* Because the German decimal point notation (comma vs period)
+        we have to replace . and , manually. */
+        var lat = parseFloat(dictEntry.lat.replace(",", "."))
+        var lon = parseFloat(dictEntry.lon.replace(",", "."))
+        var icon = null
+        var groupIcon = null
+        /* Create a custom marker object which contains attributes for <thead>
+          information panel. */
+        customMarker = L.Marker.extend(
+            {
+                options: {
+                    oid: dictEntry.oid,
+                    observation: dictEntry.observation,
+                    label: dictEntry.label,
+                    primaryInfo: dictEntry.primaryInfo,
+                    secondaryInfo: dictEntry.secondaryInfo,
+                    tertiaryInfo: dictEntry.tertiaryInfo,
+                    quaternaryInfo: dictEntry.quaternaryInfo,
+                    quinaryInfo: dictEntry.quinaryInfo,
+                    observationDate: dictEntry.observationDate,
+                    photo: dictEntry.photo,
+                    report: dictEntry.report
+                }
+            }
+        )
+
+        /* Decide if markers should be shown as own or foreign observations. */
+        var own_observation = false
+        /* If an observation has no user id, show it as foreign entry for
+        everybody. */
+
+        {% if active_user %}
+            if ("{{active_user}}" == dictEntry.uid)
+                own_observation = true
+        {% endif %}
+
+
+
+        /* Choose as which observation type it will be visualized. */
+        if (dictEntry.observation == "category1") {
+            if (own_observation == true) {
+                markerIcon = category1IconOwn
+                groupIcon = category1ClusterOwn
+            } else {
+                markerIcon = category1Icon
+                groupIcon = category1Cluster
+            }
+        } else if (dictEntry.observation == "category2") {
+            if (own_observation == true) {
+                markerIcon = category2IconOwn
+                groupIcon = category2ClusterOwn
+            } else {
+                markerIcon = category2Icon
+                groupIcon = category2Cluster
+            }
+        } else if (dictEntry.observation == "category3") {
+            if (own_observation == true) {
+                markerIcon = category3IconOwn
+                groupIcon = category3ClusterOwn
+            } else {
+                markerIcon = category3Icon
+                groupIcon = category3Cluster
+            }
+        } else if (dictEntry.observation == "category4") {
+            if (own_observation == true) {
+                markerIcon = category4IconOwn
+                groupIcon = category4ClusterOwn
+            } else {
+                markerIcon = category4Icon
+                groupIcon = category4Cluster
+            }
+        }
+        marker = new customMarker([lat, lon], {icon: markerIcon})
+        /* Bind the highlighting function for the info panel to marker. */
+        marker.on(
+            {
+                mouseover: highlightFeature,
+                mouseout: resetHighlight,
+                click: highlightFeature
+            }
+        )
+        marker.addTo(groupIcon)
+    }
+
+    /* Allow to uncheck categories (to see overlapping points for example) */
+    var category1LayerGroup = L.layerGroup([category1Cluster, category1ClusterOwn])
+    var category2LayerGroup = L.layerGroup([category2Cluster, category2ClusterOwn])
+    var category3LayerGroup = L.layerGroup([category3Cluster, category3ClusterOwn])
+    var category4LayerGroup = L.layerGroup([category4Cluster, category4ClusterOwn])
+
+    /* Add all the cluster groups to the map. */
+    category1LayerGroup.addTo(map)
+    category2LayerGroup.addTo(map)
+    category3LayerGroup.addTo(map)
+    category4LayerGroup.addTo(map)
+
+
+
+
+    /* Create a layer groups for the layer control panel.*/
+    var basemaps = {
+        "bright": CartoDB_VoyagerLabelsUnder,
+        "OSM": OpenStreetMap_DE,
+        "topographic": OpenTopo,
+        "imagery": dopLayer
+    }
+
+
+    var optionalLayerKeys = {
+        "category1": category1LayerGroup,
+        "category2": category2LayerGroup,
+        "category3": category3LayerGroup,
+        "category4": category4LayerGroup,
+    }
+
+
+    /* Add the layer control to the map. */
+    var layercontrol = L.control.layers(basemaps, optionalLayerKeys)
+    layercontrol.addTo(map)
+
+    /* Add a dragable marker on left-click. */
+    function createMarker(e) {
+        var markerpinicon = pinIcon
+        if (interface_type == "update" & update_type == "category1") {
+            markerpinicon = category1pinIcon
+        } else if (interface_type == "update" & update_type == "category2") {
+            markerpinicon = category2pinIcon
+        } else if (interface_type == "update" & update_type == "category3") {
+            markerpinicon = category3pinIcon
+        } else if (interface_type == "update" & update_type == "category4") {
+            markerpinicon = category4pinIcon
+        }
+        marker = new L.marker(e.latlng,
+            {
+                draggable: 'true',
+                icon: markerpinicon,
+                zIndexOffset: 1000
+            }
+        )
+        activeMarker = true;
+        /* Round them to the 6th decimal. */
+        var lat = String(Math.round(e.latlng.lat * 1000000) / 1000000)
+        var lng = String(Math.round(e.latlng.lng * 1000000) / 1000000)
+        marker.addTo(map)
+
+        /* Fill 2 input boxes in fht form with the coordinates from
+         the marker. */
+
+        // Bind a drag-function to the marker
+        marker.on("dragend", onDrag);
+        marker.bindPopup("Lat: " + lat + "<br>" + "Lon: " + lng)
+        enterLatLng(lat, lng, 0)
+    }
+
+
+    /* Change the popup and values in the input field on drag. You can also
+    add a function that fills an entry form with map coordinates here.*/
+    function onDrag(e) {
+
+        /* Round them to the 6th decimal. */
+        var lat = String(Math.round(e.target.getLatLng().lat * 1000000) / 1000000)
+        var lng = String(Math.round(e.target.getLatLng().lng * 1000000) / 1000000)
+        var newPopupText = "Lat: " + lat + "<br>" + "Lon: " + lng
+        this.bindPopup(newPopupText).openPopup()
+        /* Fill 2 input boxes in fht form with the coordinates from
+         the marker. */
+        enterLatLng(lat, lng, 0)
+
+    }
+
+    /* Controls the active marker. */
+    function toggleMarker(e) {
+        /* don't change marker state if info panel is open. */
+        if (infoOpen == false) {
+            if (activeMarker == false) {
+                createMarker(e)
+                activeMarker = true
+            } else {
+                /* Remove the marker. */
+                enterLatLng("", "", 0) /* to empty lat lng field to make it apaprent, that they ened to be filled out agaun*/
+                marker.remove()
+                activeMarker = false
+            }
+        }
+        resetHighlight(e)
+    }
+
+    /* Create or remove the Observationmarker and Information-window on click in map. */
+    map.on("click", toggleMarker)
+
+    /* Enter the map marker position into the input field. */
+    function enterLatLng(lat, lng, a) {
+
+        // reset Bavaria warning
+        try {
+            var coord_warning = document.getElementById('coord-warning')
+            coord_warning.innerHTML = ""
+            if (a > 10) {
+                coord_warning.innerHTML = "GPS Genauigkeit: " + Math.round(a) + " m. Wiederhole " +
+                    "GPS query or set the point manually on the map for a more precise outcome."
+            }
+            accuracyfield = document.getElementById('id_AccuracyGPS')
+            accuracyfield.value = Math.round(a)
+        } catch {
+            console.log("no field for coordinates warning")
+        }
+        if (lat != "") {
+            var lat = parseFloat(lat).toFixed(6)
+            var lng = parseFloat(lng).toFixed(6)
+        } else {
+            var lat = ""
+            var lng = ""
+        }
+
+
+        /* Check if it's the lat lng input field of the entry form or the update
+        form. */
+        if (document.body.contains(document.getElementById("id_1-Lat"))) {
+            // Entry form
+            var latid = document.getElementById("id_1-Lat")
+            latid.value = lat
+            var lngid = document.getElementById("id_1-Lon")
+            lngid.value = lng
+        } else if (document.body.contains(document.getElementById("id_Lat"))) {
+            // Update form
+            var latid = document.getElementById("id_Lat")
+            latid.value = lat
+            var lngid = document.getElementById("id_Lon")
+            lngid.value = lng
+        } else if (document.body.contains(document.getElementById("id_0-Lat"))) {
+            // category1 form
+            var latid = document.getElementById("id_0-Lat")
+            latid.value = lat
+            var lngid = document.getElementById("id_0-Lon")
+            lngid.value = lng
+        } else {
+            console.log("can't find lat/lng field")
+        }
+    }
+
+    /* Call a check for spatial information of the marker. Here:
+      "is within municipality, is witihn county, belongs to climate station
+      (actually "is witihn station thiessen polygon")" */
+    /* Checks which polygons the marker lies within. */
+    function getSpatialInfo() {
+        /* Take the values from the text box, because some  users may enter
+        those manually not from the map or gps request. */
+
+        /* Check if it's the lat lng input field of the entry form or the update
+        form. */
+        if (document.body.contains(document.getElementById("id_1-Lat"))) {
+            // Entry form
+            var lat = document.getElementById("id_1-Lat").value
+            var lng = document.getElementById("id_1-Lon").value
+        } else if (document.body.contains(document.getElementById("id_Lat"))) {
+            // Update form
+            var lat = document.getElementById("id_Lat").value
+            var lng = document.getElementById("id_Lon").value
+        } else if (document.body.contains(document.getElementById("id_0-Lat"))) {
+            // category1 form
+            var lat = document.getElementById("id_0-Lat").value
+            var lng = document.getElementById("id_0-Lon").value
+        }
+        /* Fetch the pre-selection tiles for speed. */
+        var tile = spatialPreSelection_Bavaria(lat, lng)
+        var mtn_area = spatialPreSelection_Montain(lng)
+        /* If no marker is active create one from the text-entry. */
+        if (activeMarker == true) {
+            marker.setLatLng([lat, lng])
+        } else {
+            var markerpinicon = pinIcon
+            if (interface_type == "update" & update_type == "category1") {
+                markerpinicon = category1pinIcon
+            } else if (interface_type == "update" & update_type == "category2") {
+                markerpinicon = category2pinIcon
+            } else if (interface_type == "update" & update_type == "category3") {
+                markerpinicon = category3pinIcon
+            }  else if (interface_type == "update" & update_type == "category4") {
+                markerpinicon = category4pinIcon
+            }
+            marker = new L.marker(
+                [lat, lng],
+                {
+                    draggable: 'true',
+                    icon: markerpinicon,
+                    zIndexOffset: 1000
+                }
+            ).addTo(map)
+            enterLatLng(lat, lng, 0)
+            marker.on("dragend", onDrag)
+            activeMarker = true;
+        }
+        // Pan to the coordinates entered in the box
+        map.setView([lat, lng])
+
+        // This is a small file size single Polygon to determine if an observation
+        // is within BY or outside (300 m buffer)
+        var bayernList = getPolyList(bayern_buffer, tile, "TILE")
+
+        // var mountainList = getPolyList(gebirgstock, mtn_area, "preselection")
+        // Store polygon information about the marker position.
+        var markerPosition = {}
+
+
+
+
+
+        // check if Entry is within Bavaria (or buffer area)
+        for (i in bayernList) {
+            markerPosition["BY"] = null
+            if (bayernList[i].contains(marker.getLatLng()) == true) {
+                markerPosition["BY"] = "within Bavaria"
+                console.log(markerPosition["BY"])
+
+                /* Submit the current information, by calling the linked form Button.
+                 */
+                var link = document.getElementById('submit_location')
+                console.log("lat", lat)
+                console.log("lon", lng)
+                // the "click()" initiates the submission
+                link.click()
+
+                // Check if all fields have valid input before starting the spinner
+                var formIsValid = []
+                // Category1 Form
+                try {
+                  formIsValid.push(document.getElementById('id_Category1Subject').checkValidity())
+                  formIsValid.push(document.getElementById('id_Number').checkValidity())
+                  formIsValid.push(document.getElementById('id_Category1Feature1').checkValidity())
+                  formIsValid.push(document.getElementById('id_Category1Feature2').checkValidity())
+                  formIsValid.push(document.getElementById('id_Category1Feature3').checkValidity())
+                  formIsValid.push(document.getElementById('id_ObservationDate').checkValidity())
+                  formIsValid.push(document.getElementById('id_ObservationTime').checkValidity())
+                } catch {
+                  console.log("Not the category1 form.")
+                }
+                // Category2
+                try {
+                  formIsValid.push(document.getElementById('id_Category2Subject').checkValidity())
+                  formIsValid.push(document.getElementById('id_Category2Feature1').checkValidity())
+                  formIsValid.push(document.getElementById('id_Category2Feature2').checkValidity())
+                  formIsValid.push(document.getElementById('id_Category2Feature3').checkValidity())
+                  formIsValid.push(document.getElementById('id_ObservationDate').checkValidity())
+                } catch {
+                  console.log("Not the category2 form.")
+                }
+                // Category3
+                try {
+                  formIsValid.push(document.getElementById('id_Category3Subject').checkValidity())
+                  formIsValid.push(document.getElementById('id_Category3Feature2').checkValidity())
+                  formIsValid.push(document.getElementById('id_ObservationDate').checkValidity())
+                } catch {
+                  console.log("Not the category 3 form.")
+                }
+                // Category4
+                try {
+                  formIsValid.push(document.getElementById('id_Category4Subject').checkValidity())
+                  formIsValid.push(document.getElementById('id_Category4Feature1').checkValidity())
+                  formIsValid.push(document.getElementById('id_Category4Feature2').checkValidity())
+                  formIsValid.push(document.getElementById('id_Event').checkValidity())
+                  formIsValid.push(document.getElementById('id_ObservationDate').checkValidity())
+                } catch {
+                  console.log("Not the category4 form.")
+                }
+                console.log(formIsValid)
+                // iF there is a nonvalid entry don't send the spinner
+                if (formIsValid.includes(false)){
+                  console.log("contains invalid inputs in form")
+                } else {
+                  // Form inputs are valid, start the spinner
+                  document.getElementById('sendspinner').style.display = "inline-block"
+                }
+                break
+            }
+        }
+
+        if (markerPosition["BY"] == null) {
+            console.log("Observation is outside of Bavaria.")
+            var coord_warning = document.getElementById('coord-warning')
+            coord_warning.innerHTML = "Observation is outside of Bavaria."
+        }
+    }
+
+    // remove spinner on full loading of map
+    document.getElementById('centerspinner').style.display = "none"
+
+</script>

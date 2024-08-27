@@ -1,0 +1,14 @@
+{% extends 'delete_observation.html' %}
+
+{% block deletion_form %}
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <p> An entry from {{ category1.ObservationDate }}, {{ category1.Category1Subject }} will be deleted.</p>
+        <input type="submit" value="Confirm">
+
+    </form>
+
+{% endblock %}

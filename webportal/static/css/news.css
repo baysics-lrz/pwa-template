@@ -1,0 +1,11 @@
+.headline_news{
+    font-family: "vision-black";
+    font-size: 3.5em;
+    margin-top: 1em;
+}
+
+@media (max-width: 767px) {
+    .headline_news{
+        font-size: 2em;
+    }
+}

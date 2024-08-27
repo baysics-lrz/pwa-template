@@ -1,0 +1,150 @@
+{% extends  'base.html' %}
+{% block content %}
+<link rel="stylesheet" href="/static/css/rank.css?v=1.0.0">
+
+<div class="mt-5 rank_list" align="center" >
+    <div class="rank-1">
+        <img src="/static/image/category1.svg" style="width:60px" class="img_rank">
+        <h2 class="mt-4" style="margin-top: 25px">Ranking of category 1</h2>
+        <table class="mt-5 table_rank" >
+            {% for rank in category1_ranking|slice:":10" %}
+                <tr>
+                    {% if forloop.counter == 1 %}
+                    <td align="center">         <img src="/static/image/ranking_1.svg" style="width:40px"></td>
+                    {% elif forloop.counter == 2 %}
+                    <td align="center">         <img src="/static/image/ranking_2.svg" style="width:40px"></td>
+                    {% elif forloop.counter == 3 %}
+                    <td align="center">         <img src="/static/image/ranking_3.svg" style="width:40px"></td>
+
+                    {% else %}
+                    <td align="center"></td>
+                    {% endif %}
+                    {% if rank.name_agreement == "Yes" %}
+                        <td align="center"> {{ rank.username }} </td>
+                    {% else %}
+                        <td align="center"> Anonymous</td>
+                    {% endif %}
+                    <td align="center" style="color:var(--primary); font-weight: bold;"> {{ rank.count_obs }}</td>
+                </tr>
+            {% endfor %}
+            {% if user.is_authenticated %}
+            {% for rank in category1_ranking %}
+            {% if rank.username == user.username %}
+            You are on place {{forloop.counter}}.
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+
+    <div class="rank-2">
+        <img src="/static/image/category2.svg" style="width:60px" class="img_rank">
+        <h2 class="mt-4">Ranking of Category 2</h2>
+        <table class="mt-5 table_rank" >
+            {% for rank in category2_ranking|slice:":10" %}
+
+                <tr>
+                    {% if forloop.counter == 1 %}
+                    <td align="center">         <img src="/static/image/ranking_1.svg" style="width:40px"></td>
+                    {% elif forloop.counter == 2 %}
+                    <td align="center">         <img src="/static/image/ranking_2.svg" style="width:40px"></td>
+                    {% elif forloop.counter == 3 %}
+                    <td align="center">         <img src="/static/image/ranking_3.svg" style="width:40px"></td>
+
+                    {% else %}
+                    <td align="center"></td>
+                    {% endif %}
+
+                    {% if rank.name_agreement == "Yes" %}
+                        <td align="center"> {{ rank.username }} </td>
+                    {% else %}
+                        <td align="center"> Anonymous</td>
+                    {% endif %}
+                    <td align="center" style="color:var(--primary); font-weight: bold;"> {{ rank.count_obs }}</td>
+
+                </tr>
+            {% endfor %}
+            {% if user.is_authenticated %}
+            {% for rank in  category2_ranking %}
+            {% if rank.username == user.username %}
+            You are on place {{forloop.counter}}.
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+
+    <div class="rank-3">
+        <img src="/static/image/category3.svg" style="width:60px" class="img_rank">
+        <h2 class="mt-4"style="margin-top: 25px">Ranking of category 3</h2>
+        <table class="mt-5 table_rank" >
+            {% for rank in category3_ranking|slice:":10" %}
+                <tr>
+                    {% if forloop.counter == 1 %}
+                    <td align="center">         <img src="/static/image/ranking_1.svg" style="width:40px"></td>
+                    {% elif forloop.counter == 2 %}
+                    <td align="center">         <img src="/static/image/ranking_2.svg" style="width:40px"></td>
+                    {% elif forloop.counter == 3 %}
+                    <td align="center">         <img src="/static/image/ranking_3.svg" style="width:40px"></td>
+
+                    {% else %}
+                    <td align="center"></td>
+                    {% endif %}
+                    {% if rank.name_agreement == "Yes" %}
+                        <td align="center"> {{ rank.username }} </td>
+                    {% else %}
+                        <td align="center"> Anonymous</td>
+                    {% endif %}
+                    <td align="center" style="color:var(--primary); font-weight: bold;"> {{ rank.count_obs }}</td>
+                </tr>
+            {% endfor %}
+            {% if user.is_authenticated %}
+            {% for rank in category3_ranking %}
+            {% if rank.username == user.username %}
+            You are on place {{forloop.counter}}.
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+
+    <div class="rank-4">
+        <img src="/static/image/category4.svg" style="width:60px" class="img_rank">
+        <h2 class="mt-4" style="margin-top: 25px">Ranking of category 4</h2>
+        <table class="mt-5 table_rank">
+
+            {% for rank in category4_ranking|slice:":10" %}
+                <tr>
+                    {% if forloop.counter == 1 %}
+                    <td align="center">         <img src="/static/image/ranking_1.svg" style="width:40px"></td>
+                    {% elif forloop.counter == 2 %}
+                    <td align="center">         <img src="/static/image/ranking_2.svg" style="width:40px"></td>
+                    {% elif forloop.counter == 3 %}
+                    <td align="center">         <img src="/static/image/ranking_3.svg" style="width:40px"></td>
+
+                    {% else %}
+                    <td align="center"></td>
+                    {% endif %}
+                    {% if rank.name_agreement == "Yes" %}
+                        <td align="center"> {{ rank.username }} </td>
+                    {% else %}
+                        <td align="center"> Anonymous</td>
+                    {% endif %}
+                    <td align="center" style="color:var(--primary); font-weight: bold;"> {{ rank.count_obs }}</td>
+                </tr>
+
+            {% endfor %}
+            {% if user.is_authenticated %}
+            {% for rank in category4_ranking %}
+            {% if rank.username == user.username %}
+            You are on place {{forloop.counter}}.
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        </table>
+
+    </div>
+</div>
+
+
+{% endblock %}

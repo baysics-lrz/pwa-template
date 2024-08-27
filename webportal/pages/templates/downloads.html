@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="downloads-container mb-5">
+    <div class="downloadscontent mt-3 mb-5">
+
+
+        <h1 class="headline-downloads">
+            Downloads
+        </h1>
+        <p class="mb-5">On this page we have collected all available files for you, so that you can find them in one place.</p>
+
+        <div class="downloadsbox">
+        <h2 class="headline-2-downloads ">API</h2>
+        <p>The project provides an API for interaction with external programs. The introduction is available at: <a
+                class="downloads-links" href="/api/doc-short">API Documentation</a>.</p>
+        </div>
+
+        <div class="downloadsbox">
+        <h2 class="headline-2-downloads">
+            Progressive Web App
+        </h2>
+        <p>Download our portal as an APP to your homescreen. If you are surfing on an Android with Chrome, then you can
+            you can easily download the APP by clicking the orange download button. If you surf with another browser
+            or on an Iphone, you will find all information under "How it works".</p>
+        <div class="buttons d-flex flex-column flex-md-row">
+            <button type="button" class="btn a2hs-button btn-sm">Install<i class="fa fa-arrow-circle-down "></i>
+            </button>
+            <button type="button" data-toggle="modal" data-target=".bd-example-modal-lg"
+                    class="btn btn-success btn-sm pwa-info-button" data-dismiss="modal">How it works
+            </button>
+        </div>
+        </div>
+        <div class="downloadsbox">
+        <h2 class="headline-2-downloads ">
+            Data
+        </h2>
+        <p>
+            Here you can find all entries available for download. Please read the Readme when using the data: <a class="link-downloads" target="_blank"
+                   href="/static/download/readme.pdf">Readme</a>
+        </p>
+        <p>Category1</p>
+        <ul class="mt-2">
+            <li>
+                <a class="link-downloads" target="_blank"
+                   href="/observations/category1/download-xls">XLS data</a>
+            </li>
+            <li>
+                <a class="link-downloads" target="_blank"
+                   href="/observations/category1/download-csv">CSV data</a>
+            </li>
+            <li>
+            <a href="">Pictures</a>
+            </li>
+                        <form class="mt-3" action="/observations/category1/download-category1-photo/" method="get">
+                        {% csrf_token %}
+                            <tr>
+                                <td><select name="month">
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select></td>
+                                <td><select name="year">
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                </select></td>
+                                <td>
+                                    <input type="hidden" id="csrf_token" value='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+                                <input class="button mt-3 " style="padding: 10px;" type='submit' value='download' />
+                                </td>
+                           </tr>
+                        </form>
+                        {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            {% if message.tags %} {{ message }} {% endif %}
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+        </ul><br>
+
+        <p>Category2</p>
+        <ul class="mt-2">
+            <li>
+                <a class="link-downloads" target="_blank"
+                   href="/observations/category2/download-xls">XLS data</a>
+            </li>
+            <li>
+                <a class="link-downloads" target="_blank"
+                   href="/observations/category2/download-csv">CSV data</a>
+            </li>
+            <li>
+            <a href="">Pictures</a>
+            </li>
+                        <form class="mt-3" action="/observations/category2/download-category2-photo/" method="get">
+                        {% csrf_token %}
+                            <tr>
+                                <td><select name="month">
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select></td>
+                                <td><select name="year">
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                </select></td>
+                                <td>
+                                    <input type="hidden" id="csrf_token" value='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+                                <input class="button mt-3 " style="padding: 10px;" type='submit' value='download' />
+                                </td>
+                           </tr>
+                        </form>
+                        {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            {% if message.tags %} {{ message }} {% endif %}
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+        </ul><br>
+
+        <p>Category3</p>
+        <ul class="mt-2">
+            <li>
+                <a class="link-downloads" target="_blank"
+                   href="/observations/category3/download-xls">XLS data</a>
+            </li>
+            <li>
+                <a class="link-downloads" target="_blank"
+                   href="/observations/category3/download-csv">CSV data</a>
+            </li>
+            <li>
+                <a href="">Pictures</a>
+            </li>
+                        <form class="mt-3" action="/observations/category3/download-category3-photo/" method="get">
+                        {% csrf_token %}
+                            <tr>
+                                <td><select name="month">
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">Juli</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select></td>
+                                <td><select name="year">
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                </select></td>
+                                <td>
+                                    <input type="hidden" id="csrf_token" value='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+                                <input class="button mt-3 " style="padding: 10px;" type='submit' value='download' />
+                                </td>
+                           </tr>
+                        </form>
+                        {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            {% if message.tags %} {{ message }} {% endif %}
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+        </ul><br>
+
+        <p>Category4</p>
+        <ul class="mt-2">
+            <li>
+                <a class="link-downloads" target="_blank"
+                   href="/observations/category4/download-xls">XLS data</a>
+            </li>
+            <li>
+                <a class="link-downloads" target="_blank"
+                   href="/observations/category4/download-csv">CSV data</a>
+            </li>
+            <li>
+                <a href="">Pictures</a>
+            </li>
+                        <form class="mt-3" action="/observations/category4/download-category4-photo/" method="get">
+                        {% csrf_token %}
+                            <tr>
+                                <td><select name="month">
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select></td>
+                                <td><select name="year">
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                </select></td>
+                                <td>
+                                    <input type="hidden" id="csrf_token" value='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+                                    <input class="button mt-3 " style="padding: 10px;" type='submit' value='download' />
+                                </td>
+                           </tr>
+                        </form>
+                        {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            {% if message.tags %} {{ message }} {% endif %}
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+        </ul><br>
+
+        </div>
+        </div>
+
+
+
+</main>
+{% endblock %}

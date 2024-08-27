@@ -1,0 +1,825 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    ul {
+        padding-left: 20px;
+
+    }
+</style>
+
+<div class="container">
+
+    <h2>API Short documentation</h2>
+    <p>Full documentation can be found <a href=/api/doc-full>here</a>.</p>
+
+    <br/>
+
+    <h3>Content</h3>
+
+    <ul>
+        <li>
+            <a href="#attribute">Attribute of categories</a>
+            <ul>
+                <li>
+                    <a href="#attribute-category1">category1</a>
+                </li>
+                <li>
+                    <a href="#attribute-category2">category2</a>
+                </li>
+                <li>
+                    <a href="#attribute-category3">Category3</a>
+                </li>
+                <li>
+                    <a href="#attribute-category4">category4</a>
+                </li>
+
+            </ul>
+        </li>
+        <li>
+            <a href="#interfaces">Interfaces for information queries</a>
+             <ul>
+                 <li>
+                     <a href="#interface-example">Example</a>
+                 </li>
+             </ul>
+        </li>
+    </ul>
+
+    <br/>
+
+    <div id="attribute">
+        <h3>Attribute of observations</h3>
+
+        <div id="attribute-category1">
+        <h5>Attributes of Category1 observation:</h5>
+            <ul>
+                <li>
+                    <b>id:</b>
+                    <ul>
+                        <li>
+                            The unique identification number of the category1 entry
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category1Subject:</b>
+                    <ul>
+                        <li>
+                            The Category1 subject
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Certainty:</b>
+                    <ul>
+                        <li>
+                            Statement about whether the observer is certain or uncertain about the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Certain" oder "Uncertain"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Number:</b>
+                    <ul>
+                        <li>
+                            The number of observed category1
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                        <li>
+                            Value: Positive number (above 0)
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category1Feature1:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection:
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category1Feature2:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category1Feature3:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection:
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Lat:</b>
+                    <ul>
+                        <li>
+                            Latitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Lon:</b>
+                    <ul>
+                        <li>
+                            Longitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Municipal:</b>
+                    <ul>
+                        <li>
+                            The municipal in which the observation is located
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>ObservationDate:</b>
+                    <ul>
+                        <li>
+                            Date of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Format: "YYYY-MM-DD"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>ObservationTime:</b>
+                    <ul>
+                        <li>
+                            The time of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Format: "HH-MM-SS"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Photo:</b>
+                    <ul>
+                        <li>
+                            The URL to the corresponding photo
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <br/>
+
+        <div id="attribute-category2">
+            <h5>Attributes of Category2 observation:</h5>
+            <ul>
+                <li>
+                    <b>id:</b>
+                    <ul>
+                        <li>
+                            The unique identification number of the category2 entry
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Subject:</b>
+                    <ul>
+                        <li>
+                            The Category2 Subject
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Certainty:</b>
+                    <ul>
+                        <li>
+                            Statement about whether the observer is certain or uncertain about the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Certain" oder "Uncertain"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature1:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature2:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature3:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature4:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature5:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature6:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection:
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature7:</b>
+                    <ul>
+                        <li>
+                            Percentage
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                        <li>
+                            Value: A number between 0 to 100
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category2Feature8:</b>
+                    <ul>
+                        <li>
+                           Percentage
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                        <li>
+                            Value: A number between 0 to 100
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Lat:</b>
+                    <ul>
+                        <li>
+                            Latitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Lon:</b>
+                    <ul>
+                        <li>
+                            Longitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Municipal:</b>
+                    <ul>
+                        <li>
+                            The municipal in which the observation is made
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>ObservationDate:</b>
+                    <ul>
+                        <li>
+                            Date of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Format: "YYYY-MM-DD"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Photo:</b>
+                    <ul>
+                        <li>
+                            The URL to the corresponding photo
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <br/>
+
+        <div id="attribute-category3">
+            <h5>Attributes of Category3 observation:</h5>
+            <ul>
+                <li>
+                    <b>id:</b>
+                    <ul>
+                        <li>
+                            The unique identification number of the category3 entry
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category3Subject:</b>
+                    <ul>
+                        <li>
+                            The Category3 subject
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Certainty:</b>
+                    <ul>
+                        <li>
+                            Statement about whether the observer is certain or uncertain about the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Value: "Certain" oder "Uncertain"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category3Feature1:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection:
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category3Feature2:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                    </ul>
+                </li>
+                 <li>
+                    <b>Lat:</b>
+                    <ul>
+                        <li>
+                            Latitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Lon:</b>
+                    <ul>
+                        <li>
+                            Longitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Municipal:</b>
+                    <ul>
+                        <li>
+                            The municipal in which the observation is made
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>ObservationDate:</b>
+                    <ul>
+                        <li>
+                            The date of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Format: "JJJJ-MM-TT"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Photo:</b>
+                    <ul>
+                        <li>
+                            The URL to the corresponding photo
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+
+        <br/>
+
+        <div id="attribute-category4">
+            <h5>Attributes of Category4 observation:</h5>
+            <ul>
+                <li>
+                    <b>id:</b>
+                    <ul>
+                        <li>
+                            The unique identification number of the category4 entry
+                        </li>
+                        <li>
+                            Data type: Number
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category4Subject:</b>
+                    <ul>
+                        <li>
+                            The Category4 subject
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                <b>Certainty:</b>
+                <ul>
+                    <li>
+                        Statement about whether the observer is certain or uncertain about the observation
+                    </li>
+                    <li>
+                        Data type: String
+                    </li>
+                    <li>
+                        Value: "Certain" oder "Uncertain"
+                    </li>
+                </ul>
+                </li>
+                <li>
+                    <b>Category4Feature1:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category4Feature2:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Category4Feature3:</b>
+                    <ul>
+                        <li>
+                            dummy text
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Selection: "Yes" or "No"
+                        </li>
+                    </ul>
+                </li>
+
+                 <li>
+                    <b>Lat:</b>
+                    <ul>
+                        <li>
+                            Latitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Lon:</b>
+                    <ul>
+                        <li>
+                            Longitude of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Municipal:</b>
+                    <ul>
+                        <li>
+                            The municipal in which the observation is made
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>ObservationDate:</b>
+                    <ul>
+                        <li>
+                            The date of the observation
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                        <li>
+                            Format: "JJJJ-MM-TT"
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Photo:</b>
+                    <ul>
+                        <li>
+                            The URL to the corresponding photo
+                        </li>
+                        <li>
+                            Data type: String
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <br/>
+
+    <div id="interfaces">
+        <h3>Interfaces for information queries</h3>
+
+        The interfaces for information queries provide a service that makes it possible to obtain information about
+        all observations in a clearly arranged JSON format.
+        <br/>
+        The response of the API interfaces is always a list of JSON objects containing all attributes of
+        the observations. Certain queries can also be filtered using query parameters.
+        <br/>
+
+        <h5>Category1</h5>
+        <ul>
+            <li>
+                <b>Method:</b> GET
+            </li>
+            <li>
+                <b>API: </b><a href="/api/observations/category1">http://127.0.0.1:8000/api/observations/category1</a>
+            </li>
+        </ul>
+
+        <h5>Category2</h5>
+        <ul>
+            <li>
+                <b>Method:</b> GET
+            </li>
+            <li>
+                <b>API: </b><a href="/api/observations/category2">http://127.0.0.1:8000/api/observations/category2</a>
+            </li>
+        </ul>
+        <br/>
+        <h5>Category3</h5>
+        <ul>
+            <li>
+                <b>Method:</b> GET
+            </li>
+            <li>
+                <b>API: </b><a href="/api/observations/category3s">http://127.0.0.1:8000//api/observations/category3</a>
+            </li>
+        </ul>
+        <br/>
+        <h5>Category4</h5>
+        <ul>
+            <li>
+                <b>Method:</b> GET
+            </li>
+            <li>
+                <b>API: </b><a href="/api/observations/category4">http://127.0.0.1:8000/api/observations/category4</a>
+            </li>
+        </ul>
+        <br/>
+
+        <div id="interface-example">
+            <h4>Example</h4>
+            <ul>
+                <li>
+                    <b>Example 1:</b> Output all Category3 observations
+                    <br/>
+                    Inquery:
+                    GET <a href="/api/observations/category3">http:/127.0.0.1:8000/api/observations/category3<a/>
+                    <br/>
+                    Output:
+                    <pre>
+                        <code class="json-view">
+                        [
+                            {
+                                dummy output
+                            },
+                            ...
+                        ]
+                        </code>
+                    </pre>
+                </li>
+                <li>
+                    <b>Example 2:</b> Output all Category3 observations made on 2023.05.01.
+                    <br/>
+                    Inquery:
+
+                    GET <a href="/api/observations/category3?ObservationDate=2023-05-01">http://127.0.0.1:8000/api/observations/category3?ObservationDate=2023-05-01<a/>
+                    <br/>
+                    Output:
+                    <pre>
+                        <code class="json-view">
+                        [
+                            {
+                                dummy output
+                            },
+                            ...
+                        ]
+                        </code>
+                    </pre>
+                </li>
+                <li>
+                    <b>Example 3:</b> Output all category2 observations where Feature1 is 'Yes'.
+                    <br/>
+                    Inquery:
+                    GET <a href="/api/observations/category2?Category2Feature1=Yes">http://127.0.0.1:8000/api/observations/category2?Category2Feature1=Yes<a/>
+                    <br/>
+                    Output:
+                    <pre>
+                        <code class="json-view">
+                        [
+                            {
+                                dummy output
+                            },
+                            ...
+                        ]
+                        </code>
+                    </pre>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
